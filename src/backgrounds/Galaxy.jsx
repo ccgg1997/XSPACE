@@ -33,8 +33,8 @@ const Galaxy = () => {
       const { velocity } = stars[index];
       star.position.z += velocity;
 
-      if (star.position.z > 100) {
-        star.position.z = -100;
+      if (star.position.z > 200) {
+        star.position.z = -200;
       }
     });
   });

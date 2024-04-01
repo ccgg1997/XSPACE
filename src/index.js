@@ -10,7 +10,7 @@ root.render(
     <Canvas
       camera={{ position: [0, 10, 20] }}
     >
-    <Experience />
-    </Canvas>    
+      <Experience />
+    </Canvas>
   </>
 );
