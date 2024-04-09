@@ -1,9 +1,8 @@
 import { OrbitControls, Stars } from "@react-three/drei";
-import World from "./world/World";
+import World from "./levels/Level1";
 import { Perf } from "r3f-perf";
 import Galaxy from "./backgrounds/Galaxy";
 import Lights from "./lights/Lights";
-import EnviromentMap from "./enviroments/EnviromentMap";
 import { Suspense } from "react";
 
 const Experience = () => {
