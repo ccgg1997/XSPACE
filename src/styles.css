@@ -1,6 +1,7 @@
-html,
-body,
-#root {
+/* html,
+body, */
+#root,
+.gameCanvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,6 +9,16 @@ body,
   height: 100%;
   background: rgb(0, 0, 0);
 }
+
+/* .gameMenu{
+  position: 'absolute';
+  transform: 'translate(-50%, -170%)';
+  text-align: 'center';
+  background: 'rgba(255, 255, 255, 0.5)';
+  padding: '20px';
+  border-radius: '1px',;
+  
+} */
 
 canvas {
   touch-action: none;

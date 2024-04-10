@@ -5,7 +5,7 @@ import Galaxy from "../backgrounds/Galaxy";
 import Lights from "../lights/Lights";
 import { Suspense } from "react";
 
-const Experience = () => {
+const Level1 = () => {
 
   return (
     <>
@@ -24,4 +24,4 @@ const Experience = () => {
   );
 };
 
-export default Experience;
+export default Level1;
