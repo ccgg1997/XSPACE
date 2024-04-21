@@ -64,7 +64,7 @@ const GameCanvas = () => {
     return (
         <Canvas
             // camera={{ position: cameraPosition }}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#ffffff' }}
         >
             {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
             <ambientLight />
