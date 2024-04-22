@@ -17,7 +17,7 @@ const Lights = () => {
     <>
       <ambientLight
         color={new Color("#FFFFFF")}
-        intensity={1}
+        intensity={2}
       />
 
       {/* esta luz es */}
@@ -45,12 +45,12 @@ const Lights = () => {
         intensity={intensitySL}
       ></spotLight>*/}
 
-      {/* <hemisphereLight
+      <hemisphereLight
         position={[2, 10, -2]}
         intensity={3}
-        color={"red"}
+        color={"white"}
         skyColor={"blue"}
-      /> */}
+      />
 
     </>
   );

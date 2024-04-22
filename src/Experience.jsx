@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 // import { PerspectiveCamera } from '@react-three/drei';
 import GameMenu from './components/interface/GameMenu';
 import Level1 from './levels/Level1';
-import Level2 from './levels/Level2';
+// import Level2 from './levels/Level2';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import Lights from './lights/Lights';
+import Galaxy from './backgrounds/Galaxy';
+import World from "./components/Level1Environment";
+import { Perf } from 'r3f-perf';
+import { useNavigate } from "react-router-dom";
 
 
 
 const GameCanvas = () => {
-    const [activeLevel, setActiveLevel] = useState(<Level1 />)
-    const [showMenu, setShowMenu] = useState(true)
-    const [cameraPosition, setCameraPosition] = useState([50, 50, 50])
     const resetCameraPosition = () => setCameraPosition([0, 10, 20]);
-
-    const cameraRef = useRef();
+    const navigate = useNavigate();
 
     const options = [
         {
@@ -33,15 +35,21 @@ const GameCanvas = () => {
     const startLevel = (level) => {
         switch (level) {
             case '1':
-                setShowMenu(false);
-                setActiveLevel(<Level1 />)
+                navigate('/level1', {
+                    state: {
+                        firstTime: true
+                    }
+                })
                 break;
             case '2':
-                setShowMenu(false);
-                setActiveLevel(<Level2 setCameraPosition={setCameraPosition} />)
+                navigate('/level2', {
+                    state: {
+                        firstTime: true
+                    }
+                })
                 break;
             default:
-                resetCameraPosition();
+                // resetCameraPosition();
                 break;
         }
     }
@@ -69,8 +77,18 @@ const GameCanvas = () => {
             {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
             <ambientLight />
             {/* <pointLight position={[10, 10, 10]} /> */}
-            {showMenu && <GameMenu options={options} />}
-            {activeLevel}
+            <GameMenu options={options} />
+            {/* <Perf position="top-left" /> */}
+            <PerspectiveCamera makeDefault position={[0, 10, 20]} />
+            {/* <Lights />
+                <EnviromentMap /> */}
+            <OrbitControls makeDefault target={[0, 10, 0]} />
+
+            <Suspense fallback={null}>
+                <Lights />
+                <World />
+                <Galaxy />
+            </Suspense>
         </Canvas>
     );
 };

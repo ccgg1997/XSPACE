@@ -10,7 +10,7 @@ export default function Level2Environment(props) {
         castShadow
         receiveShadow
         geometry={nodes.Walls.geometry}
-        material={materials['Metal Wall']}
+        material={materials.ConcreteWall}
         position={[0, 5, -245]}
         scale={[0.369, 0.154, 7.538]}
       />
