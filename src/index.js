@@ -3,12 +3,13 @@ import { createRoot } from 'react-dom/client';
 import Experience from './Experience';
 import './styles.css';
 import { Canvas } from '@react-three/fiber';
+import GameRoutes from './GameRoutes';
 
 const root = createRoot(document.getElementById("root"));
 
 root.render(
   <>
-    <Experience />
+    <GameRoutes />
 
     {/* <Canvas
       camera={{ position: [0, 10, 20] }}
