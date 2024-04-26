@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 // import { PerspectiveCamera } from '@react-three/drei';
 import GameMenu from './components/interface/GameMenu';
-import Level1 from './levels/Level1';
 // import Level2 from './levels/Level2';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import Lights from './lights/Lights';
 import Galaxy from './backgrounds/Galaxy';
 import World from "./components/Level1Environment";
-import { Perf } from 'r3f-perf';
 import { useNavigate } from "react-router-dom";
 
 
@@ -29,6 +27,18 @@ const GameCanvas = () => {
         {
             text: 'Level 3',
             action: () => startLevel('3')
+        },
+        {
+            text: 'Level 4',
+            action: () => startLevel('4')
+        },
+        {
+            text: 'Level 5',
+            action: () => startLevel('5')
+        },
+        {
+            text: 'Level 6',
+            action: () => startLevel('6')
         }
     ];
 
@@ -43,6 +53,34 @@ const GameCanvas = () => {
                 break;
             case '2':
                 navigate('/level2', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+            case '3':
+                navigate('/level3', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+                case '4':
+                navigate('/level4', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+                case '5':
+                navigate('/level5', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+                case '6':
+                navigate('/level6', {
                     state: {
                         firstTime: true
                     }
