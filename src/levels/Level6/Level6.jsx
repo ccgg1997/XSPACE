@@ -5,9 +5,13 @@ import Galaxy from "../../backgrounds/Galaxy";
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
+import { PerspectiveCamera } from "@react-three/drei";
+import { useRef } from "react";
+
 
 
 const Level6 = () => {
+  const orbitControlsRef = useRef();
   return (
     <Canvas
       style={{
@@ -19,9 +23,14 @@ const Level6 = () => {
       }}
     >
       <Perf position="top-left" />
+      <PerspectiveCamera makeDefault position={[0, 7, 10]} zoom={1.8} />
       {/* <Lights />
       <EnviromentMap /> */}
-      <OrbitControls makeDefault target={[0, 10, 10]} />
+      <OrbitControls makeDefault
+            target={[0, 6, 0]}
+            enablePan={true}
+            ref={orbitControlsRef}
+          />
       <ambientLight/>
       <Suspense fallback={null}>
         <Physics>
