@@ -27,7 +27,7 @@ const Level3 = () => {
         }}
       >
         <Perf position="top-left" />
-        <PerspectiveCamera makeDefault position={[0, 7, 10]} zoom={1.8} />
+        <PerspectiveCamera makeDefault position={[0, 6, 12]} zoom={1} />
         {/* <Lights />
       <EnviromentMap /> */}
         <OrbitControls
