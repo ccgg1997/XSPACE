@@ -5,7 +5,7 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 export default function Villano() {
     const avatarRef = useRef();
     const avatarBodyRef = useRef();
-    const { avatar,setAvatar } = useAvatar();
+    const { avatar, setAvatar } = useAvatar();
     const { nodes, materials, animations } = useGLTF('/assets/models/villano/villano.glb')
     console.log(avatar)
     const { actions } = useAnimations(animations, avatarRef)
@@ -19,7 +19,7 @@ export default function Villano() {
     }, [actions, avatar.animation]);
 
     return (
-        <group ref={avatarRef} name="Scene" position-y={0} position-z={-30}  >
+        <group ref={avatarRef} name="Scene" position-y={0} position-z={-90}  >
             <group name="Armature">
                 <skinnedMesh
                     name="EyeLeft"

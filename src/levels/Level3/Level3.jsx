@@ -39,7 +39,7 @@ const Level3 = () => {
           />
           <ambientLight />
           <Suspense fallback={null}>
-            <Physics>
+            <Physics >
               <World onLoad={() => setReady(true)} />
               <Nave />
             </Physics>
