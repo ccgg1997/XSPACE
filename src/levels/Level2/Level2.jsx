@@ -27,10 +27,10 @@ const Level2 = ({ setCameraPosition }) => {
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#BFBFBF' }}
         >
           <Perf position="top-left" />
-          <PerspectiveCamera makeDefault position={[0, 7, 10]} zoom={1.8} />
+          <PerspectiveCamera makeDefault position={[0, 12, 12]} zoom={1} />
 
           <OrbitControls makeDefault
-            target={[0, 6, 0]}
+            target={[0, 3, 0]}
             enablePan={true}
             ref={orbitControlsRef}
           />
