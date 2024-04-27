@@ -3,7 +3,7 @@ import { OrbitControls, KeyboardControls } from "@react-three/drei";
 import Level2Environment from "./Level2Environment";
 import { Perf } from "r3f-perf";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useState, useRef } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
@@ -18,6 +18,9 @@ const Level2 = ({ setCameraPosition }) => {
   const map = useMovements();
   const naveRef = useRef();
   const orbitControlsRef = useRef()
+  const [ready, setReady] = useState(false);
+
+
 
 
   return (
@@ -41,13 +44,13 @@ const Level2 = ({ setCameraPosition }) => {
               intensity={1.4}
             />
             <Physics debug={true}>
-              <Level2Environment />
+              <Level2Environment onLoad={() => setReady(true)} />
               <Nave
               />
 
             </Physics>
           </Suspense>
-          <Controls orbitControlsRef={orbitControlsRef} />
+          <Controls orbitControlsRef={orbitControlsRef} ready={ready} />
         </Canvas>
       </KeyboardControls>
     </NaveProvider>

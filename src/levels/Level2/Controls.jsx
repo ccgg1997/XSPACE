@@ -1,11 +1,11 @@
 import { OrbitControls, useKeyboardControls } from "@react-three/drei";
 // import { useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Quaternion, Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 
-export default function Controls({ orbitControlsRef }) {
+export default function Controls({ orbitControlsRef, ready = false }) {
     const { nave, setNave } = useNave();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
@@ -17,8 +17,13 @@ export default function Controls({ orbitControlsRef }) {
     let cameraTarget = new Vector3(0, 6, 0);
     const desiredDistance = 2;
 
+    const { camera } = useThree();
+    camera.near = 30;
+
 
     useFrame((state, delta) => {
+        if (!ready)
+            return;
         const { up, down, left, right } = get()
         const currentTranslation = nave.body?.translation()
         let moveX = currentTranslation?.x;//walkDirection.x * velocity * delta
@@ -37,7 +42,7 @@ export default function Controls({ orbitControlsRef }) {
             }
             if (left) {
                 moveX -= velocity * delta;
-                console.log('moveX', moveX, 'currentTranslation.x', currentTranslation.x, 'velocity', velocity, 'delta', delta)
+                // console.log('moveX', moveX, 'currentTranslation.x', currentTranslation.x, 'velocity', velocity, 'delta', delta)
             }
             if (right) {
                 moveX += velocity * delta;

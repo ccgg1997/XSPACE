@@ -28,16 +28,15 @@ const GameCanvas = () => {
             text: 'Level 3',
             action: () => startLevel('3')
         },
-        
+        {
+            text: 'Level 4',
+            action: () => startLevel('4')
+        },
         {
             text: 'Level 5',
             action: () => startLevel('5')
         },
         /*
-        {
-            text: 'Level 5',
-            action: () => startLevel('5')
-        },
         {
             text: 'Level 6',
             action: () => startLevel('6')
@@ -67,8 +66,14 @@ const GameCanvas = () => {
                     }
                 })
                 break;
-                
-                case '4':
+            case '4':
+                navigate('/level4', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+            case '5':
                 navigate('/level5', {
                     state: {
                         firstTime: true
@@ -76,13 +81,6 @@ const GameCanvas = () => {
                 })
                 break;
                 /** 
-                case '5':
-                navigate('/level5', {
-                    state: {
-                        firstTime: true
-                    }
-                })
-                break;
                 case '6':
                 navigate('/level6', {
                     state: {

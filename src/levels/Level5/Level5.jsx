@@ -1,5 +1,5 @@
 import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
-import Level5Environment from "./Level4Environment";
+import Level5Environment from "./Level5Environment";
 import { Perf } from "r3f-perf";
 import Galaxy from "../../backgrounds/Galaxy";
 import { Suspense } from "react";
