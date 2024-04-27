@@ -11,6 +11,7 @@ import { Canvas } from "@react-three/fiber";
 import World from "./world/World";
 import Controls from "./controls/Controls";
 import Avatar from "./characters/avatar/Avatar";
+import Villano from "./characters/villano/Villano";
 import useMovements from "../../utils/key-movements-l1";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { AvatarProvider } from "../../context/AvatarContext";
@@ -30,7 +31,8 @@ export default function Level1() {
                         {/* <Environments /> */}
                         <Physics debug={true}>
                             <World />
-                            <Girl />
+                            {/* <Girl /> */}
+                            <Villano/>
                             <RedMen />
                             <Ecctrl
                                 camInitDis={-2}
