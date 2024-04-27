@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { Quaternion, Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 
-export default function Controls({ orbitControlsRef }) {
+export default function Controls({ orbitControlsRef, ready = false }) {
     const { nave, setNave } = useNave();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
@@ -19,6 +19,9 @@ export default function Controls({ orbitControlsRef }) {
 
 
     useFrame((state, delta) => {
+        if (!ready)
+            return;
+
         const { up, down, left, right } = get()
         const currentTranslation = nave.body?.translation()
         let moveX = currentTranslation?.x;//walkDirection.x * velocity * delta

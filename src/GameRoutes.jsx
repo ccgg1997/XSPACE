@@ -9,16 +9,15 @@ import { AvatarProvider } from "./context/AvatarContext";
 export default function GameRoutes() {
     return (
         <BrowserRouter>
-            <AvatarProvider><Routes>
+            <Routes>
 
                 <Route path="/" element={<Experience />} />
                 <Route path="/level1" element={<Level1 />} />
                 <Route path="/level2" element={<Level2 />} />
                 <Route path="/level3" element={<Level3 />} />
                 <Route path="/level4" element={<Level4 />} />
-                
+
             </Routes>
-            </AvatarProvider>
         </BrowserRouter>
     )
 }

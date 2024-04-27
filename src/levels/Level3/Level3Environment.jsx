@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 
-export default function Level3(props) {
-  const { nodes, materials } = useGLTF("/assets/models/Level3.glb");
+export default function Level3({ args, onLoad = () => { } }) {
+  const { nodes, materials, scene } = useGLTF("/assets/models/Level3.glb");
+  useEffect(() => {
+    // console.log('Model loaded:', scene);
+    onLoad();
+  }, [scene]); //
 
   return (
-    <group {...props} dispose={null}>
+    <group {...args} dispose={null}>
       <RigidBody type="fixed" colliders="trimesh" restitution={0}>
         <mesh
           castShadow
