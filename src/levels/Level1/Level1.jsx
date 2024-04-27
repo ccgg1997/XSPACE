@@ -32,7 +32,7 @@ export default function Level1() {
                         <Physics debug={false}>
                             <World />
                             {/* <Girl /> */}
-                            <Villano/>
+                            <Villano />
                             <RedMen />
                             <Ecctrl
                                 camInitDis={-2}
