@@ -13,7 +13,7 @@ export default function Controls({ orbitControlsRef }) {
     let rotateAngle = new Vector3(0, 1, 0);
     let rotateQuaternion = new Quaternion();
     const velocity = 3;
-    const speed = 5;
+    const speed = 8;
     let cameraTarget = new Vector3(0, 6, 0);
     const desiredDistance = 2;
 
@@ -73,7 +73,8 @@ export default function Controls({ orbitControlsRef }) {
             z: newPosition.z
         }, true)
 
-
+        state.camera.position.add(new Vector3(0, 0, -1 * (speed * delta)))
+        orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
         const pressed = get().back
     })
 

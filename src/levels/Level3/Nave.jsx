@@ -33,6 +33,8 @@ export default function Nave(props) {
                 receiveShadow
                 geometry={nodes.nave_espacial.geometry}
                 material={materials.FrontColor}
+                position={[0, 0, 0]}
+                scale={[0.8, 1, 0.50]}
             />
         </RigidBody >
     )
