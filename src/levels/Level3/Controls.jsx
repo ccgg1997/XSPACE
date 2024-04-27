@@ -1,7 +1,7 @@
 import { OrbitControls, useKeyboardControls } from "@react-three/drei";
 // import { useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame,useThree } from "@react-three/fiber";
 import { Quaternion, Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 
@@ -16,6 +16,9 @@ export default function Controls({ orbitControlsRef, ready = false }) {
     const speed = 8;
     let cameraTarget = new Vector3(0, 6, 0);
     const desiredDistance = 2;
+
+    const { camera } = useThree();
+    camera.near = 30;
 
 
     useFrame((state, delta) => {
