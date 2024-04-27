@@ -45,22 +45,6 @@ export default function Controls({ orbitControlsRef }) {
 
 
         }
-        console.log(state.camera.current)
-        // console.log('camera', state.camera)
-        // state.camera.position.add(new Vector3(0, 0, -0.1))
-        try {
-            // state.current.camera.lookAt(10, newPosition.y, newPosition.z);
-            // console.log('NO FALLO')
-        } catch (error) {
-            console.log('FALLO')
-
-        }
-        // cameraTarget?.set(
-        //     newPosition.x,
-        //     newPosition.y + 1,
-        //     newPosition.z
-        // )
-        // orbitControlsRef.current.target = cameraTarget
 
         const newPosition = new Vector3(
             moveX,
@@ -73,7 +57,8 @@ export default function Controls({ orbitControlsRef }) {
             z: newPosition.z
         }, true)
 
-
+        state.camera.position.add(new Vector3(0, 0, -1 * (speed * delta)))
+        orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
         const pressed = get().back
     })
 
