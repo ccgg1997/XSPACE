@@ -6,7 +6,6 @@ import Level2 from "./levels/Level2/Level2";
 import Level3 from "./levels/Level3/Level3";
 import Level4 from "./levels/Level4/Level4";
 import Level5 from "./levels/Level5/Level5";
-import { AvatarProvider } from "./context/AvatarContext";
 
 export default function GameRoutes() {
     return (
