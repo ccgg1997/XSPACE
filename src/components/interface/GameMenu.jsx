@@ -17,11 +17,11 @@ const GameMenu = ({ options }) => {
     const itemStyle = {
         marginBottom: '10px',
         fontSize: '50px',
-        color: 'white'
+        color: 'gray'
     };
     const selectedItemStyle = {
         ...itemStyle,
-        color: 'red', // change color when selected
+        color: "#0099CE", // change color when selected
     };
 
 
