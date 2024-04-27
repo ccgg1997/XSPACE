@@ -21,6 +21,8 @@ const Level2 = ({ setCameraPosition }) => {
   const [ready, setReady] = useState(false);
 
 
+
+
   return (
     <NaveProvider>
       <KeyboardControls map={map} >
