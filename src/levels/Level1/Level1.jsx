@@ -29,7 +29,7 @@ export default function Level1() {
                     <Suspense fallback={null}>
                         <Lights ></Lights>
                         {/* <Environments /> */}
-                        <Physics debug={true}>
+                        <Physics debug={false}>
                             <World />
                             {/* <Girl /> */}
                             <Villano/>

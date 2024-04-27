@@ -9,6 +9,7 @@ export default function RedManCircle(props) {
 
   const radius = 3.5;
   const speed = 1.5;
+  const blackMaterial = { color: "black" };
 
   useFrame((state, delta) => {
     const elapsedTime = state.clock.getElapsedTime();
