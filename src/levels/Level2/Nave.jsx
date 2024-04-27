@@ -39,6 +39,7 @@ export default function Nave(props) {
                 material={materials.FrontColor}
                 position={[0, 0, -19.468]}
                 ref={naveRef}
+                frustumCulled={false}
             >
                 <CuboidCollider
                     args={[0.25, 2, 2]}
