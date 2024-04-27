@@ -1,11 +1,15 @@
+import { useEffect } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 
-export default function Level2Environment(props) {
+export default function Level2Environment({ args, onLoad = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
-  const { nodes, materials } = useGLTF('/assets/models/Level2.glb');
+  const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
+  useEffect(() => {
+    onLoad();
+  }, [scene]);
   return (
-    <group {...props} dispose={null}>
+    <group {...args} dispose={null}>
       <RigidBody type="fixed" colliders="trimesh" restitution={0}>
         <mesh
           castShadow
@@ -141,4 +145,4 @@ export default function Level2Environment(props) {
   )
 
 }
-useGLTF.preload('/assets/models/Level2.glb')
+// useGLTF.preload('/assets/models/Level2.glb')

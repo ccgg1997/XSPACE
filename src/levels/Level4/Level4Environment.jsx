@@ -1,10 +1,16 @@
-import React, { useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 
-export default function Level4Environment(props) {
-  const { nodes, materials } = useGLTF('/assets/models/Level4.glb')
+
+export default function Level4Environment({ args, onLoad = () => { } }) {
+  const { nodes, materials, scene } = useGLTF('/assets/models/Level4.glb')
+
+  useEffect(() => {
+    onLoad();
+  }, [scene]);
+
   return (
-    <group {...props} dispose={null}>
+    <group {...args} dispose={null}>
       <mesh
         castShadow
         receiveShadow
@@ -139,4 +145,4 @@ export default function Level4Environment(props) {
   )
 }
 
-useGLTF.preload('/assets/models/Level4.glb')
+// useGLTF.preload('/assets/models/Level4.glb')
