@@ -103,7 +103,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo003.geometry}
           material={materials["Material.004"]}
-          position={[-3.181, 6.063, -143.901]}
+          position={[-5.342, 6.063, -146.497]}
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
@@ -113,7 +113,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo005.geometry}
           material={materials["Material.005"]}
-          position={[1.02, 6.142, -144.326]}
+          position={[-1.14, 6.142, -146.921]}
           rotation={[-0.001, 0, 0]}
           scale={[0.432, 0.719, 0.297]}
         />
@@ -124,7 +124,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo006.geometry}
           material={materials["Material.003"]}
-          position={[-8.91, 6.013, -151.737]}
+          position={[-11.071, 6.013, -154.332]}
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
@@ -134,7 +134,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo007.geometry}
           material={materials["Material.007"]}
-          position={[-1.651, 5.145, -151.652]}
+          position={[-3.811, 5.145, -154.247]}
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
@@ -144,7 +144,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo008.geometry}
           material={materials["Material.006"]}
-          position={[-4.709, 6.092, -152.161]}
+          position={[-6.869, 6.092, -154.757]}
           rotation={[-0.001, 0, 0]}
           scale={[0.432, 0.719, 0.297]}
         />
@@ -779,7 +779,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo038.geometry}
           material={nodes.Cubo038.material}
-          position={[-1.612, 2.919, -151.614]}
+          position={[-3.772, 2.919, -154.209]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -790,7 +790,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo039.geometry}
           material={nodes.Cubo039.material}
-          position={[-4.928, 2.919, -151.924]}
+          position={[-7.088, 2.919, -154.519]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -801,7 +801,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo040.geometry}
           material={nodes.Cubo040.material}
-          position={[-8.87, 2.919, -151.924]}
+          position={[-11.031, 2.919, -154.519]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -812,7 +812,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo001.geometry}
           material={materials["Material.003"]}
-          position={[0.699, 5.876, -126.15]}
+          position={[2.205, 5.876, -129.431]}
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
@@ -822,7 +822,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo002.geometry}
           material={materials["Material.007"]}
-          position={[7.958, 5.008, -126.064]}
+          position={[9.464, 5.008, -129.346]}
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
@@ -832,7 +832,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo041.geometry}
           material={materials["Material.006"]}
-          position={[4.9, 5.955, -126.574]}
+          position={[6.407, 5.955, -129.856]}
           rotation={[-0.001, 0, 0]}
           scale={[0.432, 0.719, 0.297]}
         />
@@ -843,7 +843,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo042.geometry}
           material={nodes.Cubo042.material}
-          position={[7.997, 2.782, -126.027]}
+          position={[9.503, 2.782, -129.308]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -854,7 +854,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo043.geometry}
           material={nodes.Cubo043.material}
-          position={[4.681, 2.782, -126.337]}
+          position={[6.187, 2.782, -129.619]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -865,7 +865,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo044.geometry}
           material={nodes.Cubo044.material}
-          position={[0.739, 2.782, -126.337]}
+          position={[2.245, 2.782, -129.619]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -876,7 +876,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo045.geometry}
           material={nodes.Cubo045.material}
-          position={[-3.299, 2.65, -143.803]}
+          position={[-5.459, 2.65, -146.398]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
@@ -887,7 +887,7 @@ export default function Level3(props) {
           receiveShadow
           geometry={nodes.Cubo046.geometry}
           material={nodes.Cubo046.material}
-          position={[0.937, 2.65, -144.194]}
+          position={[-1.224, 2.65, -146.789]}
           rotation={[0, 0, -Math.PI]}
           scale={[-0.503, -0.851, -0.559]}
         />
