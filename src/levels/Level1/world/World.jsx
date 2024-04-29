@@ -13,6 +13,20 @@ export default function World(props) {
                 <RigidBody type="fixed" colliders="trimesh">
                     <mesh onClick={(e) => e.stopPropagation()} receiveShadow={true} geometry={nodes.Floor.geometry} material={materials.floorMaterial} />
                 </RigidBody>
+                <RigidBody type="fixed" colliders="trimesh"><mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.roca.geometry}
+                    material={materials.roca}
+                    position={[-2.13, 1.09, -8.547]}
+                /></RigidBody>
+                <RigidBody type="fixed" colliders="trimesh"><mesh
+                    castShadow
+                    receiveShadow
+                    geometry={nodes.roca2.geometry}
+                    material={materials.roca2}
+                    position={[3.929, 1.09, -8.547]}
+                /></RigidBody>
             </group>
         </group>
     );
