@@ -3,9 +3,9 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { RigidBody, BallCollider } from '@react-three/rapier';
 
-export default function RedManCircle(props) {
+export default function BlackManCircle(props) {
   const redManCircleRef = useRef(null);
-  const { nodes, materials } = useGLTF('/assets/models/red-mens/RedManCircle.glb');
+  const { nodes, materials } = useGLTF('/assets/models/black-mens/RedManCircle.glb');
 
   const radius = 3.5;
   const speed = 1.5;
