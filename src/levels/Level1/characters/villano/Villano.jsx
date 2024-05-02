@@ -19,7 +19,7 @@ export default function Villano() {
     }, [actions, avatar.animation]);
 
     return (
-        <group ref={avatarRef} name="Scene" position-y={0} position-z={-90}  >
+        <group ref={avatarRef} name="Scene" position-y={0} position-z={-96}  >
             <group name="Armature">
                 <skinnedMesh
                     name="EyeLeft"

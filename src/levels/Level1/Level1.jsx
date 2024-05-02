@@ -20,39 +20,42 @@ export default function Level1() {
     const map = useMovements();
 
     return (
-        <AvatarProvider>
-            <KeyboardControls map={map} >
-                <Canvas
-                    shadows={false}
-                >
-                    <Perf position="top-left" />
-                    <Suspense fallback={null}>
-                        <Lights ></Lights>
-                        {/* <Environments /> */}
-                        <Physics debug={false}>
-                            <World />
-                            {/* <Girl /> */}
-                            <Villano />
-                            <RedMen />
-                            <Ecctrl
-                                camInitDis={-2}
-                                camMaxDis={-2}
-                                maxVelLimit={5}
-                                jumpVel={4}
-                                position={[1, 10, -10]}
-                                characterInitDir={180}
-                                camInitDir={{ x: 0, y: 10 }}
-                            >
-                                <Avatar />
-                            </Ecctrl>
-                        </Physics>
+        <>
+            <AvatarProvider>
+                <KeyboardControls map={map} >
+            <h1>HOLAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h1>
+                    <Canvas
+                        shadows={false}
+                    >
+                        <Perf position="top-left" />
+                        <Suspense fallback={null}>
+                            <Lights ></Lights>
+                            {/* <Environments /> */}
+                            <Physics debug={false}>
+                                <World />
+                                {/* <Girl /> */}
+                                <Villano />
+                                <RedMen />
+                                <Ecctrl
+                                    camInitDis={-2}
+                                    camMaxDis={-2}
+                                    maxVelLimit={5}
+                                    jumpVel={4}
+                                    position={[1, 10, -10]}
+                                    characterInitDir={180}
+                                    camInitDir={{ x: 0, y: 10 }}
+                                >
+                                    <Avatar />
+                                </Ecctrl>
+                            </Physics>
 
-                        {/* <WelcomeText position={[0, 1, -2]} /> */}
-                    </Suspense>
-                    <Controls />
-                </Canvas>
-            </KeyboardControls>
-        </AvatarProvider>
+                            {/* <WelcomeText position={[0, 1, -2]} /> */}
+                        </Suspense>
+                        <Controls />
+                    </Canvas>
+                </KeyboardControls>
+            </AvatarProvider>
+        </>
 
     )
 }
