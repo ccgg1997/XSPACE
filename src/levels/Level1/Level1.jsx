@@ -15,15 +15,17 @@ import Villano from "./characters/villano/Villano";
 import useMovements from "../../utils/key-movements-l1";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
 import { AvatarProvider } from "../../context/AvatarContext";
+import React, { useState } from 'react';
 
 export default function Level1() {
+    const [countLives, setCountLives] = useState(3);
     const map = useMovements();
-
+    const lives = "♥".repeat(countLives)
     return (
         <>
             <AvatarProvider>
                 <KeyboardControls map={map} >
-            <h1>HOLAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h1>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', fontSize: '44px', color: 'red' , padding:"3px" }}>{lives}</div>
                     <Canvas
                         shadows={false}
                     >

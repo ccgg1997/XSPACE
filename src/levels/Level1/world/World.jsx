@@ -6,42 +6,36 @@ export default function World(props) {
 
   return (
     <group {...props} dispose={null}>
-      {/* <group>
-                <RigidBody type="fixed" colliders="trimesh">
-                    <mesh onClick={(e) => e.stopPropagation()} geometry={nodes.Walls.geometry} material={materials.wallMaterial} />
-                </RigidBody>
-                <RigidBody type="fixed" colliders="trimesh">
-                    <mesh onClick={(e) => e.stopPropagation()} receiveShadow={true} geometry={nodes.Floor.geometry} material={materials.floorMaterial} />
-                </RigidBody>
-                <RigidBody type="fixed" colliders="trimesh"><mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.roca.geometry}
-                    material={materials.roca}
-                    position={[-2.13, 1.09, -8.547]}
-                /></RigidBody>
-                <RigidBody type="fixed" colliders="trimesh"><mesh
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.roca2.geometry}
-                    material={materials.roca2}
-                    position={[3.929, 1.09, -8.547]}
-                /></RigidBody>
-            </group> */}
-
-      <RigidBody type="fixed" colliders="trimesh"><mesh
+      <RigidBody type="dynamic" colliders="trimesh"><mesh
         castShadow
         receiveShadow
         geometry={nodes.roca.geometry}
         material={materials.roca}
-        position={[-2.13, 1.09, -8.547]}
+        position={[-2.13, 15.645, -13.036]}
       /></RigidBody>
-      <RigidBody type="fixed" colliders="trimesh"><mesh
+
+      <RigidBody >
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Mball.geometry}
+        material={materials.Mball}
+        position={[0.13, 16, -13.132]}
+      /></RigidBody>
+      <RigidBody >
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Mball.geometry}
+        material={materials.Mball}
+        position={[-2.13, 15.645, -16.036]}
+      /></RigidBody>
+      <RigidBody type="dynamic" colliders="trimesh"><mesh
         castShadow
         receiveShadow
         geometry={nodes.roca2.geometry}
         material={materials.roca2}
-        position={[3.929, 1.09, -8.547]}
+        position={[3.286, 13.759, -13.584]}
       /></RigidBody>
       <RigidBody type="fixed" colliders="trimesh"><mesh
         castShadow
@@ -762,23 +756,68 @@ export default function World(props) {
         scale={[0.1, 4, 4]}
       /></RigidBody>
       <RigidBody type="fixed" colliders="trimesh" >
-      <group
-        position={[-1.849, 0.304, -49.371]}
-        rotation={[Math.PI, -1.023, Math.PI]}
-        scale={[0.033, 0.3, 0.023]}>
+        <group
+          position={[-1.849, 0.304, -49.371]}
+          rotation={[Math.PI, -1.023, Math.PI]}
+          scale={[0.033, 0.3, 0.023]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Cylinder069.geometry}
+            material={nodes.Cylinder069.material}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Cylinder069_1.geometry}
+            material={materials.Material}
+          />
+        </group></RigidBody>
+        <RigidBody type="fixed" colliders="trimesh">
         <mesh
           castShadow
           receiveShadow
-          geometry={nodes.Cylinder069.geometry}
-          material={nodes.Cylinder069.material}
-        />
+          geometry={nodes.Cube.geometry}
+          material={nodes.Cube.material}
+          position={[0.235, 1.75, -11.367]}
+          scale={[1, 0.694, 1]}
+        /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
         <mesh
           castShadow
           receiveShadow
-          geometry={nodes.Cylinder069_1.geometry}
-          material={materials.Material}
+          geometry={nodes.Cube007.geometry}
+          material={nodes.Cube007.material}
+          position={[0.079, 2.89, -26.279]}
         />
-      </group></RigidBody>
+      </RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube008.geometry}
+          material={nodes.Cube008.material}
+          position={[0.079, 2.89, -28.317]}
+        />
+      </RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube010.geometry}
+          material={nodes.Cube010.material}
+          position={[0.079, 2.89,-30.943 ]}
+        />
+      </RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube009.geometry}
+          material={nodes.Cube009.material}
+          position={[0.079, 2.89, -33.599]}
+        /></RigidBody>
+      
     </group>
   );
 }
