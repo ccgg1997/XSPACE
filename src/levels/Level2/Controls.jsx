@@ -14,11 +14,11 @@ export default function Controls({ orbitControlsRef, ready = false }) {
     let rotateQuaternion = new Quaternion();
     const velocity = 3;
     const speed = 5;
-    let cameraTarget = new Vector3(0, 6, 0);
+    //let cameraTarget = new Vector3(0, 0, 0);
     const desiredDistance = 2;
 
     const { camera } = useThree();
-    camera.near = 30;
+    camera.near = 20;
 
 
     useFrame((state, delta) => {
@@ -26,9 +26,9 @@ export default function Controls({ orbitControlsRef, ready = false }) {
             return;
         const { up, down, left, right } = get()
         const currentTranslation = nave.body?.translation()
-        let moveX = currentTranslation?.x;//walkDirection.x * velocity * delta
-        let moveY = currentTranslation?.y;//walkDirection.y * velocity * delta
-        let moveZ = (currentTranslation ? currentTranslation.z : 0) - speed * delta
+        let moveX = 0;//currentTranslation?.x;//walkDirection.x * velocity * delta
+        let moveY = 0;//currentTranslation?.y;//walkDirection.y * velocity * delta
+        let moveZ = speed * delta
         if (up || down || left || right) {
             // console.log(currentTranslation)
 
@@ -52,9 +52,9 @@ export default function Controls({ orbitControlsRef, ready = false }) {
         }
 
         const newPosition = new Vector3(
-            moveX,
-            moveY,
-            moveZ
+            currentTranslation.x + moveX,
+            currentTranslation.y + moveY,
+            currentTranslation.z - moveZ
         )
         nave.body?.setTranslation({
             x: newPosition.x,
@@ -62,7 +62,7 @@ export default function Controls({ orbitControlsRef, ready = false }) {
             z: newPosition.z
         }, true)
 
-        state.camera.position.add(new Vector3(0, 0, -1 * (speed * delta)))
+        state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
         orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
         const pressed = get().back
     })
