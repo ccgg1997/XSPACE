@@ -9,12 +9,12 @@ import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
-import { useFrame } from "@react-three/fiber";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
-// import Ecctrl, { EcctrlAnimation } from "ecctrl";
+import { handleCollision } from "./ColisionController";
 
-const Level2 = ({ setCameraPosition }) => {
+
+const Level2 = ({ }) => {
   const map = useMovements();
   const naveRef = useRef();
   const orbitControlsRef = useRef()
@@ -30,7 +30,7 @@ const Level2 = ({ setCameraPosition }) => {
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#BFBFBF' }}
         >
           <Perf position="top-left" />
-          <PerspectiveCamera makeDefault position={[0, 12, 12]} zoom={1} />
+          <PerspectiveCamera makeDefault position={[0, 5, 12]} zoom={1.3} />
 
           <OrbitControls makeDefault
             target={[0, 3, 0]}
@@ -44,7 +44,7 @@ const Level2 = ({ setCameraPosition }) => {
               intensity={1.4}
             />
             <Physics debug={true}>
-              <Level2Environment onLoad={() => setReady(true)} />
+              <Level2Environment onLoad={() => setReady(true)} collisionManager={handleCollision} />
               <Nave
               />
 

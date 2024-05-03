@@ -31,6 +31,7 @@ export default function Nave(props) {
             gravityScale={0}
             enabledRotations={[false, false, false]}
             restitution={0}
+            name="naveEspacial"
         >
             <mesh
                 castShadow
