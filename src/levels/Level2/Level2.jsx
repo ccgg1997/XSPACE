@@ -9,12 +9,12 @@ import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
-import { useFrame } from "@react-three/fiber";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
-// import Ecctrl, { EcctrlAnimation } from "ecctrl";
+import { handleCollision } from "./ColisionController";
 
-const Level2 = ({ setCameraPosition }) => {
+
+const Level2 = ({ }) => {
   const map = useMovements();
   const naveRef = useRef();
   const orbitControlsRef = useRef()
@@ -44,7 +44,7 @@ const Level2 = ({ setCameraPosition }) => {
               intensity={1.4}
             />
             <Physics debug={true}>
-              <Level2Environment onLoad={() => setReady(true)} />
+              <Level2Environment onLoad={() => setReady(true)} collisionManager={handleCollision} />
               <Nave
               />
 
