@@ -2,15 +2,15 @@ import { useEffect } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 
-export default function Level2Environment({ args, onLoad = () => { } }) {
+export default function Level2Environment({ args, onLoad = () => { }, collisionManager = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
   useEffect(() => {
     onLoad();
   }, [scene]);
   return (
-    <group {...args} dispose={null} frustumCulled={false}>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false}>
+    <group {...args} dispose={null}>
+      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} onCollisionEnter={collisionManager} name="PARED">
         <mesh
           castShadow
           receiveShadow
@@ -21,7 +21,7 @@ export default function Level2Environment({ args, onLoad = () => { } }) {
           frustumCulled={true}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false}>
+      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} onCollisionEnter={collisionManager} name="PISO">
         <mesh
           castShadow
           receiveShadow
@@ -32,7 +32,7 @@ export default function Level2Environment({ args, onLoad = () => { } }) {
           frustumCulled={false}
         />
       </RigidBody>
-      <RigidBody type="fixed" restitution={0}>
+      <RigidBody type="fixed" restitution={0} onCollisionEnter={collisionManager} name="obstaculo">
         <mesh
           castShadow
           receiveShadow
@@ -43,7 +43,7 @@ export default function Level2Environment({ args, onLoad = () => { } }) {
           frustumCulled={true}
         />
       </RigidBody>
-      <RigidBody type="fixed" restitution={0}>
+      <RigidBody type="fixed" restitution={0} onCollisionEnter={collisionManager} name="obstaculo">
         <mesh
           castShadow
           receiveShadow
@@ -55,7 +55,7 @@ export default function Level2Environment({ args, onLoad = () => { } }) {
         />
 
       </RigidBody>
-      <RigidBody type="fixed">
+      <RigidBody type="fixed" onCollisionEnter={collisionManager}>
         <mesh
           castShadow
           receiveShadow
