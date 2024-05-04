@@ -11,31 +11,64 @@ export default function World(props) {
         receiveShadow
         geometry={nodes.roca.geometry}
         material={materials.roca}
-        position={[-2.13, 15.645, -13.036]}
+        position={[-0.13, 18.645, -15.036]}
       /></RigidBody>
+      <RigidBody >
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[0.33, 26, -13.132]}
+        /></RigidBody>
+      <RigidBody >
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[0.45, 65, -13.132]}
+        /></RigidBody>
+      <RigidBody >
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[0, 20, -13.132]}
+        /></RigidBody>
 
       <RigidBody >
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Mball.geometry}
-        material={materials.Mball}
-        position={[0.13, 16, -13.132]}
-      /></RigidBody>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[0.13, 16, -13.132]}
+        /></RigidBody>
+
       <RigidBody >
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Mball.geometry}
-        material={materials.Mball}
-        position={[-2.13, 15.645, -16.036]}
-      /></RigidBody>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[-2.13, 16, -13.132]}
+        /></RigidBody>
+      <RigidBody >
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Mball.geometry}
+          material={materials.Mball}
+          position={[-2.13, 36, -16.132]}
+        /></RigidBody>
       <RigidBody type="dynamic" colliders="trimesh"><mesh
         castShadow
         receiveShadow
         geometry={nodes.roca2.geometry}
         material={materials.roca2}
-        position={[3.286, 13.759, -13.584]}
+        position={[3.286, 13.759, -21.584]}
       /></RigidBody>
       <RigidBody type="fixed" colliders="trimesh"><mesh
         castShadow
@@ -105,7 +138,7 @@ export default function World(props) {
           material={materials['Material.003']}
           position={[-1.687, 0.449, -50.709]}
           rotation={[-Math.PI, 1.543, -Math.PI]}
-          scale={[0.05, 0.025, 0.1]}>
+          scale={[0.10, 0.05, 0.2]}>
           <mesh
             castShadow
             receiveShadow
@@ -729,7 +762,7 @@ export default function World(props) {
           castShadow
           receiveShadow
           geometry={nodes.pc4.geometry}
-          material={materials.PC4}
+          material={materials.pc4}
           position={[3.343, 2.836, -95.62]}
           rotation={[Math.PI, -1.559, Math.PI]}
           scale={[0.1, 4, 4]}
@@ -766,14 +799,14 @@ export default function World(props) {
             geometry={nodes.Cylinder069.geometry}
             material={nodes.Cylinder069.material}
           />
-          <mesh
+          <RigidBody type="fixed" colliders="trimesh"><mesh
             castShadow
             receiveShadow
             geometry={nodes.Cylinder069_1.geometry}
             material={materials.Material}
-          />
+          /></RigidBody>
         </group></RigidBody>
-        <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody type="fixed" colliders="trimesh">
         <mesh
           castShadow
           receiveShadow
@@ -791,22 +824,14 @@ export default function World(props) {
           position={[0.079, 2.89, -26.279]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cube008.geometry}
-          material={nodes.Cube008.material}
-          position={[0.079, 2.89, -28.317]}
-        />
-      </RigidBody>
+
       <RigidBody type="fixed" colliders="trimesh">
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Cube010.geometry}
           material={nodes.Cube010.material}
-          position={[0.079, 2.89,-30.943 ]}
+          position={[0.079, 2.89, -30.943]}
         />
       </RigidBody>
       <RigidBody type="fixed" colliders="trimesh">
@@ -817,7 +842,75 @@ export default function World(props) {
           material={nodes.Cube009.material}
           position={[0.079, 2.89, -33.599]}
         /></RigidBody>
-      
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube008.geometry}
+          material={materials.pared}
+          position={[0.087, 0.332, -56.875]}
+          scale={[1.061, 0.401, 1]}
+        /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube016.geometry}
+          material={materials.pared}
+          position={[0.087, 0.666, -61.214]}
+          scale={[1.061, 0.809, 1]}
+        /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cube017.geometry}
+        material={materials.pared}
+        position={[0.087, 0.976, -66.348]}
+        scale={[1.061, 2.708, 1]}
+      /></RigidBody>
+
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cube011.geometry}
+        material={materials.roca}
+        position={[0.065, 1.652, -24.073]}
+        rotation={[Math.PI / 2, 0.005, -Math.PI / 2]}
+      />
+      </RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube012.geometry}
+          material={materials.pared}
+          position={[2.147, 2.657, -27.29]}
+          rotation={[Math.PI / 2, Math.PI / 2, 0]}
+          scale={[1.18, 2.756, 1]}
+        /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh">
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cube013.geometry}
+          material={materials.pared}
+          position={[-2.124, 2.843, -28.394]}
+          rotation={[-Math.PI / 2, -Math.PI / 2, 0]}
+        /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cube014.geometry}
+        material={materials['pared.002']}
+        position={[0.079, 2.89, -35.645]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cube015.geometry}
+        material={materials['pared.003']}
+        position={[0.142, 2.89, -38.64]}
+      /></RigidBody>
     </group>
   );
 }
