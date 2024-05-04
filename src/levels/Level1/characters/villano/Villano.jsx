@@ -37,20 +37,7 @@ export default function Villano() {
                     morphTargetDictionary={nodes.EyeRight.morphTargetDictionary}
                     morphTargetInfluences={nodes.EyeRight.morphTargetInfluences}
                 />
-                {/* <skinnedMesh
-                    name="Wolf3D_Body"
-                    geometry={nodes.Wolf3D_Body.geometry}
-                    material={materials.Wolf3D_Body}
-                    skeleton={nodes.Wolf3D_Body.skeleton}
-                    morphTargetDictionary={nodes.Wolf3D_Body.morphTargetDictionary}
-                    morphTargetInfluences={nodes.Wolf3D_Body.morphTargetInfluences}
-                /> */}
-                {/* <skinnedMesh
-                    name="Wolf3D_Hair"
-                    geometry={nodes.Wolf3D_Hair.geometry}
-                    material={materials.Wolf3D_Hair}
-                    skeleton={nodes.Wolf3D_Hair.skeleton}
-                /> */}
+
                 <skinnedMesh
                     name="Wolf3D_Head"
                     geometry={nodes.Wolf3D_Head.geometry}
@@ -67,14 +54,7 @@ export default function Villano() {
                     morphTargetDictionary={nodes.Wolf3D_Headwear.morphTargetDictionary}
                     morphTargetInfluences={nodes.Wolf3D_Headwear.morphTargetInfluences}
                 />
-                {/* <skinnedMesh
-                    name="Wolf3D_Facewear"
-                    geometry={nodes.Wolf3D_Facewear.geometry}
-                    material={materials.Wolf3D_Facewear}
-                    skeleton={nodes.Wolf3D_Facewear.skeleton}
-                    morphTargetDictionary={nodes.Wolf3D_Facewear.morphTargetDictionary}
-                    morphTargetInfluences={nodes.Wolf3D_Facewear.morphTargetInfluences}
-                /> */}
+
                 <skinnedMesh
                     name="Wolf3D_Outfit_Bottom"
                     geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
