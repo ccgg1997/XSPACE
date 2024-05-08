@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import Lights from "./lights/Lights";
 import Galaxy from "./backgrounds/Galaxy";
 import World from "./components/Level1Environment";
+import { useAuth } from "./context/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const auth = useAuth();
 
   const menuStyle = {
     position: "absolute",
@@ -47,6 +49,15 @@ const Home = () => {
     }
   };
 
+  const onHandleButtonLogin = async () => {
+    await auth.loginWithGoogle().then((res) => {
+      console.log(res)
+      navigate("/menu");
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+
   return (
     <Canvas>
       <ambientLight />
@@ -58,19 +69,7 @@ const Home = () => {
       <Html style={menuStyle}>
         <div style={formStyle}>
           <h2 style={headingStyle}>Iniciar Sesión</h2>
-          <input
-            type="text"
-            placeholder="Correo Electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Ingresar</button>
+          <button onClick={onHandleButtonLogin}>Ingresar</button>
           {errorMessage && <p>{errorMessage}</p>}
         </div>
       </Html>
