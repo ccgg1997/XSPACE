@@ -15,42 +15,61 @@ import Villano from "./characters/villano/Villano";
 import Villano2 from "./characters/villano2/Villano2";
 import useMovements from "../../utils/key-movements-l1";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
+import React, { useState} from 'react';
 import { AvatarProvider } from "../../context/AvatarContext";
-import React, { useState } from 'react';
+import { useAvatar } from "../../context/AvatarContext";
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
+   
     const map = useMovements();
-    const lives = "♥".repeat(countLives)
+    const avatar = useAvatar();
+    // Verificar si el avatar y su posición están listos antes de acceder a ellos
+    const[avatarpositionz,setavatarpositionz] = useState(0);
+    
+    const setpositionfunction = (position) => {
+        setavatarpositionz(position);
+    }
+
+    const lives = "♥".repeat(countLives);
+
     const diccionario_objetos = {
         "objeto1": {
-            "rango_x": [0, -20],
+            "rango_x": [0,  0.026],
             "mensaje": "Esquiva las Rocas"
         },
         "objeto2": {
-            "rango_x": [-21, -40],
+            "rango_x": [ 0.027, 0.038],
             "mensaje": "Salta el obstaculo"
         },
         "objeto3": {
-            "rango_x": [-41, -60],
+            "rango_x": [0.0515, 0.087],
             "mensaje": "Pasa todas las puertas"
         },
         "objeto4": {
-            "rango_x": [-61, -80],
+            "rango_x": [0.088, 0.125],
             "mensaje": "Encuentra la pieza perdida"
         },
         "objeto5": {
-            "rango_x": [-81, -100],
+            "rango_x": [0.126, 0.180],
             "mensaje": "Salta los obstaculo"
-        }
+        },
+        "objeto6": {
+            "rango_x": [0.181, 0.4],
+            "mensaje": "Ataca tu enemigo"
+        },
+
+
     };
 
-    const posicion_x = -15; // Por ejemplo
     let mensaje = "";
-    for (const objeto in diccionario_objetos) {
-        if (posicion_x >= diccionario_objetos[objeto]["rango_x"][1] && posicion_x <= diccionario_objetos[objeto]["rango_x"][0]) {
-            mensaje = diccionario_objetos[objeto]["mensaje"];
-            break;
+    // Verificar si la posición del avatar está definida antes de usarla
+    if (avatarpositionz !== null) {
+        for (const objeto in diccionario_objetos) {
+            if (avatarpositionz >= diccionario_objetos[objeto]["rango_x"][0] && avatarpositionz <= diccionario_objetos[objeto]["rango_x"][1]) {
+                mensaje = diccionario_objetos[objeto]["mensaje"];
+                break;
+            }
         }
     }
     return (
@@ -64,7 +83,7 @@ export default function Level1() {
                     <Canvas
                         shadows={false}
                     >
-                        <Perf position="top-left" />
+                        {/* <Perf position="top-left" /> */}
                         <Suspense fallback={null}>
                             <Lights ></Lights>
                             {/* <Environments /> */}
@@ -83,7 +102,7 @@ export default function Level1() {
                                     characterInitDir={180}
                                     camInitDir={{ x: 0, y: 10 }}
                                 >
-                                    <Avatar />
+                                    <Avatar setpositionfunction={setpositionfunction} />
                                 </Ecctrl>
                             </Physics>
 

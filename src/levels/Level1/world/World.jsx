@@ -865,7 +865,7 @@ export default function World(props) {
         receiveShadow
         geometry={nodes.Cube017.geometry}
         material={materials.pared}
-        position={[0.087, 0.976, -66.348]}
+        position={[0.087, 0.976, -65.9]}
         scale={[1.061, 2.708, 1]}
       /></RigidBody>
 
