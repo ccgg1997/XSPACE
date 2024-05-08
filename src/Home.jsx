@@ -6,6 +6,7 @@ import Lights from "./lights/Lights";
 import Galaxy from "./backgrounds/Galaxy";
 import World from "./components/Level1Environment";
 import { useAuth } from "./context/AuthContext";
+import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Home = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -240%)",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     padding: "20px",
     borderRadius: "10px",
     textAlign: "center",
@@ -37,7 +38,7 @@ const Home = () => {
   };
 
   const headingStyle = {
-    color: "white",
+    color: "black",
   };
 
   //ToDo: Que no esté quemado xd. Ty
@@ -69,7 +70,8 @@ const Home = () => {
       <Html style={menuStyle}>
         <div style={formStyle}>
           <h2 style={headingStyle}>Iniciar Sesión</h2>
-          <button onClick={onHandleButtonLogin}>Ingresar</button>
+          <Button size="lg" variant="danger" onClick={onHandleButtonLogin}>Ingresar</Button>
+          {/* <button onClick={onHandleButtonLogin}>Ingresar</button> */}
           {errorMessage && <p>{errorMessage}</p>}
         </div>
       </Html>
