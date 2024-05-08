@@ -41,14 +41,6 @@ const Home = () => {
     color: "black",
   };
 
-  //ToDo: Que no esté quemado xd. Ty
-  const handleLogin = () => {
-    if (email === "admin" && password === "admin") {
-      navigate("/menu"); //El menú donde están los niveles
-    } else {
-      setErrorMessage("Correo o contraseña incorrectos");
-    }
-  };
 
   const onHandleButtonLogin = async () => {
     await auth.loginWithGoogle().then((res) => {

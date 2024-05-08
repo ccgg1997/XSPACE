@@ -9,12 +9,15 @@ import Galaxy from './backgrounds/Galaxy';
 import World from "./components/Level1Environment";
 import { useNavigate } from "react-router-dom";
 import Logout from './components/logout/Logout';
+import { createUser, readUser } from "./db/user-collection";
+import { useAuth } from './context/AuthContext';
 
 
 
 const GameCanvas = () => {
     const resetCameraPosition = () => setCameraPosition([0, 10, 20]);
     const navigate = useNavigate();
+    const auth = useAuth();
 
     const options = [
         {
@@ -112,6 +115,37 @@ const GameCanvas = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
+
+
+    const saveDataUser = async (valuesUser) => {
+        const userDb = await readUser(valuesUser.email);
+        console.log('userDb', userDb)
+        if (!userDb) {
+            console.log('Creando usuario nuevo')
+            await createUser(valuesUser)
+        }
+    }
+
+    const readDataUser = async (email) => {
+        await readUser(email).then((res) => console.log(res))
+            .catch((error) => console.error(error))
+    }
+
+    useEffect(() => {
+        if (auth.userLogged) {
+            const { displayName, email } = auth.userLogged
+
+            saveDataUser({
+                displayName: displayName,
+                email: email,
+            })
+
+            readDataUser(email)
+
+
+        }
+    }, [auth.userLogged])
+
     return (
         <>
             <Logout />
