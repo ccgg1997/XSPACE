@@ -28,7 +28,6 @@ export default function Level1() {
     const[avatarpositionz,setavatarpositionz] = useState(0);
     
     const setpositionfunction = (position) => {
-        console.log("position",position)
         setavatarpositionz(position);
     }
 
@@ -84,7 +83,7 @@ export default function Level1() {
                     <Canvas
                         shadows={false}
                     >
-                        <Perf position="top-left" />
+                        {/* <Perf position="top-left" /> */}
                         <Suspense fallback={null}>
                             <Lights ></Lights>
                             {/* <Environments /> */}

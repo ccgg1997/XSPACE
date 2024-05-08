@@ -38,7 +38,6 @@ export default function Controls() {
     const { forward, backward, leftward, rightward } = get()
     if (forward || backward || leftward || rightward) {
       setPlay(true)
-      console.log("AVATAR current position",avatar.body )
       // if (forward) avatar.ref.current.position.z -= speed * delta; // Mover hacia adelante
       // if (backward) avatar.ref.current.position.z += speed * delta; // Mover hacia atrás
       const newPosition = avatar.ref.current.position.clone(); // Clonar la posición actual

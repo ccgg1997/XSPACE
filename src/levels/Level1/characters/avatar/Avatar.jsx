@@ -7,7 +7,6 @@ export default function Avatar({setpositionfunction}) {
     const avatarRef = useRef();
     const { avatar,setAvatar } = useAvatar();
     const { nodes, materials, animations } = useGLTF('/assets/models/avatar/Avatar.glb')
-    console.log("avatar",avatar)
     
     const { actions } = useAnimations(animations, avatarRef)
     const{refPosition,setRefPosition} = useState(-0.60)
@@ -16,9 +15,7 @@ export default function Avatar({setpositionfunction}) {
         if (typeof setpositionfunction === 'function') {
             setpositionfunction(avatarRef.current.position.z);
         }
-        console.log(typeof setpositionfunction)
         actions[avatar.animation]?.reset().fadeIn(0.5).play();
-        console.log("hola",avatarRef.current.position)
         return () => {
             
             if (actions[avatar.animation])
