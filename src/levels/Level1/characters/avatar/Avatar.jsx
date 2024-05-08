@@ -1,25 +1,37 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useState } from "react";
 import { useAvatar } from "../../../../context/AvatarContext";
 import { useAnimations, useGLTF } from "@react-three/drei";
 
-export default function Avatar() {
-    const avatarRef = useRef();
+export default function Avatar({setpositionfunction}) {
     const avatarBodyRef = useRef();
+    const avatarRef = useRef();
     const { avatar,setAvatar } = useAvatar();
     const { nodes, materials, animations } = useGLTF('/assets/models/avatar/Avatar.glb')
-    console.log(avatar)
+    console.log("avatar",avatar)
+    
     const { actions } = useAnimations(animations, avatarRef)
+    const{refPosition,setRefPosition} = useState(-0.60)
     useEffect(() => {
+        setAvatar({ ...avatar,ref:avatarRef,body:avatarBodyRef });
+        if (typeof setpositionfunction === 'function') {
+            setpositionfunction(avatarRef.current.position.z);
+        }
+        console.log(typeof setpositionfunction)
         actions[avatar.animation]?.reset().fadeIn(0.5).play();
+        console.log("hola",avatarRef.current.position)
         return () => {
+            
             if (actions[avatar.animation])
                 actions[avatar.animation].fadeOut(0.5);
         }
 
     }, [actions, avatar.animation]);
+    // Función para obtener la posición del avatar
+  
+
 
     return (
-        <group ref={avatarRef} name="Scene" position-y={-0.60}  >
+        <group ref={avatarRef} name="Scene" position-y={-0.60}   >
             <group name="Armature">
                 <skinnedMesh
                     name="EyeLeft"

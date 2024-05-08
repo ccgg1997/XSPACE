@@ -5,10 +5,10 @@ import { useFrame } from "@react-three/fiber";
 
 export default function Controls() {
   const { avatar, setAvatar } = useAvatar();
-  console.log(avatar)
   const [sub, get] = useKeyboardControls()
   const [runSound] = useState(new Audio("/assets/sounds/run.wav"))
   const [play, setPlay] = useState(false)
+  const speed = 0.01;
 
   useEffect(() => {
     const unsubscribe = sub(
@@ -34,10 +34,20 @@ export default function Controls() {
     }
   }, [play])
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     const { forward, backward, leftward, rightward } = get()
     if (forward || backward || leftward || rightward) {
       setPlay(true)
+      console.log("AVATAR current position",avatar.body )
+      // if (forward) avatar.ref.current.position.z -= speed * delta; // Mover hacia adelante
+      // if (backward) avatar.ref.current.position.z += speed * delta; // Mover hacia atrás
+      const newPosition = avatar.ref.current.position.clone(); // Clonar la posición actual
+      if (forward) newPosition.z += speed * delta; // Mover hacia adelante
+      if (backward) newPosition.z -= speed * delta; // Mover hacia atrás
+      if (leftward) newPosition.x += speed * delta; // Mover hacia la izquierda
+      if (rightward) newPosition.x -= speed * delta; // Mover hacia la derecha
+      avatar.ref.current.position.copy(newPosition); 
+
     } else {
       setPlay(false)
     }
