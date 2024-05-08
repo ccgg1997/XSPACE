@@ -5,19 +5,22 @@ import { useNavigate } from "react-router-dom";
 import Lights from "./lights/Lights";
 import Galaxy from "./backgrounds/Galaxy";
 import World from "./components/Level1Environment";
+import { useAuth } from "./context/AuthContext";
+import Button from 'react-bootstrap/Button';
 
 const Home = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const auth = useAuth();
 
   const menuStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -240%)",
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     padding: "20px",
     borderRadius: "10px",
     textAlign: "center",
@@ -35,7 +38,7 @@ const Home = () => {
   };
 
   const headingStyle = {
-    color: "white",
+    color: "black",
   };
 
   //ToDo: Que no esté quemado xd. Ty
@@ -46,6 +49,15 @@ const Home = () => {
       setErrorMessage("Correo o contraseña incorrectos");
     }
   };
+
+  const onHandleButtonLogin = async () => {
+    await auth.loginWithGoogle().then((res) => {
+      console.log(res)
+      navigate("/menu");
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
 
   return (
     <Canvas>
@@ -58,19 +70,8 @@ const Home = () => {
       <Html style={menuStyle}>
         <div style={formStyle}>
           <h2 style={headingStyle}>Iniciar Sesión</h2>
-          <input
-            type="text"
-            placeholder="Correo Electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Ingresar</button>
+          <Button size="lg" variant="danger" onClick={onHandleButtonLogin}>Ingresar</Button>
+          {/* <button onClick={onHandleButtonLogin}>Ingresar</button> */}
           {errorMessage && <p>{errorMessage}</p>}
         </div>
       </Html>

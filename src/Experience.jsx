@@ -8,6 +8,7 @@ import Lights from './lights/Lights';
 import Galaxy from './backgrounds/Galaxy';
 import World from "./components/Level1Environment";
 import { useNavigate } from "react-router-dom";
+import Logout from './components/logout/Logout';
 
 
 
@@ -112,26 +113,29 @@ const GameCanvas = () => {
         };
     }, []);
     return (
-        <Canvas
-            // camera={{ position: cameraPosition }}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        >
-            {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
-            <ambientLight />
-            {/* <pointLight position={[10, 10, 10]} /> */}
-            <GameMenu options={options} />
-            {/* <Perf position="top-left" /> */}
-            <PerspectiveCamera makeDefault position={[0, 10, 20]} />
-            {/* <Lights />
+        <>
+            <Logout />
+            <Canvas
+                // camera={{ position: cameraPosition }}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            >
+                {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
+                <ambientLight />
+                {/* <pointLight position={[10, 10, 10]} /> */}
+                <GameMenu options={options} />
+                {/* <Perf position="top-left" /> */}
+                <PerspectiveCamera makeDefault position={[0, 10, 20]} />
+                {/* <Lights />
                 <EnviromentMap /> */}
-            <OrbitControls makeDefault target={[0, 10, 0]} />
+                <OrbitControls makeDefault target={[0, 10, 0]} />
 
-            <Suspense fallback={null}>
-                <Lights />
-                <World />
-                <Galaxy />
-            </Suspense>
-        </Canvas>
+                <Suspense fallback={null}>
+                    <Lights />
+                    <World />
+                    <Galaxy />
+                </Suspense>
+            </Canvas>
+        </>
     );
 };
 
