@@ -87,7 +87,7 @@ export default function Level1() {
                         <Suspense fallback={null}>
                             <Lights ></Lights>
                             {/* <Environments /> */}
-                            <Physics debug={false}>
+                            <Physics debug={true}>
                                 <World />
                                 {/* <Girl /> */}
                                 <Villano />
@@ -101,6 +101,12 @@ export default function Level1() {
                                     position={[0, 10, -1]}
                                     characterInitDir={180}
                                     camInitDir={{ x: 0, y: 10 }}
+                                    onCollisionEnter={({ manifold, target, other  }) => {
+                                        console.log(
+                                          "Collision at world position ",
+                                          manifold.solverContactPoint(0)
+                                        );
+                                      }}
                                 >
                                     <Avatar setpositionfunction={setpositionfunction} />
                                 </Ecctrl>
