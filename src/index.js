@@ -4,6 +4,7 @@ import Experience from './Experience';
 import './styles.css';
 import { Canvas } from '@react-three/fiber';
 import GameRoutes from './GameRoutes';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = createRoot(document.getElementById("root"));
 
