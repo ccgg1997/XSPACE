@@ -43,7 +43,7 @@ const Level2 = ({ }) => {
               color={new Color("#FFFFFF")}
               intensity={1.4}
             />
-            <Physics debug={true}>
+            <Physics debug={false}>
               <Level2Environment onLoad={() => setReady(true)} collisionManager={handleCollision} />
               <Nave
               />

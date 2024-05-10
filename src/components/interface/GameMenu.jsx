@@ -1,27 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Html } from '@react-three/drei';
+import './GameMenu.css';
 
 const GameMenu = ({ options }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const menuStyle = {
-        width: '16rem',
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
         transform: 'translate(-50%, -170%)',
-        textAlign: 'center',
-        // background: 'rgba(255, 255, 255, 0.5)',
-        padding: '20px',
-        borderRadius: '10px',
-    };
-    const itemStyle = {
-        marginBottom: '10px',
-        fontSize: '50px',
-        color: 'gray'
-    };
-    const selectedItemStyle = {
-        ...itemStyle,
-        color: "#0099CE", // change color when selected
     };
 
 
@@ -49,9 +33,9 @@ const GameMenu = ({ options }) => {
         };
     }, [selectedIndex, options]);
     return (
-        <Html className='gameMenu' style={menuStyle}>
+        <Html className='gamemenu' style={menuStyle}>
             {options.map((option, index) => (
-                <div key={index} style={index === selectedIndex ? selectedItemStyle : itemStyle}>
+                <div key={index} className={index != selectedIndex ? 'menuitem' : 'menuitem selected-item'} onClick={option.action}>
                     {option.text}
                 </div>
             ))}

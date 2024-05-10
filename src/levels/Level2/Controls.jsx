@@ -12,8 +12,8 @@ export default function Controls({ orbitControlsRef, ready = false }) {
     let walkDirection = new Vector3()
     let rotateAngle = new Vector3(0, 1, 0);
     let rotateQuaternion = new Quaternion();
-    const velocity = 3;
-    const speed = 5;
+    const velocity = 6;
+    const speed = 18;
     //let cameraTarget = new Vector3(0, 0, 0);
     const desiredDistance = 2;
 
