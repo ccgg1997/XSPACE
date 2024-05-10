@@ -18,11 +18,10 @@ export default function Avatar({ setpositionfunction }) {
         }
         actions[avatar.animation]?.reset().fadeIn(0.5).play();
         return () => {
-
             if (actions[avatar.animation])
                 actions[avatar.animation].fadeOut(0.5);
         }
-
+       
     }, [actions, avatar.animation]);
 
 

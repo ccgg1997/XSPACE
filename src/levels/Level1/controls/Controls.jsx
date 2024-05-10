@@ -21,6 +21,16 @@ export default function Controls() {
   }, [avatar, setAvatar, sub, get]);
 
   useEffect(() => {
+    const unsubscribe = sub(
+      (state) => state.attack,
+      (pressed) => {
+        console.log("ESTAMOS ES SEVERA PELEA ÑERO")
+      }
+    );
+    return () => unsubscribe();
+  }, [avatar, setAvatar, sub, get]);
+
+  useEffect(() => {
     if (play) {
       runSound.currentTime = 0;
       runSound.volume = Math.random()

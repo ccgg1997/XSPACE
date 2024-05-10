@@ -24,9 +24,10 @@ export default function Level1() {
    
     const map = useMovements();
     const avatar = useAvatar();
+
     // Verificar si el avatar y su posición están listos antes de acceder a ellos
     const[avatarpositionz,setavatarpositionz] = useState(0);
-    
+    const[ultimaVidaPerdida,setUltimaVidaPerdida] =  useState(new Date().getTime());
     const setpositionfunction = (position) => {
         setavatarpositionz(position);
     }
@@ -87,7 +88,7 @@ export default function Level1() {
                         <Suspense fallback={null}>
                             <Lights ></Lights>
                             {/* <Environments /> */}
-                            <Physics debug={true}>
+                            <Physics debug={false}>
                                 <World />
                                 {/* <Girl /> */}
                                 <Villano />
@@ -102,10 +103,18 @@ export default function Level1() {
                                     characterInitDir={180}
                                     camInitDir={{ x: 0, y: 10 }}
                                     onCollisionEnter={({ manifold, target, other  }) => {
+                                        const diferencia= (new Date().getTime()-ultimaVidaPerdida )/1000  > 2
+                                        console.log("HOLA_",ultimaVidaPerdida,diferencia)
                                         console.log(
                                           "Collision at world position ",
-                                          manifold.solverContactPoint(0)
-                                        );
+                                          manifold.solverContactPoint(0),"mainfold: ",manifold,"target: ", target,"other: ",other
+                                        )
+                                        if(countLives>0 && diferencia){
+                                            setCountLives(countLives-1)
+                                            setUltimaVidaPerdida(new Date().getTime())
+
+                                        }
+                                            
                                       }}
                                 >
                                     <Avatar setpositionfunction={setpositionfunction} />
