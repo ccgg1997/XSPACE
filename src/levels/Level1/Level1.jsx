@@ -22,6 +22,8 @@ import { useAvatar } from "../../context/AvatarContext";
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
     const [mostrarVidaExtra,setMostrarVidaExtra] = useState(true);
+    const [cohete,setCohete] = useState("");
+    const[quitarPieza,setQuitarPieza]=useState(false)
    
     const map = useMovements();
     const avatar = useAvatar();
@@ -34,7 +36,6 @@ export default function Level1() {
     }
 
     const lives = "♥".repeat(countLives);
-    const cohete = "🚀"
     const diccionario_objetos = {
         "objeto1": {
             "rango_x": [0,  0.026],
@@ -90,7 +91,7 @@ export default function Level1() {
                             <Lights ></Lights>
                             {/* <Environments /> */}
                             <Physics debug={false}>
-                                <World mostrarVidaExtra={mostrarVidaExtra} />
+                                <World mostrarVidaExtra={mostrarVidaExtra} quitarPieza={quitarPieza}/>
                                 {/* <Girl /> */}
                                 <Villano />
                                 <Villano2 />
@@ -120,6 +121,13 @@ export default function Level1() {
                                             setUltimaVidaPerdida(new Date().getTime())
                                             setMostrarVidaExtra(false)
                                             console.log("desaparece la vida")
+
+                                        }
+
+                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="pieza"){
+                                            setCohete("🚀")
+                                            setQuitarPieza(true)
+                                            console.log("desaparece la pieza")
 
                                         }
                                             

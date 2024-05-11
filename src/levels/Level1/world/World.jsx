@@ -8,6 +8,7 @@ export default function World(props) {
   const { nodes, materials } = useGLTF("/assets/models/world/level1.glb")
   const liveRef = useRef(null);
   let mostraVida = props.mostrarVidaExtra
+  let quitarPieza = props.quitarPieza
 
   let yPosition = 0;
 
@@ -181,7 +182,7 @@ export default function World(props) {
         rotation={[Math.PI, 0, 0]}
         scale={[0.075, 4.174, 0.339]}
       /></RigidBody>
-      <RigidBody type="fixed" colliders="trimesh"><mesh
+     { !quitarPieza && <RigidBody type="fixed" colliders="trimesh" name="pieza"><mesh
         castShadow
         receiveShadow
         geometry={nodes.piezaNave004.geometry}
@@ -189,7 +190,7 @@ export default function World(props) {
         position={[-4.217, 0.641, -48.633]}
         rotation={[Math.PI, 0, 0]}
         scale={[0.075, 4.174, 0.339]}
-      /></RigidBody>
+      /></RigidBody>}
       <RigidBody type="fixed" colliders="trimesh"><mesh
         castShadow
         receiveShadow
