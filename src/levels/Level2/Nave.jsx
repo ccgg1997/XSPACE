@@ -9,16 +9,9 @@ export default function Nave(props) {
     const naveRef = useRef();
     const { setNave } = useNave();
     const { nodes, materials } = useGLTF('/assets/models/NaveDefault.glb');
-    // const [ref] = useBox(() => ({
-    //     type: 'Dynamic',
-    //     position,
-    //     gravityScale: 0, // Ignora la gravedad
-    // }));
+
 
     useEffect(() => {
-        console.log('naveBodyRef', naveBodyRef.current)
-        console.log('naveRef', naveRef.current)
-        console.log('position', naveRef.current.position)
         setNave({
             ref: naveRef.current,
             body: naveBodyRef.current

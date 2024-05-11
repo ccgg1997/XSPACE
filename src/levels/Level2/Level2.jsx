@@ -30,7 +30,7 @@ const Level2 = ({ }) => {
           <PauseMenu onRestart={() => setRestart(true)} />
           <KeyboardControls map={map} >
             <Canvas
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#BFBFBF' }}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
             >
               <Perf position="top-left" />
               <PerspectiveCamera makeDefault position={[0, 5, 12]} zoom={1.3} />
@@ -47,7 +47,7 @@ const Level2 = ({ }) => {
                   intensity={1.4}
                 />
                 <Physics debug={false}>
-                  <Level2Environment onLoad={() => setReady(true)} collisionManager={handleCollision} />
+                  <Level2Environment onLoad={() => setReady(true)} collisionController={handleCollision} collisionCallback={() => setRestart(true)} />
                   <Nave
                   />
 

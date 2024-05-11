@@ -1,19 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 import { useThree } from '@react-three/fiber';
+import { useGame } from '../../context/GameContext';
 
-export default function Level2Environment({ args, onLoad = () => { }, collisionManager = () => { } }) {
+export default function Level2Environment({ args, onLoad = () => { }, collisionController = () => { }, collisionCallback }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
+  const { game, setGame } = useGame();
+  // const [collisionHandled, setCollisionHandled] = useState(false);
+
   useEffect(() => {
     onLoad();
   }, [scene]);
+
+  const collisionManager = (event) => {
+    console.log('ENTROO en colisión detectada')
+    // collisionCallback();
+    setGame({ ...game, paused: true })
+    collisionController(event, collisionCallback);
+    // if (!collisionHandled) {
+    //   setCollisionHandled(true);
+    //   collisionController(event, () => {
+    //     collisionCallback()
+    //     setCollisionHandled(false);
+    //   })
+    // Manejar la colisión aquí
+
+    // Marcar la colisión como manejada para evitar futuras ejecuciones
+    // }
+  };
+
   const { camera } = useThree();
   camera.near = 20;
+
   return (
     <group {...args} dispose={null}>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} onCollisionEnter={collisionManager} name="PARED">
+      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} name="PARED">
         <mesh
           castShadow
           receiveShadow
@@ -24,7 +47,7 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionM
           frustumCulled={true}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} onCollisionEnter={collisionManager} name="PISO">
+      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} name="PISO">
         <mesh
           castShadow
           receiveShadow
