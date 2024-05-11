@@ -1,39 +1,43 @@
-import { OrbitControls, useKeyboardControls } from "@react-three/drei";
-// import { useThree } from '@react-three/fiber';
-import { useEffect, useRef, useState } from "react";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Quaternion, Vector3 } from "three";
+import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
+import { useGame } from "../../context/GameContext";
+import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, ready = false }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
     const { nave, setNave } = useNave();
+    const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
-    let rotateAngle = new Vector3(0, 1, 0);
-    let rotateQuaternion = new Quaternion();
-    const velocity = 3;
-    const speed = 5;
-    //let cameraTarget = new Vector3(0, 0, 0);
-    const desiredDistance = 2;
-
+    const velocity = 6;
+    const speed = 20;
     const { camera } = useThree();
-    camera.near = 20;
+    const startGame = () => {
+        nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
+        orbitControlsRef.current.target.set(0, 3, 0)
+        camera.position.set(0, 5, 12)
+    }
+    useEffect(() => {
+        if (restart === true) {
+            startGame();
+            onRestartDone();
+            setGame({ ...game, paused: false })
+        }
+    }, [restart])
 
 
     useFrame((state, delta) => {
-        if (!ready)
-            return;
+        if (game.paused) return;
         const { up, down, left, right } = get()
         const currentTranslation = nave.body?.translation()
-        let moveX = 0;//currentTranslation?.x;//walkDirection.x * velocity * delta
-        let moveY = 0;//currentTranslation?.y;//walkDirection.y * velocity * delta
+        let moveX = 0;
+        let moveY = 0;
         let moveZ = speed * delta
         if (up || down || left || right) {
-            // console.log(currentTranslation)
 
-            state.camera.getWorldDirection(walkDirection)
-            walkDirection.normalize()
+
             if (up) {
                 moveY += velocity * delta;
             }
@@ -42,7 +46,6 @@ export default function Controls({ orbitControlsRef, ready = false }) {
             }
             if (left) {
                 moveX -= velocity * delta;
-                // console.log('moveX', moveX, 'currentTranslation.x', currentTranslation.x, 'velocity', velocity, 'delta', delta)
             }
             if (right) {
                 moveX += velocity * delta;
@@ -64,15 +67,10 @@ export default function Controls({ orbitControlsRef, ready = false }) {
 
         state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
         orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
-        const pressed = get().back
+        get().back
     })
 
     return (
-        // <OrbitControls makeDefault
-        //     ref={orbitControlsRef}
-        //     // target={[0, 6, 0]}
-        //     enablePan={true}
-        // />
         null
     )
 }
