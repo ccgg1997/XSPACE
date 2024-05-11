@@ -1,8 +1,24 @@
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+
 
 export default function World(props) {
   const { nodes, materials } = useGLTF("/assets/models/world/level1.glb")
+  const liveRef = useRef(null);
+  let mostraVida = props.mostrarVidaExtra
+  let quitarPieza = props.quitarPieza
+
+  let yPosition = 0;
+
+  useFrame((state, delta) => {
+    yPosition += Math.sin(delta * 1) + yPosition; 
+    if (liveRef.current) {
+      liveRef.current.rotation.y += 0.01;
+    }
+  });
+  
 
   return (
     <group {...props} dispose={null}>
@@ -13,7 +29,7 @@ export default function World(props) {
         material={materials.roca}
         position={[-0.13, 18.645, -15.036]}
       /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -21,7 +37,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[0.33, 26, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -29,7 +45,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[0.45, 65, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball">
         <mesh
           castShadow
           receiveShadow
@@ -38,7 +54,7 @@ export default function World(props) {
           position={[0, 20, -13.132]}
         /></RigidBody>
 
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -47,7 +63,7 @@ export default function World(props) {
           position={[0.13, 16, -13.132]}
         /></RigidBody>
 
-      <RigidBody >
+      <RigidBody name="ball">
         <mesh
           castShadow
           receiveShadow
@@ -55,7 +71,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[-2.13, 16, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -63,12 +79,12 @@ export default function World(props) {
           material={materials.Mball}
           position={[-2.13, 36, -16.132]}
         /></RigidBody>
-      <RigidBody type="dynamic" colliders="trimesh"><mesh
+      <RigidBody ><mesh
         castShadow
         receiveShadow
         geometry={nodes.roca2.geometry}
         material={materials.roca2}
-        position={[3.286, 13.759, -21.584]}
+        position={[1.286, 13.759, -21.584]}
       /></RigidBody>
       <RigidBody type="fixed" colliders="trimesh"><mesh
         castShadow
@@ -130,6 +146,237 @@ export default function World(props) {
         position={[-0.5, 0, -70.23]}
         rotation={[0, 1.007, 0]}
       /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave.geometry}
+        material={materials.piezaNave}
+        position={[-4.217, 0.641, -41.272]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave001.geometry}
+        material={materials['piezaNave.001']}
+        position={[-4.217, 0.641, -43.235]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave002.geometry}
+        material={materials['piezaNave.002']}
+        position={[-4.217, 0.641, -45.346]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave003.geometry}
+        material={materials['piezaNave.003']}
+        position={[-4.217, 0.641, -47.123]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh" name="final"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Final.geometry}
+        material={materials.Final}
+        position={[0.01, 0.093, -88.417]}
+        scale={[0.8, 0.212, 0.8]}
+      /></RigidBody>
+     { !quitarPieza && <RigidBody type="fixed" colliders="trimesh" name="pieza"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave004.geometry}
+        material={materials['piezaNave.004']}
+        position={[-4.217, 0.641, -48.633]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>}
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave005.geometry}
+        material={materials['piezaNave.005']}
+        position={[-2.899, 0.641, -47.123]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave006.geometry}
+        material={materials['piezaNave.006']}
+        position={[-2.899, 0.641, -45.346]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave007.geometry}
+        material={materials['piezaNave.007']}
+        position={[-2.899, 0.641, -43.235]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave008.geometry}
+        material={materials['piezaNave.008']}
+        position={[-2.899, 0.641, -41.272]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave009.geometry}
+        material={materials['piezaNave.009']}
+        position={[-1.419, 0.641, -41.272]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave010.geometry}
+        material={materials['piezaNave.010']}
+        position={[-1.419, 0.641, -43.235]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave011.geometry}
+        material={materials['piezaNave.011']}
+        position={[-1.419, 0.641, -45.346]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave012.geometry}
+        material={materials['piezaNave.012']}
+        position={[-1.419, 0.641, -47.123]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave013.geometry}
+        material={materials['piezaNave.013']}
+        position={[0.031, 0.641, -47.123]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave014.geometry}
+        material={materials['piezaNave.014']}
+        position={[0.031, 0.641, -45.346]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave015.geometry}
+        material={materials['piezaNave.015']}
+        position={[0.031, 0.641, -43.235]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave016.geometry}
+        material={materials['piezaNave.016']}
+        position={[0.031, 0.641, -41.272]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave017.geometry}
+        material={materials['piezaNave.017']}
+        position={[4.443, 0.641, -53.365]}
+        rotation={[0, -0.02, -Math.PI]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave018.geometry}
+        material={materials['piezaNave.018']}
+        position={[4.402, 0.641, -51.254]}
+        rotation={[0, -0.02, -Math.PI]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave019.geometry}
+        material={materials['piezaNave.019']}
+        position={[4.367, 0.641, -49.478]}
+        rotation={[0, -0.02, -Math.PI]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.corazon.geometry}
+        material={materials['Material.001']}
+        position={[-3.931, 0.348, -52.982]}
+        scale={[1, 3.715, 1]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave020.geometry}
+        material={materials['piezaNave.020']}
+        position={[0.031, 0.641, -48.613]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave021.geometry}
+        material={materials['piezaNave.021']}
+        position={[-1.419, 0.641, -48.613]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.piezaNave022.geometry}
+        material={materials['piezaNave.022']}
+        position={[-2.899, 0.641, -48.613]}
+        rotation={[Math.PI, 0, 0]}
+        scale={[0.075, 4.174, 0.339]}
+      /></RigidBody>
+      {mostraVida && <RigidBody type="fixed" colliders="trimesh" name="live"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.live.geometry}
+        material={materials.live}
+        position={[-2.729, 0.948, -78.455]}
+        ref={liveRef}
+      /></RigidBody>}
       <RigidBody type="fixed" colliders="trimesh">
         <mesh
           castShadow

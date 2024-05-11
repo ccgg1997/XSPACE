@@ -21,6 +21,16 @@ export default function Controls() {
   }, [avatar, setAvatar, sub, get]);
 
   useEffect(() => {
+    const unsubscribe = sub(
+      (state) => state.attack,
+      (pressed) => {
+        setAvatar({ ...avatar, animation: pressed ? "Fight" : "Idle" });
+      }
+    );
+    return () => unsubscribe();
+  }, [avatar, setAvatar, sub, get]);
+
+  useEffect(() => {
     if (play) {
       runSound.currentTime = 0;
       runSound.volume = Math.random()
