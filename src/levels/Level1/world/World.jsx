@@ -63,12 +63,12 @@ export default function World(props) {
           material={materials.Mball}
           position={[-2.13, 36, -16.132]}
         /></RigidBody>
-      <RigidBody type="dynamic" colliders="trimesh"><mesh
+      <RigidBody ><mesh
         castShadow
         receiveShadow
         geometry={nodes.roca2.geometry}
         material={materials.roca2}
-        position={[3.286, 13.759, -21.584]}
+        position={[1.286, 13.759, -21.584]}
       /></RigidBody>
       <RigidBody type="fixed" colliders="trimesh"><mesh
         castShadow

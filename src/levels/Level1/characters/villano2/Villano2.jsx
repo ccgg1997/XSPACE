@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 
-export default function Villano2(props) {
+export default function ddVillano2(props) {
     const { nodes, materials } = useGLTF('/assets/models/villano2/villano2.glb')
     return (
         <group {...props} dispose={null}>

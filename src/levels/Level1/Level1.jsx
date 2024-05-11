@@ -36,7 +36,7 @@ export default function Level1() {
     const diccionario_objetos = {
         "objeto1": {
             "rango_x": [0,  0.026],
-            "mensaje": "Esquiva las Rocas"
+            "mensaje": "Esquiva las esferas de metal"
         },
         "objeto2": {
             "rango_x": [ 0.027, 0.038],
@@ -102,12 +102,12 @@ export default function Level1() {
                                     camInitDir={{ x: 0, y: 10 }}
                                     onCollisionEnter={({ manifold, target, other  }) => {
                                         const diferencia= (new Date().getTime()-ultimaVidaPerdida )/1000  > 2
-                                        console.log("HOLA_",other.rigidBodyObject)
+                                        console.log("HOLA_",other.rigidBodyObject.name)
                                         console.log(
                                           "Collision at world position ",
                                           manifold.solverContactPoint(0),"mainfold: ",manifold,"target: ", target,"other: ",other
                                         )
-                                        if(countLives>0 && diferencia){
+                                        if(countLives>0 && diferencia && other.rigidBodyObject.name){
                                             setCountLives(countLives-1)
                                             setUltimaVidaPerdida(new Date().getTime())
 
