@@ -19,6 +19,7 @@ import React, { useState, useEffect } from 'react';
 import { AvatarProvider } from "../../context/AvatarContext";
 import { useAvatar } from "../../context/AvatarContext";
 import { pass } from "three/examples/jsm/nodes/Nodes.js";
+import { useNavigate } from "react-router-dom"
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
@@ -26,52 +27,82 @@ export default function Level1() {
     const [cohete, setCohete] = useState("");
     const [final, setFinal] = useState(false);
     const [quitarPieza, setQuitarPieza] = useState(false);
+    const [textoFinal, setTextoFinal] = useState("")
 
     const map = useMovements();
     const avatar = useAvatar();
+    const navigate = useNavigate()
 
     const [avatarpositionz, setAvatarPositionz] = useState(0);
     const [ultimaVidaPerdida, setUltimaVidaPerdida] = useState(new Date().getTime());
-    const [mensaje, setMensaje] = useState("");
+    const [mensaje, setMensaje] = useState("esta bien");
 
     const setpositionfunction = (position) => {
         setAvatarPositionz(position);
     };
 
     const lives = "♥".repeat(countLives);
-    const mensajes = {
-        mensaje1: "Calma. Hay varias planetas que estan esperando tu llegada",
-        mensaje2: "Ya puedes arreglar tu nave, Este es el comienzo de un emocionante viaje.",
-        mensaje3: "Espero no mueras en el proceso."
-    }
+    const mensajes = [
+        " ",
+        "Calma...",
+        "Hay varios planetas",
+        "que esperan tu llegada",
+        "Ya puedes arreglar tu nave",
+        "Este es el comienzo",
+        "de un emocionante viaje.",
+        "Espero no mueras pronto.",
+        " ",]
+
+    const diccionario_objetos = {
+        "objeto1": {
+            "rango_x": [0, 0.026],
+            "mensaje": "Esquiva las esferas de metal"
+        },
+        "objeto2": {
+            "rango_x": [0.027, 0.038],
+            "mensaje": "Salta el obstaculo"
+        },
+        "objeto3": {
+            "rango_x": [0.0515, 0.087],
+            "mensaje": "Pasa todas las puertas"
+        },
+        "objeto4": {
+            "rango_x": [0.088, 0.125],
+            "mensaje": "Encuentra la pieza perdida"
+        },
+        "objeto5": {
+            "rango_x": [0.126, 0.180],
+            "mensaje": "Salta los obstaculo"
+        },
+        "objeto6": {
+            "rango_x": [0.181, 0.4],
+            "mensaje": "Permanece en el circulo azul"
+        },
+    };
+    const functionMsjFinal = () => {
+        const tiempoEntreMensajes = 3000;
+    
+        const promesas = mensajes.map((mensaje, index) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    setTextoFinal(mensaje);
+                    resolve();
+                }, index * tiempoEntreMensajes);
+            });
+        });
+    
+        Promise.all(promesas).then(() => {
+            setTimeout(() => {
+                console.log("entro al timeout final");
+                navigate("/level2");
+            }, 10000); 
+        });
+    };
+
+
 
     useEffect(() => {
-        const diccionario_objetos = {
-            "objeto1": {
-                "rango_x": [0, 0.026],
-                "mensaje": "Esquiva las esferas de metal"
-            },
-            "objeto2": {
-                "rango_x": [0.027, 0.038],
-                "mensaje": "Salta el obstaculo"
-            },
-            "objeto3": {
-                "rango_x": [0.0515, 0.087],
-                "mensaje": "Pasa todas las puertas"
-            },
-            "objeto4": {
-                "rango_x": [0.088, 0.125],
-                "mensaje": "Encuentra la pieza perdida"
-            },
-            "objeto5": {
-                "rango_x": [0.126, 0.180],
-                "mensaje": "Salta los obstaculo"
-            },
-            "objeto6": {
-                "rango_x": [0.181, 0.4],
-                "mensaje": "Permanece en el circulo azul"
-            },
-        };
+
 
         if (avatarpositionz !== null && !final) {
             for (const objeto in diccionario_objetos) {
@@ -124,7 +155,7 @@ export default function Level1() {
                                             "Collision at world position ",
                                             manifold.solverContactPoint(0), "mainfold: ", manifold, "target: ", target, "other: ", other
                                         )
-                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live") {
+                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza") {
                                             setCountLives(countLives - 1)
                                             setUltimaVidaPerdida(new Date().getTime())
                                             other.rigidBodyObject.name
@@ -146,9 +177,12 @@ export default function Level1() {
                                         }
 
                                         if (other.rigidBodyObject.name && other.rigidBodyObject.name == "final") {
+                                            if (final) {
+                                                return
+                                            }
                                             setFinal(true)
                                             setMensaje("Mantén presionada la tecla p")
-                                            console.log("entro al final")
+                                            functionMsjFinal()
 
                                         }
 
@@ -158,7 +192,7 @@ export default function Level1() {
                                 </Ecctrl>
                             </Physics>
 
-                            <WelcomeText position={[0, 1, -92]} text={"hola"} />
+                            <WelcomeText position={[-2, 2, -92]} text={textoFinal} />
                         </Suspense>
                         <Controls />
                     </Canvas>

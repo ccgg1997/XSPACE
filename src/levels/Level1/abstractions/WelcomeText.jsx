@@ -17,14 +17,14 @@ const WelcomeText = (props) => {
             <Text3D
                 font={"../../../../assets/fonts/SquidGamesFont.json"}
                 bevelEnabled
-                bevelSize={0.005}
+                bevelSize={0.05}
                 bevelThickness={0.01}
-                height={0.1}
-                letterSpacing={0.05}
-                size={0.2}
+                height={0.3}
+                letterSpacing={0.01}
+                size={0.4}
             >
                 <meshNormalMaterial />
-                {text}d
+                {text}
             </Text3D>
         </Center>
         </Float>

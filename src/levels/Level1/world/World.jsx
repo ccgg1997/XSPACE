@@ -187,7 +187,7 @@ export default function World(props) {
         receiveShadow
         geometry={nodes.Final.geometry}
         material={materials.Final}
-        position={[0.01, 0.093, -86.417]}
+        position={[0.01, 0.093, -88.417]}
         scale={[0.8, 0.212, 0.8]}
       /></RigidBody>
      { !quitarPieza && <RigidBody type="fixed" colliders="trimesh" name="pieza"><mesh
