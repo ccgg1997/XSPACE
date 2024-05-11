@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
+import { useThree } from '@react-three/fiber';
 
 export default function Level2Environment({ args, onLoad = () => { }, collisionManager = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
@@ -8,6 +9,8 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionM
   useEffect(() => {
     onLoad();
   }, [scene]);
+  const { camera } = useThree();
+  camera.near = 20;
   return (
     <group {...args} dispose={null}>
       <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} onCollisionEnter={collisionManager} name="PARED">
