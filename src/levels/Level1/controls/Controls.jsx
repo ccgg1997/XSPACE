@@ -24,14 +24,14 @@ export default function Controls() {
     const unsubscribe = sub(
       (state) => state.attack,
       (pressed) => {
-        setAvatar({ ...avatar, animation: pressed ? "Fight" : "Running" });
+        setAvatar({ ...avatar, animation: pressed ? "Fight" : "Idle" });
       }
     );
     return () => unsubscribe();
   }, [avatar, setAvatar, sub, get]);
 
   useEffect(() => {
-    if (play !== undefined) {
+    if (play) {
       runSound.currentTime = 0;
       runSound.volume = Math.random()
       if (runSound.paused) {

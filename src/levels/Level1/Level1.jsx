@@ -21,6 +21,7 @@ import { useAvatar } from "../../context/AvatarContext";
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
+    const [mostrarVidaExtra,setMostrarVidaExtra] = useState(true);
    
     const map = useMovements();
     const avatar = useAvatar();
@@ -33,6 +34,7 @@ export default function Level1() {
     }
 
     const lives = "♥".repeat(countLives);
+    const cohete = "🚀"
     const diccionario_objetos = {
         "objeto1": {
             "rango_x": [0,  0.026],
@@ -75,7 +77,8 @@ export default function Level1() {
         <>
             <AvatarProvider>
                 <KeyboardControls map={map} >
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
+                        <div style={{color: 'red',fontSize: '34px' }}>{cohete}</div>
                         <div style={{ marginLeft: 'auto', marginRight: 'auto', color: 'white' }}>{mensaje}</div>
                         <div style={{color: 'red',fontSize: '34px' }}>{lives}</div>
                     </div>
@@ -87,7 +90,7 @@ export default function Level1() {
                             <Lights ></Lights>
                             {/* <Environments /> */}
                             <Physics debug={false}>
-                                <World />
+                                <World mostrarVidaExtra={mostrarVidaExtra} />
                                 {/* <Girl /> */}
                                 <Villano />
                                 <Villano2 />
@@ -107,9 +110,16 @@ export default function Level1() {
                                           "Collision at world position ",
                                           manifold.solverContactPoint(0),"mainfold: ",manifold,"target: ", target,"other: ",other
                                         )
-                                        if(countLives>0 && diferencia && other.rigidBodyObject.name){
+                                        if(countLives>0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name!="live"){
                                             setCountLives(countLives-1)
                                             setUltimaVidaPerdida(new Date().getTime())
+
+                                        }
+                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="live"){
+                                            setCountLives(countLives+1)
+                                            setUltimaVidaPerdida(new Date().getTime())
+                                            setMostrarVidaExtra(false)
+                                            console.log("desaparece la vida")
 
                                         }
                                             
