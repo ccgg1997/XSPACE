@@ -59,8 +59,9 @@ export default function Level1() {
         },
         "objeto6": {
             "rango_x": [0.181, 0.4],
-            "mensaje": "Ataca tu enemigo"
+            "mensaje": "Permanece en el circulo azul"
         },
+        
 
 
     };
@@ -79,9 +80,9 @@ export default function Level1() {
             <AvatarProvider>
                 <KeyboardControls map={map} >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
-                        <div style={{color: 'red',fontSize: '34px' }}>{cohete}</div>
-                        <div style={{ marginLeft: 'auto', marginRight: 'auto', color: 'white' }}>{mensaje}</div>
-                        <div style={{color: 'red',fontSize: '34px' }}>{lives}</div>
+                        <div style={{color: 'red',fontSize: '39px' }}>{cohete}</div>
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto',fontSize: '39px', color: 'white' }}>{mensaje}</div>
+                        <div style={{color: 'red',fontSize: '39px' }}>{lives}</div>
                     </div>
                     <Canvas
                         shadows={false}
@@ -128,6 +129,11 @@ export default function Level1() {
                                             setCohete("🚀")
                                             setQuitarPieza(true)
                                             console.log("desaparece la pieza")
+
+                                        }
+
+                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="final"){
+                                            diccionario_objetos["objeto6"]["mensaje"] = "presiona la tecla P"
 
                                         }
                                             

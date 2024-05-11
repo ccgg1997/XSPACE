@@ -1150,6 +1150,14 @@ export default function World(props) {
         material={materials['pared.003']}
         position={[0.142, 2.89, -38.64]}
       /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh" name="final"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Final.geometry}
+        material={materials.Final}
+        position={[0, 0.053, -88.417]}
+        scale={[1, 0.212, 1]}
+      /></RigidBody>
     </group>
   );
 }
