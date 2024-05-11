@@ -68,7 +68,7 @@ export default function Level1() {
         },
         "objeto4": {
             "rango_x": [0.088, 0.125],
-            "mensaje": "Encuentra la pieza perdida"
+            "mensaje": "Encuentra y toca la pieza perdida"
         },
         "objeto5": {
             "rango_x": [0.126, 0.180],
