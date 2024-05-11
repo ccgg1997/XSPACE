@@ -16,6 +16,7 @@ export function AvatarProvider({children}){
         ref: null,
         body: null,
         animation: "Idle",
+        lives:3
     })
 
     return (
