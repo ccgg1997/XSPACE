@@ -20,13 +20,14 @@ const Level2 = ({ }) => {
   const map = useMovements();
   const orbitControlsRef = useRef()
   const [ready, setReady] = useState(false);
+  const [restart, setRestart] = useState(false)
 
 
   return (
     <div tabIndex={0}>
       <NaveProvider>
         <GameProvider>
-          <PauseMenu />
+          <PauseMenu onRestart={() => setRestart(true)} />
           <KeyboardControls map={map} >
             <Canvas
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#BFBFBF' }}
@@ -52,7 +53,7 @@ const Level2 = ({ }) => {
 
                 </Physics>
               </Suspense>
-              {ready && <Controls orbitControlsRef={orbitControlsRef} />}
+              {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} />}
             </Canvas>
           </KeyboardControls>
         </GameProvider>
@@ -62,19 +63,3 @@ const Level2 = ({ }) => {
 };
 
 export default Level2;
-/*
-<Ecctrl
-              camInitDis={1}
-              camMaxDis={10}
-              maxVelLimit={5}
-              jumpVel={4}
-              position={[0, 10, -30]}
-              debug={true}
-              disableFollowCam={true}
-              disableFollowCamPos={{ x: 0, y: 0, z: 0 }}
-            >
-              <Nave
-              // position={[0, 10, 0]}
-              />
-            </Ecctrl>
-            */

@@ -1,17 +1,32 @@
 import { useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
+import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
     const { nave, setNave } = useNave();
-    const { game } = useGame();
+    const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
     const velocity = 6;
     const speed = 20;
+    const { camera } = useThree();
+    const startGame = () => {
+        nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
+        orbitControlsRef.current.target.set(0, 3, 0)
+        camera.position.set(0, 5, 12)
+    }
+    useEffect(() => {
+        if (restart === true) {
+            startGame();
+            onRestartDone();
+            setGame({ ...game, paused: false })
+        }
+    }, [restart])
+
 
     useFrame((state, delta) => {
         if (game.paused) return;
@@ -22,8 +37,7 @@ export default function Controls({ orbitControlsRef }) {
         let moveZ = speed * delta
         if (up || down || left || right) {
 
-            state.camera.getWorldDirection(walkDirection)
-            walkDirection.normalize()
+
             if (up) {
                 moveY += velocity * delta;
             }
@@ -53,7 +67,7 @@ export default function Controls({ orbitControlsRef }) {
 
         state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
         orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
-        const pressed = get().back
+        get().back
     })
 
     return (

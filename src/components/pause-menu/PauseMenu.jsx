@@ -3,7 +3,7 @@ import './PauseMenu.css';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameContext';
 
-const PauseMenu = ({ }) => {
+const PauseMenu = ({ onRestart }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const { game, togglePause } = useGame();
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const PauseMenu = ({ }) => {
         },
         {
             text: 'Reiniciar',
-            action: () => { console.log('reiniciar') }//startLevel('2')
+            action: onRestart//startLevel('2')
         },
         {
             text: 'Menu',
