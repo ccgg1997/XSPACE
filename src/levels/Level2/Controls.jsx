@@ -11,8 +11,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
-    const velocity = 6;
-    const speed = 20;
+    const velocity = 8;
+    const speed = 25;
     const { camera } = useThree();
     const startGame = () => {
         nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
