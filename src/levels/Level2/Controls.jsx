@@ -23,7 +23,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         if (restart === true) {
             startGame();
             onRestartDone();
-            setGame({ ...game, paused: false })
+            setGame({ ...game, paused: false, isCollided: false })
         }
     }, [restart])
 
@@ -39,18 +39,26 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
 
 
             if (up) {
-                moveY += velocity * delta;
+                if (currentTranslation.y < 5.5) {
+                    moveY += velocity * delta;
+
+                }
             }
             if (down) {
-                moveY -= velocity * delta;
+                if (currentTranslation.y > -0.30) {
+                    moveY -= velocity * delta;
+                }
             }
             if (left) {
-                moveX -= velocity * delta;
+                if (currentTranslation.x > -8.9) {
+                    moveX -= velocity * delta;
+                }
             }
             if (right) {
-                moveX += velocity * delta;
+                if (currentTranslation.x < 8.9) {
+                    moveX += velocity * delta;
+                }
             }
-
 
         }
 
@@ -66,7 +74,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         }, true)
 
         state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
-        orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
+        orbitControlsRef.current.target.add(new Vector3(0, 0, -(speed)));
         get().back
     })
 

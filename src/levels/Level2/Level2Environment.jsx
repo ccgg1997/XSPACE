@@ -15,20 +15,9 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   }, [scene]);
 
   const collisionManager = (event) => {
-    console.log('ENTROO en colisión detectada')
-    // collisionCallback();
-    setGame({ ...game, paused: true })
+    setGame({ ...game, paused: true, isCollided: true })
     collisionController(event, collisionCallback);
-    // if (!collisionHandled) {
-    //   setCollisionHandled(true);
-    //   collisionController(event, () => {
-    //     collisionCallback()
-    //     setCollisionHandled(false);
-    //   })
-    // Manejar la colisión aquí
 
-    // Marcar la colisión como manejada para evitar futuras ejecuciones
-    // }
   };
 
   const { camera } = useThree();
