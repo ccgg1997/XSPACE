@@ -31,7 +31,7 @@ export default function Controls() {
   }, [avatar, setAvatar, sub, get]);
 
   useEffect(() => {
-    if (play) {
+    if (play !== undefined) {
       runSound.currentTime = 0;
       runSound.volume = Math.random()
       if (runSound.paused) {
