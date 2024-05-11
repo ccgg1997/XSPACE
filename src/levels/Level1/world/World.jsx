@@ -13,7 +13,7 @@ export default function World(props) {
         material={materials.roca}
         position={[-0.13, 18.645, -15.036]}
       /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -21,7 +21,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[0.33, 26, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -29,7 +29,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[0.45, 65, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball">
         <mesh
           castShadow
           receiveShadow
@@ -38,7 +38,7 @@ export default function World(props) {
           position={[0, 20, -13.132]}
         /></RigidBody>
 
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow
@@ -47,7 +47,7 @@ export default function World(props) {
           position={[0.13, 16, -13.132]}
         /></RigidBody>
 
-      <RigidBody >
+      <RigidBody name="ball">
         <mesh
           castShadow
           receiveShadow
@@ -55,7 +55,7 @@ export default function World(props) {
           material={materials.Mball}
           position={[-2.13, 16, -13.132]}
         /></RigidBody>
-      <RigidBody >
+      <RigidBody name="ball" >
         <mesh
           castShadow
           receiveShadow

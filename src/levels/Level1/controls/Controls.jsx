@@ -24,7 +24,7 @@ export default function Controls() {
     const unsubscribe = sub(
       (state) => state.attack,
       (pressed) => {
-        console.log("ESTAMOS ES SEVERA PELEA ÑERO")
+        setAvatar({ ...avatar, animation: pressed ? "Fight" : "Running" });
       }
     );
     return () => unsubscribe();

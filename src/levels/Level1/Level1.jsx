@@ -33,7 +33,6 @@ export default function Level1() {
     }
 
     const lives = "♥".repeat(countLives);
-
     const diccionario_objetos = {
         "objeto1": {
             "rango_x": [0,  0.026],
@@ -64,7 +63,6 @@ export default function Level1() {
     };
 
     let mensaje = "";
-    // Verificar si la posición del avatar está definida antes de usarla
     if (avatarpositionz !== null) {
         for (const objeto in diccionario_objetos) {
             if (avatarpositionz >= diccionario_objetos[objeto]["rango_x"][0] && avatarpositionz <= diccionario_objetos[objeto]["rango_x"][1]) {
@@ -104,7 +102,7 @@ export default function Level1() {
                                     camInitDir={{ x: 0, y: 10 }}
                                     onCollisionEnter={({ manifold, target, other  }) => {
                                         const diferencia= (new Date().getTime()-ultimaVidaPerdida )/1000  > 2
-                                        console.log("HOLA_",ultimaVidaPerdida,diferencia)
+                                        console.log("HOLA_",other.rigidBodyObject)
                                         console.log(
                                           "Collision at world position ",
                                           manifold.solverContactPoint(0),"mainfold: ",manifold,"target: ", target,"other: ",other
