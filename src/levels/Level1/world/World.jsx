@@ -182,6 +182,14 @@ export default function World(props) {
         rotation={[Math.PI, 0, 0]}
         scale={[0.075, 4.174, 0.339]}
       /></RigidBody>
+      <RigidBody type="fixed" colliders="trimesh" name="final"><mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Final.geometry}
+        material={materials.Final}
+        position={[0.01, 0.093, -86.417]}
+        scale={[0.8, 0.212, 0.8]}
+      /></RigidBody>
      { !quitarPieza && <RigidBody type="fixed" colliders="trimesh" name="pieza"><mesh
         castShadow
         receiveShadow
@@ -1149,14 +1157,6 @@ export default function World(props) {
         geometry={nodes.Cube015.geometry}
         material={materials['pared.003']}
         position={[0.142, 2.89, -38.64]}
-      /></RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" name="final"><mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Final.geometry}
-        material={materials.Final}
-        position={[0, 0.053, -88.417]}
-        scale={[1, 0.212, 1]}
       /></RigidBody>
     </group>
   );

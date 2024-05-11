@@ -1,7 +1,7 @@
 import { Center, Float, Text3D } from "@react-three/drei";
 
 const WelcomeText = (props) => {
-    const text = "Squid Games";
+    const text = props.text;
 
     return (
         <Float
@@ -15,7 +15,7 @@ const WelcomeText = (props) => {
             position={props.position}
         >
             <Text3D
-                font={"/assets/fonts/SquidGamesFont.json"}
+                font={"../../../../assets/fonts/SquidGamesFont.json"}
                 bevelEnabled
                 bevelSize={0.005}
                 bevelThickness={0.01}
@@ -24,7 +24,7 @@ const WelcomeText = (props) => {
                 size={0.2}
             >
                 <meshNormalMaterial />
-                {text}
+                {text}d
             </Text3D>
         </Center>
         </Float>

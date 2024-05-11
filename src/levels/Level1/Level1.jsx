@@ -15,74 +15,86 @@ import Villano from "./characters/villano/Villano";
 import Villano2 from "./characters/villano2/Villano2";
 import useMovements from "../../utils/key-movements-l1";
 import Ecctrl, { EcctrlAnimation } from "ecctrl";
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { AvatarProvider } from "../../context/AvatarContext";
 import { useAvatar } from "../../context/AvatarContext";
+import { pass } from "three/examples/jsm/nodes/Nodes.js";
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
-    const [mostrarVidaExtra,setMostrarVidaExtra] = useState(true);
-    const [cohete,setCohete] = useState("");
-    const[quitarPieza,setQuitarPieza]=useState(false)
-   
+    const [mostrarVidaExtra, setMostrarVidaExtra] = useState(true);
+    const [cohete, setCohete] = useState("");
+    const [final, setFinal] = useState(false);
+    const [quitarPieza, setQuitarPieza] = useState(false);
+
     const map = useMovements();
     const avatar = useAvatar();
 
-    // Verificar si el avatar y su posición están listos antes de acceder a ellos
-    const[avatarpositionz,setavatarpositionz] = useState(0);
-    const[ultimaVidaPerdida,setUltimaVidaPerdida] =  useState(new Date().getTime());
+    const [avatarpositionz, setAvatarPositionz] = useState(0);
+    const [ultimaVidaPerdida, setUltimaVidaPerdida] = useState(new Date().getTime());
+    const [mensaje, setMensaje] = useState("");
+
     const setpositionfunction = (position) => {
-        setavatarpositionz(position);
-    }
-
-    const lives = "♥".repeat(countLives);
-    const diccionario_objetos = {
-        "objeto1": {
-            "rango_x": [0,  0.026],
-            "mensaje": "Esquiva las esferas de metal"
-        },
-        "objeto2": {
-            "rango_x": [ 0.027, 0.038],
-            "mensaje": "Salta el obstaculo"
-        },
-        "objeto3": {
-            "rango_x": [0.0515, 0.087],
-            "mensaje": "Pasa todas las puertas"
-        },
-        "objeto4": {
-            "rango_x": [0.088, 0.125],
-            "mensaje": "Encuentra la pieza perdida"
-        },
-        "objeto5": {
-            "rango_x": [0.126, 0.180],
-            "mensaje": "Salta los obstaculo"
-        },
-        "objeto6": {
-            "rango_x": [0.181, 0.4],
-            "mensaje": "Permanece en el circulo azul"
-        },
-        
-
-
+        setAvatarPositionz(position);
     };
 
-    let mensaje = "";
-    if (avatarpositionz !== null) {
-        for (const objeto in diccionario_objetos) {
-            if (avatarpositionz >= diccionario_objetos[objeto]["rango_x"][0] && avatarpositionz <= diccionario_objetos[objeto]["rango_x"][1]) {
-                mensaje = diccionario_objetos[objeto]["mensaje"];
-                break;
-            }
-        }
+    const lives = "♥".repeat(countLives);
+    const mensajes = {
+        mensaje1: "Calma. Hay varias planetas que estan esperando tu llegada",
+        mensaje2: "Ya puedes arreglar tu nave, Este es el comienzo de un emocionante viaje.",
+        mensaje3: "Espero no mueras en el proceso."
     }
+
+    useEffect(() => {
+        const diccionario_objetos = {
+            "objeto1": {
+                "rango_x": [0, 0.026],
+                "mensaje": "Esquiva las esferas de metal"
+            },
+            "objeto2": {
+                "rango_x": [0.027, 0.038],
+                "mensaje": "Salta el obstaculo"
+            },
+            "objeto3": {
+                "rango_x": [0.0515, 0.087],
+                "mensaje": "Pasa todas las puertas"
+            },
+            "objeto4": {
+                "rango_x": [0.088, 0.125],
+                "mensaje": "Encuentra la pieza perdida"
+            },
+            "objeto5": {
+                "rango_x": [0.126, 0.180],
+                "mensaje": "Salta los obstaculo"
+            },
+            "objeto6": {
+                "rango_x": [0.181, 0.4],
+                "mensaje": "Permanece en el circulo azul"
+            },
+        };
+
+        if (avatarpositionz !== null && !final) {
+            for (const objeto in diccionario_objetos) {
+                if (avatarpositionz >= diccionario_objetos[objeto]["rango_x"][0] && avatarpositionz <= diccionario_objetos[objeto]["rango_x"][1]) {
+                    setMensaje(diccionario_objetos[objeto]["mensaje"]);
+                    break;
+                }
+            }
+            pass
+        }
+        else {
+            setMensaje("Manten Presionada la tecla P")
+        }
+    }, [avatarpositionz, final]);
+
     return (
         <>
             <AvatarProvider>
                 <KeyboardControls map={map} >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
-                        <div style={{color: 'red',fontSize: '39px' }}>{cohete}</div>
-                        <div style={{ marginLeft: 'auto', marginRight: 'auto',fontSize: '39px', color: 'white' }}>{mensaje}</div>
-                        <div style={{color: 'red',fontSize: '39px' }}>{lives}</div>
+                        <div style={{ color: 'red', fontSize: '39px' }}>{cohete}</div>
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: '39px', color: 'white' }}>{mensaje}</div>
+                        <div style={{ color: 'red', fontSize: '49px' }}>{lives}</div>
                     </div>
                     <Canvas
                         shadows={false}
@@ -92,7 +104,7 @@ export default function Level1() {
                             <Lights ></Lights>
                             {/* <Environments /> */}
                             <Physics debug={false}>
-                                <World mostrarVidaExtra={mostrarVidaExtra} quitarPieza={quitarPieza}/>
+                                <World mostrarVidaExtra={mostrarVidaExtra} quitarPieza={quitarPieza} />
                                 {/* <Girl /> */}
                                 <Villano />
                                 <Villano2 />
@@ -105,45 +117,48 @@ export default function Level1() {
                                     position={[0, 10, -1]}
                                     characterInitDir={180}
                                     camInitDir={{ x: 0, y: 10 }}
-                                    onCollisionEnter={({ manifold, target, other  }) => {
-                                        const diferencia= (new Date().getTime()-ultimaVidaPerdida )/1000  > 2
-                                        console.log("HOLA_",other.rigidBodyObject.name)
+                                    onCollisionEnter={({ manifold, target, other }) => {
+                                        const diferencia = (new Date().getTime() - ultimaVidaPerdida) / 1000 > 2
+                                        console.log("HOLA_", other.rigidBodyObject.name)
                                         console.log(
-                                          "Collision at world position ",
-                                          manifold.solverContactPoint(0),"mainfold: ",manifold,"target: ", target,"other: ",other
+                                            "Collision at world position ",
+                                            manifold.solverContactPoint(0), "mainfold: ", manifold, "target: ", target, "other: ", other
                                         )
-                                        if(countLives>0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name!="live"){
-                                            setCountLives(countLives-1)
+                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live") {
+                                            setCountLives(countLives - 1)
                                             setUltimaVidaPerdida(new Date().getTime())
+                                            other.rigidBodyObject.name
 
                                         }
-                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="live"){
-                                            setCountLives(countLives+1)
+                                        if (other.rigidBodyObject.name && other.rigidBodyObject.name == "live") {
+                                            setCountLives(countLives + 1)
                                             setUltimaVidaPerdida(new Date().getTime())
                                             setMostrarVidaExtra(false)
                                             console.log("desaparece la vida")
 
                                         }
 
-                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="pieza"){
+                                        if (other.rigidBodyObject.name && other.rigidBodyObject.name == "pieza") {
                                             setCohete("🚀")
                                             setQuitarPieza(true)
                                             console.log("desaparece la pieza")
 
                                         }
 
-                                        if(other.rigidBodyObject.name && other.rigidBodyObject.name=="final"){
-                                            diccionario_objetos["objeto6"]["mensaje"] = "presiona la tecla P"
+                                        if (other.rigidBodyObject.name && other.rigidBodyObject.name == "final") {
+                                            setFinal(true)
+                                            setMensaje("Mantén presionada la tecla p")
+                                            console.log("entro al final")
 
                                         }
-                                            
-                                      }}
+
+                                    }}
                                 >
                                     <Avatar setpositionfunction={setpositionfunction} />
                                 </Ecctrl>
                             </Physics>
 
-                            {/* <WelcomeText position={[0, 1, -2]} /> */}
+                            <WelcomeText position={[0, 1, -92]} text={"hola"} />
                         </Suspense>
                         <Controls />
                     </Canvas>
