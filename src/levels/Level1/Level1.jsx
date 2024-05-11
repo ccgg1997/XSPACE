@@ -155,7 +155,7 @@ export default function Level1() {
                                             "Collision at world position ",
                                             manifold.solverContactPoint(0), "mainfold: ", manifold, "target: ", target, "other: ", other
                                         )
-                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza") {
+                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza"&& other.rigidBodyObject.name != "final") {
                                             setCountLives(countLives - 1)
                                             setUltimaVidaPerdida(new Date().getTime())
                                             other.rigidBodyObject.name
