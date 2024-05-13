@@ -20,6 +20,34 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         camera.position.set(0, 5, 12)
     }
     useEffect(() => {
+        const unsubscribe = sub(
+            (state) => {
+                if (state.up || state.down || state.left || state.right) {
+                    return state
+                }
+                return null;
+            },
+            (pressed) => {
+                if (!game.paused) {
+                    // console.log('pressed', pressed)
+                    if (!pressed) {
+                        setNave({ ...nave, animation: "Idle" });
+                    } else if (pressed.up) {
+                        setNave({ ...nave, animation: "naveUpRotation" });
+                    } else if (pressed.down) {
+                        setNave({ ...nave, animation: "naveDownRotation" });
+                    } else if (pressed.left) {
+                        setNave({ ...nave, animation: "naveLeftRotation" });
+                    } else if (pressed.right) {
+                        setNave({ ...nave, animation: "naveRightRotation" });
+                    }
+                }
+            }
+        );
+        return () => unsubscribe();
+    }, [game, nave, setNave, sub, get]);
+
+    useEffect(() => {
         if (restart === true) {
             startGame();
             onRestartDone();
