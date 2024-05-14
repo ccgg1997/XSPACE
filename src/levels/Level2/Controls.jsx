@@ -5,14 +5,14 @@ import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
 import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
     const velocity = 8;
-    const speed = 25;
+    const initialSpeed = 30;
     const { camera } = useThree();
     const startGame = () => {
         nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
@@ -62,6 +62,11 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         const currentTranslation = nave.body?.translation()
         let moveX = 0;
         let moveY = 0;
+        let speed = initialSpeed;
+        if (currentTranslation.z < -907) {
+            speed = 0
+            initCombat();
+        }
         let moveZ = speed * delta
         if (up || down || left || right) {
 

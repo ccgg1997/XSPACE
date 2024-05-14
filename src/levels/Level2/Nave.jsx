@@ -22,10 +22,7 @@ export default function Nave(props) {
     }, [naveBodyRef.current, naveRef.current])
 
     useEffect(() => {
-        // console.log("EN LA ANIMACION ", nave)
         if (nave.animation) {
-            console.log('actions', actions)
-            console.log('actions2', actions[nave.animation])
             actions[nave.animation].setLoop(THREE.LoopOnce);
             actions[nave.animation].clampWhenFinished = true;
             actions[nave.animation]?.reset().play();//.fadeIn(0.5)
@@ -39,11 +36,6 @@ export default function Nave(props) {
         }
 
     }, [nave.animation]);
-    useEffect(() => {
-        console.log('AAAAA')
-        console.log('actionsRef', actions)
-
-    }, [actions]);
 
     return (
         <RigidBody ref={naveBodyRef}
