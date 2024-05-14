@@ -5,14 +5,14 @@ import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
 import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
-    const velocity = 6;
-    const speed = 20;
+    const velocity = 8;
+    const initialSpeed = 30;
     const { camera } = useThree();
     const startGame = () => {
         nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
@@ -20,10 +20,38 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         camera.position.set(0, 5, 12)
     }
     useEffect(() => {
+        const unsubscribe = sub(
+            (state) => {
+                if (state.up || state.down || state.left || state.right) {
+                    return state
+                }
+                return null;
+            },
+            (pressed) => {
+                if (!game.paused) {
+                    // console.log('pressed', pressed)
+                    if (!pressed) {
+                        setNave({ ...nave, animation: "Idle" });
+                    } else if (pressed.up) {
+                        setNave({ ...nave, animation: "naveUpRotation" });
+                    } else if (pressed.down) {
+                        setNave({ ...nave, animation: "naveDownRotation" });
+                    } else if (pressed.left) {
+                        setNave({ ...nave, animation: "naveLeftRotation" });
+                    } else if (pressed.right) {
+                        setNave({ ...nave, animation: "naveRightRotation" });
+                    }
+                }
+            }
+        );
+        return () => unsubscribe();
+    }, [game, nave, setNave, sub, get]);
+
+    useEffect(() => {
         if (restart === true) {
             startGame();
             onRestartDone();
-            setGame({ ...game, paused: false })
+            setGame({ ...game, paused: false, isCollided: false })
         }
     }, [restart])
 
@@ -34,23 +62,36 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         const currentTranslation = nave.body?.translation()
         let moveX = 0;
         let moveY = 0;
+        let speed = initialSpeed;
+        if (currentTranslation.z < -907) {
+            speed = 0
+            initCombat();
+        }
         let moveZ = speed * delta
         if (up || down || left || right) {
 
 
             if (up) {
-                moveY += velocity * delta;
+                if (currentTranslation.y < 5.5) {
+                    moveY += velocity * delta;
+
+                }
             }
             if (down) {
-                moveY -= velocity * delta;
+                if (currentTranslation.y > -0.30) {
+                    moveY -= velocity * delta;
+                }
             }
             if (left) {
-                moveX -= velocity * delta;
+                if (currentTranslation.x > -8.9) {
+                    moveX -= velocity * delta;
+                }
             }
             if (right) {
-                moveX += velocity * delta;
+                if (currentTranslation.x < 8.9) {
+                    moveX += velocity * delta;
+                }
             }
-
 
         }
 
@@ -66,7 +107,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone }) {
         }, true)
 
         state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
-        orbitControlsRef.current.target.add(new Vector3(0, 0, -10));
+        orbitControlsRef.current.target.add(new Vector3(0, 0, -(speed)));
         get().back
     })
 

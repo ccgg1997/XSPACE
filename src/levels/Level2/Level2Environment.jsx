@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 import { useThree } from '@react-three/fiber';
@@ -8,28 +8,22 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
   const { game, setGame } = useGame();
-  // const [collisionHandled, setCollisionHandled] = useState(false);
+  const wallsRef = useRef();
 
   useEffect(() => {
     onLoad();
   }, [scene]);
 
   const collisionManager = (event) => {
-    console.log('ENTROO en colisión detectada')
-    // collisionCallback();
-    setGame({ ...game, paused: true })
+    setGame({ ...game, paused: true, isCollided: true, wallsRef: wallsRef })
     collisionController(event, collisionCallback);
-    // if (!collisionHandled) {
-    //   setCollisionHandled(true);
-    //   collisionController(event, () => {
-    //     collisionCallback()
-    //     setCollisionHandled(false);
-    //   })
-    // Manejar la colisión aquí
 
-    // Marcar la colisión como manejada para evitar futuras ejecuciones
-    // }
   };
+
+  useEffect(() => {
+    console.log('wallsRef', wallsRef)
+    setGame({ ...game, wallsRef: wallsRef })
+  }, [])
 
   const { camera } = useThree();
   camera.near = 20;
@@ -45,6 +39,7 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
           position={[0, 5, -500]}
           scale={[0.369, 0.154, 15.385]}
           frustumCulled={true}
+          ref={wallsRef}
         />
       </RigidBody>
       <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} name="PISO">
@@ -198,7 +193,7 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
           receiveShadow
           geometry={nodes.wall_obst012.geometry}
           material={materials['Metal Obstacle']}
-          position={[0, 5, -913.3]}
+          position={[0, 5, -908]}
           scale={[1.5, 0.625, 0.25]}
         />
       </RigidBody>

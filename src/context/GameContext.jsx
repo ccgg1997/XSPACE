@@ -14,7 +14,7 @@ export const useGame = () => {
 export function GameProvider({ children }) {
     const [game, setGame] = useState({ paused: true })
     const togglePause = () => {
-        setGame({ paused: !game.paused })
+        setGame({ paused: !game.paused, isCollided: false })
     }
 
     return (

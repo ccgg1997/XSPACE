@@ -14,7 +14,13 @@ const PauseMenu = ({ onRestart }) => {
     const options = [
         {
             text: 'Jugar',
-            action: () => togglePause()//startLevel('1')
+            action: () => {
+                if (game.isCollided == true) {
+                    onRestart();
+                } else {
+                    togglePause()
+                }
+            }
         },
         {
             text: 'Reiniciar',
@@ -26,6 +32,14 @@ const PauseMenu = ({ onRestart }) => {
         }
 
     ];
+
+    const jugarOption = () => {
+        if (game.isCollided == true) {
+            onRestart();
+        } else {
+            togglePause()
+        }
+    }
 
     const handleKeyDown = (event) => {
         if (event.key == 'Escape') {
