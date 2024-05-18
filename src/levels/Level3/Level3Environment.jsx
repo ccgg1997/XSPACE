@@ -1,17 +1,47 @@
 import React, { useEffect } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
+import { useGame } from "../../context/GameContext";
+import { useThree } from "@react-three/fiber";
+import { useRef } from "react";
 
-export default function Level3({ args, onLoad = () => {} }) {
+export default function Level3({
+  args,
+  onLoad = () => {},
+  collisionController = () => {},
+  collisionCallback,
+}) {
   const { nodes, materials, scene } = useGLTF("/assets/models/Level3.glb");
+  const { game, setGame } = useGame();
+  const wallsRef = useRef();
+
   useEffect(() => {
     // console.log('Model loaded:', scene);
     onLoad();
   }, [scene]); //
 
+  const collisionManager = (event) => {
+    setGame({ ...game, paused: true, isCollided: true });
+    collisionController(event, collisionCallback);
+  };
+
+  useEffect(() => {
+    console.log("wallsRef", wallsRef);
+    setGame({ ...game, wallsRef: wallsRef });
+  }, []);
+
+  const { camera } = useThree();
+  camera.near = 20;
+
   return (
     <group {...args} dispose={null}>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        frustumCulled={false}
+        name="PISO"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -21,7 +51,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.369, 0.154, 24.571]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        frustumCulled={false}
+        name="PARED"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -31,16 +67,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.369, 0.154, 24.606]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.nave_espacial.geometry}
-          material={materials.FrontColor}
-          scale={[0.645, 0.431, 0.504]}
-        />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -50,7 +83,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.741, 0.276, 0.04]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -60,7 +99,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.572, 0.3, 0.279]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -70,7 +115,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[1, 0.313, 0.25]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -80,7 +131,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.572, 0.3, 0.279]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -90,7 +147,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -100,7 +163,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -110,7 +179,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -120,7 +195,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -131,7 +212,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -141,7 +228,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -151,7 +244,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -162,7 +261,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -172,7 +277,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -182,7 +293,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -192,7 +309,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -202,7 +325,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -212,7 +341,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -222,7 +357,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -232,7 +373,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -242,7 +389,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -252,7 +405,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -262,7 +421,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -272,7 +437,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -282,7 +453,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -292,7 +469,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -302,7 +485,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -312,7 +501,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.13, 0.059, 0.117]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -323,7 +518,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-1.555, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -334,7 +535,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-1.555, -0.205, -0.173]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -345,7 +552,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.756, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -356,7 +569,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-1.555, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -367,7 +586,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.756, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -378,7 +603,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-1.555, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -389,7 +620,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-1.555, -0.233, -0.191]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -399,7 +636,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -409,7 +652,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -420,7 +669,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -430,7 +685,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -441,7 +702,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -451,7 +718,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -461,7 +734,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -472,7 +751,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -482,7 +767,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -492,7 +783,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -502,7 +799,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -512,7 +815,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -522,7 +831,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -532,7 +847,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -542,7 +863,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -552,7 +879,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -562,7 +895,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -572,7 +911,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -582,7 +927,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.13, 0.059, 0.117]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -592,7 +943,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -602,7 +959,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -612,7 +975,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -622,7 +991,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -632,7 +1007,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -643,7 +1024,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -654,7 +1041,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -665,7 +1058,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -676,7 +1075,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -687,7 +1092,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -698,7 +1109,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -709,7 +1126,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -720,7 +1143,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -731,7 +1160,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -742,7 +1177,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -753,7 +1194,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -764,7 +1211,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -775,7 +1228,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -786,7 +1245,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -797,7 +1262,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -808,7 +1279,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -819,7 +1296,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -829,7 +1312,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -839,7 +1328,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -850,7 +1345,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -861,7 +1362,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -872,7 +1379,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -883,7 +1396,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -894,7 +1413,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -905,7 +1430,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -915,7 +1446,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -925,7 +1462,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -936,7 +1479,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -947,7 +1496,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -958,7 +1513,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -969,7 +1530,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -980,7 +1547,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -991,7 +1564,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1002,7 +1581,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1012,7 +1597,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1023,7 +1614,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1034,7 +1631,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1045,7 +1648,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1055,7 +1664,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.462, 0.77, 0.318]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1065,7 +1680,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.357, 0.601, 0.246]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1076,7 +1697,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.432, 0.719, 0.297]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1087,7 +1714,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1098,7 +1731,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1109,7 +1748,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1120,7 +1765,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1131,7 +1782,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1142,7 +1799,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[-0.503, -0.851, -0.559]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1152,7 +1815,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1162,7 +1831,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1172,7 +1847,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1182,7 +1863,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1192,7 +1879,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1202,7 +1895,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
@@ -1212,7 +1911,13 @@ export default function Level3({ args, onLoad = () => {} }) {
           scale={[0.164, 0.074, 0.148]}
         />
       </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh">
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
         <mesh
           castShadow
           receiveShadow
