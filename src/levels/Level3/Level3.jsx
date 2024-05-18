@@ -11,12 +11,18 @@ import Nave from "./Nave";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
 import useMovements from "../../utils/key-movements";
+import { GameProvider } from "../../context/GameContext";
+import { handleCollision } from "./ColisionController";
+import PauseMenu from "../../components/pause-menu/PauseMenu";
 const Level3 = () => {
   const orbitControlsRef = useRef();
   const map = useMovements();
   const [ready, setReady] = useState(false);
+  const [restart, setRestart] = useState(false);
   return (
     <NaveProvider>
+      <GameProvider>
+        <PauseMenu onRestart={() => setRestart(true)} />
       <KeyboardControls map={map}>
         <Canvas
           style={{
@@ -27,10 +33,7 @@ const Level3 = () => {
             height: "100%",
           }}
         >
-          <Perf position="top-left" />
           <PerspectiveCamera makeDefault position={[0, 6, 12]} zoom={1} />
-          {/* <Lights />
-      <EnviromentMap /> */}
           <OrbitControls
             makeDefault
             target={[0, 6, 0]}
@@ -40,13 +43,14 @@ const Level3 = () => {
           <ambientLight />
           <Suspense fallback={null}>
             <Physics >
-              <World onLoad={() => setReady(true)} />
+              <World onLoad={() => setReady(true)} collisionController={handleCollision} collisionCallback={() => setRestart(true)} />
               <Nave />
             </Physics>
           </Suspense>
-          <Controls orbitControlsRef={orbitControlsRef} ready={ready} />
+          {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} />}
         </Canvas>
       </KeyboardControls>
+      </GameProvider>
     </NaveProvider>
   );
 };
