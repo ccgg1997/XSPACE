@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
-import { useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
+import { useNave } from '../../context/NaveContext';
 
 export default function Level2Environment({ args, onLoad = () => { }, collisionController = () => { }, collisionCallback }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
+  const { nave } = useNave();
   const { game, setGame } = useGame();
   const wallsRef = useRef();
 
@@ -17,15 +19,23 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   const collisionManager = (event) => {
 
     if (event.other.rigidBodyObject.name == "naveEspacial") {
-      setGame({ ...game, paused: true, isCollided: true, wallsRef: wallsRef })
+      setGame({ ...game, paused: true, isCollided: true })
     }
 
   };
 
   useEffect(() => {
-    console.log('wallsRef', wallsRef)
-    setGame({ ...game, wallsRef: wallsRef })
+    setGame({ ...game })
   }, [])
+
+  useFrame(() => {
+    const currentTranslation = nave.body?.translation()
+    if (currentTranslation?.z < -907) {
+      wallsRef.current.visible = false;
+    } else {
+      wallsRef.current.visible = true;
+    }
+  });
 
   const { camera } = useThree();
   camera.near = 20;

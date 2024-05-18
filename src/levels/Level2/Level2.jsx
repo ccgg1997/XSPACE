@@ -63,7 +63,7 @@ const Level2 = ({ }) => {
 
                 </Physics>
               </Suspense>
-              {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} />}
+              {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}
             </Canvas>
           </KeyboardControls>
         </GameProvider>

@@ -129,6 +129,7 @@ const Combat = ({ canvasRef, setMensaje }) => {
             setInit(true)
         } else {
             setInit(false)
+            setMensaje("")
         }
 
     })
@@ -137,9 +138,27 @@ const Combat = ({ canvasRef, setMensaje }) => {
         if (init) {
             setMensaje("!Esquiva los meteoritos!")
             canvasRef.current.style.background = 'black';
-            if (game.wallsRef) {
-                game.wallsRef.current.visible = false;
-            }
+            //premios
+            const showReward = () => {
+                setMensaje("!Recupera las partes 🔹​!")
+                setReward(true);
+                setTimeout(() => {
+                    setMensaje("!Esquiva los meteoritos!")
+                    setReward(false);
+                }, 9000); // Ocultar después de 4 segundos
+            };
+
+            // Esperar 10 segundos antes de mostrar el componente por primera vez
+            const initialTimeout = setTimeout(() => {
+                showReward();
+                // Luego, configurar el intervalo para mostrar el componente cada 10 segundos
+                const interval = setInterval(showReward, 10000);
+                // Limpiar el intervalo cuando el componente se desmonte
+                return () => clearInterval(interval);
+            }, 8000);
+
+            // Limpiar el intervalo cuando el componente se desmonte
+            return () => clearInterval(initialTimeout);
         }
     }, [init])
 
@@ -156,27 +175,12 @@ const Combat = ({ canvasRef, setMensaje }) => {
         });
         setstars(generatedStars)
 
-        //premios
-        const showReward = () => {
-            console.log('mostrando premio')
-            setReward(true);
-            setTimeout(() => {
-                console.log('ocultando premio')
-                setReward(false);
-            }, 9000); // Ocultar después de 4 segundos
-        };
 
-        // Mostrar el componente inmediatamente y luego cada 10 segundos
-        showReward();
-        const interval = setInterval(showReward, 10000);
-
-        // Limpiar el intervalo cuando el componente se desmonte
-        return () => clearInterval(interval);
     }, [])
 
     const onRewardObtained = () => {
-        console.log('onRewardObtained')
         setReward(false);
+        setMensaje("")
     }
 
     return (
