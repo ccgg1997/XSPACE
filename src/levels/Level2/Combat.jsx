@@ -1,15 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useRapierRigidBody } from "@react-three/fiber";
 import { useNave } from '../../context/NaveContext';
 import { useGame } from '../../context/GameContext';
 import { Vector3 } from 'three';
+import { RigidBody, useRapier } from "@react-three/rapier"
+import { Sphere } from '@react-three/drei';
 
-const Star = ({ position }) => {
+const generateInitialStarPosition = () => {
+    return {
+        x: Math.floor(Math.random() * 30) - 20,
+        y: Math.floor(Math.random() * 25) - 10,
+        z: -1040
+    }
+}
+
+const Star = ({ position, velocity }) => {
+    // const ref = useRef();
+    const refBody = useRef();
+    const { nave } = useNave();
+    const { game, setGame } = useGame();
+
+
+    const collisionManager = (event) => {
+        if (event.other.rigidBodyObject.name == "naveEspacial") {
+            nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            setGame({ ...game, paused: true, isCollided: true })
+        }
+        refBody.current.setTranslation(generateInitialStarPosition(), true)
+    }
+
+    useFrame(() => {
+        const currentTranslation = refBody.current?.translation()
+        if (currentTranslation?.z > -900) {
+            refBody.current.setTranslation(generateInitialStarPosition(), true)
+
+        }
+    });
+
     return (
-        <mesh position={position}>
-            <sphereGeometry args={[1, 8, 8]} />
-            <meshBasicMaterial color="#ADADAD" />
-        </mesh>
+        <RigidBody ref={refBody}
+            position={position}
+            colliders="ball"
+            gravityScale={0}
+            linearVelocity={[0, 0, velocity]}
+            restitution={0}
+            name="star"
+            onCollisionEnter={collisionManager}
+        >
+            <Sphere args={[1, 8, 8]}>
+                <meshStandardMaterial color="#ADADAD" />
+            </Sphere>
+        </RigidBody>
     );
 };
 
@@ -19,58 +61,56 @@ const Combat = ({ canvasRef, setMensaje }) => {
     const [init, setInit] = useState(false)
     const [stars, setstars] = useState([])
 
-    const starsRef = useRef();
+    const starsRef = useRef(null);
 
-    const numStars = 20;
+    const numStars = 24;
 
 
     useFrame((state, delta) => {
         if (game.paused) return;
         const currentTranslation = nave.body?.translation()
-        if (currentTranslation?.z < -907) {
+        if (currentTranslation?.z < -907 && starsRef) {
             setInit(true)
-            starsRef?.current.children.forEach((star, index) => {
-                const { velocity } = stars[index];
-                star.position.z += velocity;
-
-                if (star.position.z > -900) {
-                    star.position.x = Math.floor(Math.random() * 41) - 20
-                    star.position.y = Math.floor(Math.random() * 41) - 20
-                    star.position.z = -1040;
-                    // set(new Vector3(Math.random() * 600 - 400, Math.random() * 600 - 400, -1030));
-                }
-            });
+        } else {
+            setInit(false)
         }
 
     })
 
     useEffect(() => {
         if (init) {
-            console.log('INICIOOOOO', game.wallsRef)
             setMensaje("!Esquiva los meteoritos!")
-
             canvasRef.current.style.background = 'black';
             if (game.wallsRef) {
                 game.wallsRef.current.visible = false;
             }
-
-            const generatedStars = Array.from({ length: numStars }, () => {
-                return {
-                    position: new Vector3(Math.floor(Math.random() * 41) - 20, Math.floor(Math.random() * 41) - 20, -1040),
-                    velocity: Math.random() * 2,
-                };
-            });
-            setstars(generatedStars)
         }
-    }, [init, game])
+    }, [init])
+
+    useEffect(() => {
+        console.log('GENERANDO METERORITOS')
+        const generatedStars = Array.from({ length: numStars }, () => {
+            const position = generateInitialStarPosition();
+            return {
+                id: Date.now(),
+                position: new Vector3(position.x, position.y, position.z),
+                velocity:
+                    Math.floor(Math.random() * (35 - 24 + 1)) + 24
+            };
+        });
+        setstars(generatedStars)
+    }, [])
+
 
     return (
-        <group ref={starsRef}>
-            {/* Renderizar cada estrella */}
-            {stars.map((star, index) => (
-                <Star key={index} position={star.position} />
-            ))}
-        </group>
+        <>
+            {init && <group ref={starsRef}>
+
+                {stars.map((star, index) => (
+                    <Star key={star.id + index} position={star.position} velocity={star.velocity} />
+                ))}
+            </group>}
+        </>
     );
 };
 
