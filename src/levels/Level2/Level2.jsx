@@ -44,8 +44,10 @@ const Level2 = ({ }) => {
 
               <OrbitControls makeDefault
                 target={[0, 3, 0]}
-                enablePan={true}
+                enablePan={false}
                 ref={orbitControlsRef}
+                enableRotate={false}
+                enableZoom={false}
               />
 
               <Suspense fallback={null}>

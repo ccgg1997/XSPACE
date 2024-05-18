@@ -15,8 +15,10 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   }, [scene]);
 
   const collisionManager = (event) => {
-    setGame({ ...game, paused: true, isCollided: true, wallsRef: wallsRef })
-    collisionController(event, collisionCallback);
+
+    if (event.other.rigidBodyObject.name == "naveEspacial") {
+      setGame({ ...game, paused: true, isCollided: true, wallsRef: wallsRef })
+    }
 
   };
 

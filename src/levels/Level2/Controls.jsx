@@ -15,7 +15,9 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
     const initialSpeed = 30;
     const { camera } = useThree();
     const startGame = () => {
-        nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
         orbitControlsRef.current.target.set(0, 3, 0)
         camera.position.set(0, 5, 12)
     }
