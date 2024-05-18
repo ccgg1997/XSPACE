@@ -24,8 +24,9 @@ const Level2 = ({ }) => {
   const [restart, setRestart] = useState(false)
   const [mensaje, setMensaje] = useState("");
   const [initCombat, setInitCombat] = useState(false)
+  const [cohete, setCohete] = useState("🔹");
 
-
+  const lives = "♥".repeat(3);
   return (
     <div tabIndex={0}>
       <NaveProvider>
@@ -33,7 +34,9 @@ const Level2 = ({ }) => {
           <PauseMenu onRestart={() => setRestart(true)} />
           <KeyboardControls map={map} >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
+              <div style={{ color: 'red', fontSize: '39px', zIndex: "1", marginLeft: "1rem" }}>{cohete}</div>
               {mensaje && <div style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: '30px', color: 'white', zIndex: "1" }}>{mensaje}</div>}
+              <div style={{ color: 'red', fontSize: '49px', zIndex: "1" }}>{lives}</div>
             </div>
             <Canvas
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}

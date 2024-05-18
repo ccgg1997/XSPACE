@@ -181,6 +181,8 @@ const Combat = ({ canvasRef, setMensaje }) => {
     const onRewardObtained = () => {
         setReward(false);
         setMensaje("")
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
 
     return (
