@@ -1,21 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useFrame, useRapierRigidBody } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useNave } from '../../context/NaveContext';
 import { useGame } from '../../context/GameContext';
 import { Vector3 } from 'three';
-import { RigidBody, useRapier } from "@react-three/rapier"
+import { RigidBody } from "@react-three/rapier"
 import { Sphere } from '@react-three/drei';
 
 const generateInitialStarPosition = () => {
     return {
         x: Math.floor(Math.random() * 30) - 20,
-        y: Math.floor(Math.random() * 25) - 10,
+        y: Math.floor(Math.random() * 18) - 2,
         z: -1040
+    }
+}
+const generateInitialRewardPosition = () => {
+    return {
+        x: Math.floor(Math.random() * 16) - 7,
+        y: Math.floor(Math.random() * 10),
+        z: -1045
     }
 }
 
 const Star = ({ position, velocity }) => {
-    // const ref = useRef();
     const refBody = useRef();
     const { nave } = useNave();
     const { game, setGame } = useGame();
@@ -31,6 +37,11 @@ const Star = ({ position, velocity }) => {
     }
 
     useFrame(() => {
+        if (game.paused) {
+            refBody.current?.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        } else {
+            refBody.current?.setLinvel({ x: 0, y: 0, z: velocity }, true);
+        }
         const currentTranslation = refBody.current?.translation()
         if (currentTranslation?.z > -900) {
             refBody.current.setTranslation(generateInitialStarPosition(), true)
@@ -55,11 +66,56 @@ const Star = ({ position, velocity }) => {
     );
 };
 
-const Combat = ({ canvasRef, setMensaje }) => {
-    const { nave, setNave } = useNave();
+const Reward = ({ velocity, onRewardObtained }) => {
+    const refBody = useRef();
+    const { nave } = useNave();
     const { game, setGame } = useGame();
+
+    const collisionManager = (event) => {
+        console.log('colision premio', event)
+        if (event.other.rigidBodyObject.name == "naveEspacial") {
+            nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            console.log('recogiste premio!')
+            onRewardObtained();
+        }
+    }
+
+    useFrame(() => {
+        if (game.paused) {
+            refBody.current?.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        } else {
+            refBody.current?.setLinvel({ x: 0, y: 0, z: velocity }, true);
+        }
+    });
+
+    useEffect(() => {
+        refBody.current.setTranslation(generateInitialRewardPosition(), true)
+    }, []);
+
+
+    return (
+        <RigidBody ref={refBody}
+            colliders="ball"
+            gravityScale={0}
+            linearVelocity={[0, 0, velocity]}
+            restitution={0}
+            name="reward"
+            onCollisionEnter={collisionManager}
+        >
+            <Sphere args={[1, 8, 8]}>
+                <meshStandardMaterial color="#4D96FF" />
+            </Sphere>
+        </RigidBody>
+    );
+};
+
+const Combat = ({ canvasRef, setMensaje }) => {
+    const { nave } = useNave();
+    const { game } = useGame();
     const [init, setInit] = useState(false)
     const [stars, setstars] = useState([])
+    const [reward, setReward] = useState(false)
 
     const starsRef = useRef(null);
 
@@ -73,6 +129,7 @@ const Combat = ({ canvasRef, setMensaje }) => {
             setInit(true)
         } else {
             setInit(false)
+            setMensaje("")
         }
 
     })
@@ -81,14 +138,32 @@ const Combat = ({ canvasRef, setMensaje }) => {
         if (init) {
             setMensaje("!Esquiva los meteoritos!")
             canvasRef.current.style.background = 'black';
-            if (game.wallsRef) {
-                game.wallsRef.current.visible = false;
-            }
+            //premios
+            const showReward = () => {
+                setMensaje("!Recupera las partes 🔹​!")
+                setReward(true);
+                setTimeout(() => {
+                    setMensaje("!Esquiva los meteoritos!")
+                    setReward(false);
+                }, 9000); // Ocultar después de 4 segundos
+            };
+
+            // Esperar 10 segundos antes de mostrar el componente por primera vez
+            const initialTimeout = setTimeout(() => {
+                showReward();
+                // Luego, configurar el intervalo para mostrar el componente cada 10 segundos
+                const interval = setInterval(showReward, 10000);
+                // Limpiar el intervalo cuando el componente se desmonte
+                return () => clearInterval(interval);
+            }, 8000);
+
+            // Limpiar el intervalo cuando el componente se desmonte
+            return () => clearInterval(initialTimeout);
         }
     }, [init])
 
     useEffect(() => {
-        console.log('GENERANDO METERORITOS')
+        //meteoritos
         const generatedStars = Array.from({ length: numStars }, () => {
             const position = generateInitialStarPosition();
             return {
@@ -99,8 +174,14 @@ const Combat = ({ canvasRef, setMensaje }) => {
             };
         });
         setstars(generatedStars)
+
+
     }, [])
 
+    const onRewardObtained = () => {
+        setReward(false);
+        setMensaje("")
+    }
 
     return (
         <>
@@ -110,6 +191,7 @@ const Combat = ({ canvasRef, setMensaje }) => {
                     <Star key={star.id + index} position={star.position} velocity={star.velocity} />
                 ))}
             </group>}
+            {reward && init && <Reward velocity={20} onRewardObtained={onRewardObtained} />}
         </>
     );
 };

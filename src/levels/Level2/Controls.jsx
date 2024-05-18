@@ -5,7 +5,7 @@ import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
 import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
@@ -20,6 +20,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
         orbitControlsRef.current.target.set(0, 3, 0)
         camera.position.set(0, 5, 12)
+        canvasRef.current.style.background = '#231F1F';
     }
     useEffect(() => {
         const unsubscribe = sub(
