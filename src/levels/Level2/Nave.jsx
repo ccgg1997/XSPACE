@@ -73,21 +73,3 @@ export default function Nave(props) {
 
 }
 useGLTF.preload('/assets/models/NaveDefault.glb')
-{/* <mesh
-castShadow
-receiveShadow
-geometry={nodes.nave_espacial.geometry}
-material={materials.FrontColor}
-position={[0, 0, -19.468]}
-ref={naveRef}
-//frustumCulled={false}
->
-<CuboidCollider
-    args={[0.25, 2, 2]}
-    position={[0, 2.3, -1]}
-/>
-<CuboidCollider
-    args={[3, 0.4, 2]}
-    position={[0, 3.5, -1]}
-/>
-</mesh> */}

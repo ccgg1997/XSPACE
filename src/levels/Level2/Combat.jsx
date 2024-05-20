@@ -24,7 +24,7 @@ const generateInitialRewardPosition = () => {
 const Star = ({ position, velocity }) => {
     const refBody = useRef();
     const { nave } = useNave();
-    const { game, setGame } = useGame();
+    const { game, setGame, setMessage } = useGame();
 
 
     const collisionManager = (event) => {
@@ -69,7 +69,7 @@ const Star = ({ position, velocity }) => {
 const Reward = ({ velocity, onRewardObtained }) => {
     const refBody = useRef();
     const { nave } = useNave();
-    const { game, setGame } = useGame();
+    const { game, setMessage } = useGame();
 
     const collisionManager = (event) => {
         console.log('colision premio', event)
@@ -110,17 +110,20 @@ const Reward = ({ velocity, onRewardObtained }) => {
     );
 };
 
-const Combat = ({ canvasRef, setMensaje }) => {
+const Combat = ({ canvasRef }) => {
     const { nave } = useNave();
-    const { game } = useGame();
+    const { game, setMessage, addPart, setPartIcon } = useGame();
     const [init, setInit] = useState(false)
     const [stars, setstars] = useState([])
     const [reward, setReward] = useState(false)
 
     const starsRef = useRef(null);
 
-    const numStars = 24;
+    const numStars = 21;
 
+    useEffect(() => {
+        setPartIcon("🔹")
+    }, [])
 
     useFrame((state, delta) => {
         if (game.paused) return;
@@ -129,23 +132,23 @@ const Combat = ({ canvasRef, setMensaje }) => {
             setInit(true)
         } else {
             setInit(false)
-            setMensaje("")
+            setMessage("")
         }
 
     })
 
     useEffect(() => {
         if (init) {
-            setMensaje("!Esquiva los meteoritos!")
+            setMessage("!Esquiva los meteoritos!")
             canvasRef.current.style.background = 'black';
             //premios
             const showReward = () => {
-                setMensaje("!Recupera las partes 🔹​!")
+                setMessage("!Recupera las partes 🔹​!")
                 setReward(true);
                 setTimeout(() => {
-                    setMensaje("!Esquiva los meteoritos!")
+                    setMessage("!Esquiva los meteoritos!")
                     setReward(false);
-                }, 9000); // Ocultar después de 4 segundos
+                }, 9500); // Ocultar después de 4 segundos
             };
 
             // Esperar 10 segundos antes de mostrar el componente por primera vez
@@ -158,7 +161,7 @@ const Combat = ({ canvasRef, setMensaje }) => {
             }, 8000);
 
             // Limpiar el intervalo cuando el componente se desmonte
-            return () => clearInterval(initialTimeout);
+            return () => { clearInterval(initialTimeout), setMessage("") };
         }
     }, [init])
 
@@ -180,7 +183,8 @@ const Combat = ({ canvasRef, setMensaje }) => {
 
     const onRewardObtained = () => {
         setReward(false);
-        setMensaje("")
+        setMessage("!Esquiva los meteoritos!")
+        addPart();
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
