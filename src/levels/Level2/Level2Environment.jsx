@@ -37,8 +37,8 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
     }
   });
 
-  const { camera } = useThree();
-  camera.near = 20;
+  // const { camera } = useThree();
+  // camera.near = 20;
 
   return (
     <group {...args} dispose={null}>

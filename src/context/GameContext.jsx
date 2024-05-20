@@ -12,13 +12,46 @@ export const useGame = () => {
 }
 
 export function GameProvider({ children }) {
-    const [game, setGame] = useState({ paused: true })
+    const [message, setMessage] = useState("");
+    const [game, setGame] = useState(
+        {
+            paused: true,
+            isCollided: false
+        }
+    )
+
+    const [stats, setStats] = useState({
+        lives: 3,
+        parts: 0,
+        partIcon: "",
+        message: ""
+    })
+
     const togglePause = () => {
-        setGame({ paused: !game.paused, isCollided: false })
+        setGame({ ...game, paused: !game.paused, isCollided: false })
     }
 
+
+
+    const addLive = () => {
+        setStats({ ...stats, lives: stats.lives + 1 })
+    }
+
+    const removeLive = () => {
+        setStats({ ...stats, lives: stats.lives - 1 })
+    }
+
+    const addPart = () => {
+        setStats({ ...stats, parts: stats.parts + 1 })
+    }
+
+    const setPartIcon = (partIcon) => {
+        setStats({ ...stats, partIcon: partIcon })
+    }
+
+
     return (
-        <GameContext.Provider value={{ game, setGame, togglePause }}>
+        <GameContext.Provider value={{ game, stats, message, setGame, togglePause, addLive, removeLive, addPart, setPartIcon, setMessage }}>
             {children}
         </GameContext.Provider>
     )
