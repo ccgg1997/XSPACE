@@ -1,4 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { editUser, readUser } from "../db/user-collection";
+import { useAuth } from "./AuthContext";
 
 export const GameContext = createContext();
 
@@ -12,6 +15,8 @@ export const useGame = () => {
 }
 
 export function GameProvider({ children }) {
+    const { userLogged } = useAuth();
+    const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const [game, setGame] = useState(
         {
@@ -32,8 +37,6 @@ export function GameProvider({ children }) {
         setGame({ ...game, paused: !game.paused, isCollided: false })
     }
 
-
-
     const addLive = () => {
         setStats({ ...stats, lives: stats.lives + 1 })
     }
@@ -49,6 +52,22 @@ export function GameProvider({ children }) {
     const setPartIcon = (partIcon) => {
         setStats({ ...stats, partIcon: partIcon })
     }
+
+    useEffect(() => {
+        if (stats.lives < 0) {
+            setMessage('Game Over')
+            readUser(userLogged.email).then((userData) => {
+                editUser(userLogged.email, { ...userData, level: 1, lives: 3 })
+
+            });
+
+            setTimeout(() => {
+                navigate("/menu");
+                setMessage('')
+            }, 3000);
+        }
+    }, [stats.lives])
+
 
 
     return (
