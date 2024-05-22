@@ -1,7 +1,5 @@
 import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
 import World from "./Level3Environment";
-import { Perf } from "r3f-perf";
-import Galaxy from "../../backgrounds/Galaxy";
 import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
@@ -14,58 +12,52 @@ import useMovements from "../../utils/key-movements";
 import { GameProvider } from "../../context/GameContext";
 import { handleCollision } from "./ColisionController";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
+import { useGame } from "../../context/GameContext";
+import GameStats from "../../components/interface/GameStats";
+import Live from "../../components/items/Live";
 const Level3 = () => {
-  const orbitControlsRef = useRef();
   const map = useMovements();
+  const orbitControlsRef = useRef();
+  const cameraRef = useRef();
+  const canvasRef = useRef();
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
-  const [countLives, setCountLives] = useState(3);
-  const [boost, setBoost] = useState(0);
-  const lives = "♥".repeat(countLives);
-  const boosters = "🚀".repeat(boost);
+  const { stats, addLive, removeLive } = useGame();
+
+  const onEarnLife = () => {
+    addLive();
+  };
+  
 
   return (
+    <div tabIndex={0}>
     <NaveProvider>
-      <GameProvider>
         <PauseMenu onRestart={() => setRestart(true)} />
         <KeyboardControls map={map}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              fontSize: "24px",
-              padding: "3px",
-            }}
-          >
-            <div style={{ color: "red", fontSize: "39px" }}>{boosters}</div>
-            <div style={{ color: "red", fontSize: "49px" }}>{lives}</div>
-          </div>
+          <GameStats />
           <Canvas
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-            }}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
+            ref={canvasRef}
           >
-            <PerspectiveCamera makeDefault position={[0, 6, 12]} zoom={1} />
-            <OrbitControls
-              makeDefault
-              target={[0, 6, 0]}
-              enablePan={true}
+            <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
+            <OrbitControls makeDefault
+              camera={cameraRef.current}
+              target={[0, 1, -28]}
+              enablePan={false}
               ref={orbitControlsRef}
+              enableRotate={false}
+              enableZoom={false}
             />
-            <ambientLight />
             <Suspense fallback={null}>
+              <ambientLight />
               <Physics>
                 <World
                   onLoad={() => setReady(true)}
-                  collisionController={handleCollision}
-                  collisionCallback={() => setRestart(true)}
+                  collisionCallback={removeLive}
+
                 />
                 <Nave />
+                <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
             {ready && (
@@ -73,12 +65,13 @@ const Level3 = () => {
                 orbitControlsRef={orbitControlsRef}
                 restart={restart}
                 onRestartDone={() => setRestart(false)}
+                canvasRef={canvasRef}
               />
             )}
           </Canvas>
         </KeyboardControls>
-      </GameProvider>
     </NaveProvider>
+  </div>
   );
 };
 

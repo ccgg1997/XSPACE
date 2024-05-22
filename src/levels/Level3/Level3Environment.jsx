@@ -1,25 +1,18 @@
 import React, { useEffect } from "react";
-import { useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF} from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useGame } from "../../context/GameContext";
-import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import { useNave } from "../../context/NaveContext";
-import { useState } from "react";
-import * as THREE from "three";
 
 export default function Level3({
   args,
   onLoad = () => {},
-  collisionController = () => {},
-  collisionCallback,
+  collisionCallback = () => {},
 }) {
   const { nodes, materials, scene } = useGLTF("/assets/models/Level3.glb");
-  const { nodes:livesNodes,materials:materialsLives } = useGLTF("/assets/models/items/lives.glb");
   const { game, setGame } = useGame();
-  const [showLives, setShowLives] = useState(true);
   const { nave } = useNave();
-  const heartRef = useRef();
   const wallsRef = useRef();
 
   useEffect(() => {
@@ -28,22 +21,15 @@ export default function Level3({
   }, [scene]); //
 
   const collisionManager = (event) => {
-    setGame({ ...game, paused: true, isCollided: true });
-    collisionController(event, collisionCallback);
-  };
-
-  const heartCollisionManager = (event) => {
-    console.log("heartCollisionManager", event);
-    setShowLives(false);
+    if (event.other.rigidBodyObject.name == "naveEspacial") {
+      setGame({ ...game, paused: true, isCollided: true })
+      collisionCallback();
+    }
   };
 
   useEffect(() => {
-    console.log("wallsRef", wallsRef);
     setGame({ ...game, wallsRef: wallsRef });
   }, []);
-
-  const { camera } = useThree();
-  camera.near = 20;
 
   return (
     <group {...args} dispose={null}>
@@ -79,15 +65,6 @@ export default function Level3({
           scale={[0.369, 0.154, 24.606]}
         />
       </RigidBody>
-        <mesh
-          castShadow
-          receiveShadow
-          ref = {heartRef}
-          geometry={livesNodes.lives.geometry}
-          material={materialsLives.lives}
-          position={[-6.784, 5.555, -335.465]}
-          scale={0.672}
-        />
       <RigidBody
         type="fixed"
         colliders="trimesh"
