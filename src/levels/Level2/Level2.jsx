@@ -2,7 +2,7 @@
 import { OrbitControls, KeyboardControls } from "@react-three/drei";
 import Level2Environment from "./Level2Environment";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
@@ -14,6 +14,8 @@ import { handleCollision } from "./ColisionController";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
+import Live from "../../components/items/Live";
+import { useGame } from "../../context/GameContext";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -23,6 +25,12 @@ const Level2 = ({ }) => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
+  const { stats, addLive, removeLive } = useGame();
+
+  const onEarnLife = () => {
+    addLive();
+  }
+
 
   return (
     <div tabIndex={0}>
@@ -50,12 +58,12 @@ const Level2 = ({ }) => {
                 color={new Color("#FFFFFF")}
                 intensity={1.4}
               />
-              <Physics debug={false}>
-                <Level2Environment onLoad={() => setReady(true)} collisionController={handleCollision} collisionCallback={() => setRestart(true)} />
+              <Physics debug={true}>
+                <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Nave
                 />
                 {initCombat && <Combat setMensaje={setMensaje} canvasRef={canvasRef} />}
-
+                <Live onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
             {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}

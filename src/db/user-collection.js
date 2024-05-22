@@ -1,6 +1,6 @@
 "use strict";
 
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 
 const usersRef = collection(db, "users")
@@ -46,6 +46,7 @@ const readUser = async (userEmail) => {
 
 const editUser = async (userEmail, userData) => {
     try {
+        console.log('userEmail', userEmail, 'userData', userData)
         const userSnapshot = await getDocs(
             query(usersRef, where("email", "==", userEmail)))
 
@@ -54,7 +55,8 @@ const editUser = async (userEmail, userData) => {
         }
 
         const userDoc = userSnapshot.docs[0]
-        await userDoc.ref.update(userData)
+        const userDocRef = userDoc.ref;
+        await updateDoc(userDocRef, userData);
         return { success: true, message: "User updated" }
     } catch (error) {
         console.error(error)

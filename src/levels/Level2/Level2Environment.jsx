@@ -5,7 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
-export default function Level2Environment({ args, onLoad = () => { }, collisionController = () => { }, collisionCallback }) {
+export default function Level2Environment({ args, onLoad = () => { }, collisionCallback = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
   const { nave } = useNave();
@@ -20,6 +20,7 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
 
     if (event.other.rigidBodyObject.name == "naveEspacial") {
       setGame({ ...game, paused: true, isCollided: true })
+      collisionCallback();
     }
 
   };
@@ -37,8 +38,6 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
     }
   });
 
-  // const { camera } = useThree();
-  // camera.near = 20;
 
   return (
     <group {...args} dispose={null}>
@@ -213,4 +212,4 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   )
 
 }
-// useGLTF.preload('/assets/models/Level2.glb')
+useGLTF.preload('/assets/models/Level2.glb')
