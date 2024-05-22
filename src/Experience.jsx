@@ -40,12 +40,12 @@ const GameCanvas = () => {
         {
             text: 'Level 5',
             action: () => startLevel('5')
-        }
-        /*
+        },
+        
         {
             text: 'Level 6',
             action: () => startLevel('6')
-        }*/
+        }
     ];
 
     const startLevel = (level) => {
@@ -86,7 +86,7 @@ const GameCanvas = () => {
                     }
                 })
                 break;
-            /** 
+            
         case '6':
         navigate('/level6', {
             state: {
@@ -94,7 +94,7 @@ const GameCanvas = () => {
             }
         })
         break;
-        */
+        
             default:
                 // resetCameraPosition();
                 break;
