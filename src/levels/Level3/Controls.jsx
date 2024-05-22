@@ -5,7 +5,7 @@ import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
 import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
@@ -14,9 +14,12 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
     const initialSpeed = 30;
     const { camera } = useThree();
     const startGame = () => {
-        nave.body?.setTranslation({ x: 0, y: 0, z: 0 }, true)
-        orbitControlsRef.current.target.set(0, 3, 0)
-        camera.position.set(0, 5, 12)
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
+        orbitControlsRef.current.target.set(0, 1, -28)
+        camera.position.set(0, 5, -14)
+        canvasRef.current.style.background = '#231F1F';
     }
     useEffect(() => {
         const unsubscribe = sub(
@@ -62,8 +65,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         let moveX = 0;
         let moveY = 0;
         let speed = initialSpeed;
-        if (currentTranslation.z < -733) {
-
+        if (currentTranslation.z < -907) {
         }
         let moveZ = speed * delta
         if (up || down || left || right) {
@@ -104,7 +106,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             z: newPosition.z
         }, true)
 
-        state.camera.position.add(new Vector3(moveX, moveY / 2, -1 * (speed * delta)))
+        state.camera.position.add(new Vector3(moveX, moveY, -1 * (speed * delta)))
         orbitControlsRef.current.target.add(new Vector3(0, 0, -(speed)));
         get().back
     })

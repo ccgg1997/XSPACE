@@ -13,7 +13,6 @@ export default function Nave(props) {
     const { nodes, materials, animations } = useGLTF('/assets/models/NaveDefault.glb');
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
 
-
     useEffect(() => {
         setNave({
             ...nave,
@@ -53,6 +52,10 @@ export default function Nave(props) {
                     castShadow
                     receiveShadow
                     object={nodes.nave_espacial}
+                // material={materials.FrontColor}
+                // position={[0, 0, -19.468]}
+                // ref={naveRef}
+                //frustumCulled={false}
                 >
                     <CuboidCollider
                         args={[0.25, 2, 2]}

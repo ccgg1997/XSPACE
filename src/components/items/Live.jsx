@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { RigidBody, BallCollider } from '@react-three/rapier';
 import React, { useRef } from 'react';
 
-const Live = ({ postion = [0, 2.3, -50], scale = 1.5, onEarnLife = () => { } }) => {
+const Live = ({ position , scale , onEarnLife = () => { } }) => {
     const liveRef = useRef(null);
     const { nodes, materials } = useGLTF('/assets/models/items/lives.glb');
     let yPosition = 0;
@@ -34,7 +34,7 @@ const Live = ({ postion = [0, 2.3, -50], scale = 1.5, onEarnLife = () => { } }) 
                 receiveShadow
                 geometry={nodes.lives.geometry}
                 material={materials.lives}
-                position={postion}
+                position={position}
                 scale={scale}
                 ref={liveRef}
             >
