@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAuth } from "../../context/AuthContext"
 import "./stylesLogout.css"
+import { Button } from "react-bootstrap"
 
 export default function Logout() {
     const auth = useAuth()
@@ -17,7 +18,7 @@ export default function Logout() {
     }
     return (
         <div className="button-logout">
-            <button onClick={onHandleButtonLogout}> Logout </button>
+            <Button size="md" variant="danger" className="me-2 mb-3" onClick={onHandleButtonLogout}> Logout </Button>
         </div>
     )
 }

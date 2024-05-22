@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGame } from '../../context/GameContext';
+import { useAuth } from '../../context/AuthContext';
+import { readUser } from '../../db/user-collection';
 
 const GameStats = () => {
-    const { stats, message } = useGame();
+    const { stats, message, setStats } = useGame();
+    const { userLogged } = useAuth();
+    useEffect(() => {
+        if (userLogged) {
+            readUser(userLogged.email).then((userData) => {
+                setStats({
+                    ...stats,
+                    lives: userData.lives,
+                    level: userData.level
+                })
+
+            });
+        }
+
+
+    }, [userLogged])
+
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>

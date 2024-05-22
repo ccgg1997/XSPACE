@@ -7,9 +7,23 @@ const usersRef = collection(db, "users")
 
 const createUser = async (userData) => {
     try {
-        await addDoc(usersRef, userData)
+        const newUser = {
+            ...userData,
+            lives: 3,
+            level: 1
+        }
+        await addDoc(usersRef, newUser)
     } catch (error) {
         console.error(error)
+    }
+}
+
+const saveDataUser = async (valuesUser) => {
+    const userDb = await readUser(valuesUser.email);
+    console.log('userDb', userDb)
+    if (!userDb) {
+        console.log('Creando usuario nuevo')
+        await createUser(valuesUser)
     }
 }
 
@@ -47,4 +61,4 @@ const editUser = async (userEmail, userData) => {
     }
 }
 
-export { createUser, readUser, editUser };
+export { createUser, readUser, editUser, saveDataUser };

@@ -7,6 +7,7 @@ import Galaxy from "./backgrounds/Galaxy";
 import World from "./components/Level1Environment";
 import { useAuth } from "./context/AuthContext";
 import Button from 'react-bootstrap/Button';
+import { saveDataUser } from "./db/user-collection";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -44,8 +45,13 @@ const Home = () => {
 
   const onHandleButtonLogin = async () => {
     await auth.loginWithGoogle().then((res) => {
-      console.log(res)
-      navigate("/menu");
+      if (res.success) {
+        saveDataUser({ email: res.user.email, displayName: res.user.displayName });
+        setTimeout(() => {
+          navigate("/menu");
+        }, 1000);
+      }
+      // navigate("/menu");
     }).catch((error) => {
       console.error(error)
     })

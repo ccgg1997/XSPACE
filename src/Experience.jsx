@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Logout from './components/logout/Logout';
 import { createUser, readUser } from "./db/user-collection";
 import { useAuth } from './context/AuthContext';
+import GameStats from './components/interface/GameStats';
 
 
 
@@ -117,37 +118,10 @@ const GameCanvas = () => {
     }, []);
 
 
-    const saveDataUser = async (valuesUser) => {
-        const userDb = await readUser(valuesUser.email);
-        console.log('userDb', userDb)
-        if (!userDb) {
-            console.log('Creando usuario nuevo')
-            await createUser(valuesUser)
-        }
-    }
-
-    const readDataUser = async (email) => {
-        await readUser(email).then((res) => console.log(res))
-            .catch((error) => console.error(error))
-    }
-
-    useEffect(() => {
-        if (auth.userLogged) {
-            const { displayName, email } = auth.userLogged
-
-            saveDataUser({
-                displayName: displayName,
-                email: email,
-            })
-
-            readDataUser(email)
-
-
-        }
-    }, [auth.userLogged])
 
     return (
         <>
+            <GameStats />
             <Logout />
             <Canvas
                 // camera={{ position: cameraPosition }}

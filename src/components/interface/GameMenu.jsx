@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Html } from '@react-three/drei';
 import './GameMenu.css';
+import { useGame } from '../../context/GameContext';
 
 const GameMenu = ({ options }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const { stats } = useGame();
     const menuStyle = {
         transform: 'translate(-50%, -170%)',
     };
@@ -13,10 +15,12 @@ const GameMenu = ({ options }) => {
         const handleKeyDown = (event) => {
             switch (event.key) {
                 case 'ArrowUp':
-                    setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : options.length - 1));
+                    setSelectedIndex((prevIndex) =>
+                        (prevIndex > 0 ? prevIndex - 1 : stats.level - 1)
+                    );
                     break;
                 case 'ArrowDown':
-                    setSelectedIndex((prevIndex) => (prevIndex < options.length - 1 ? prevIndex + 1 : 0));
+                    setSelectedIndex((prevIndex) => (prevIndex < stats.level - 1 ? prevIndex + 1 : 0));
                     break;
                 case 'Enter':
                     options[selectedIndex].action();
@@ -31,11 +35,21 @@ const GameMenu = ({ options }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [selectedIndex, options]);
+    }, [selectedIndex, options, stats.level]);
+
+    useEffect(() => {
+    }, [stats])
+
     return (
         <Html className='gamemenu' style={menuStyle}>
             {options.map((option, index) => (
-                <div key={index} className={index != selectedIndex ? 'menuitem' : 'menuitem selected-item'} onClick={option.action}>
+                <div key={index}
+                    className={
+                        (index != selectedIndex ? 'menuitem' : 'menuitem selected-item') +
+                        (index == stats?.level - 1 ? ' current' : '') +
+                        (index > stats?.level - 1 ? ' blocked' : '')
+                    }
+                    onClick={option.action}>
                     {option.text}
                 </div>
             ))}

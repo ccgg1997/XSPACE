@@ -20,6 +20,7 @@
     font-size: 60px;
     color: gray
 }
+
 @media (max-width: 1320px)  {
 
     .menuitem {
@@ -27,7 +28,7 @@
     }
 }
 
-@media (min-width: 1321px)  {
+@media (min-width: 1321px)  {   
 
     .menuitem {
         font-size: 60px;
@@ -36,4 +37,12 @@
 
 .menuitem.selected-item {
     color: #0099CE;
+}
+    
+    
+.menuitem.current {
+            text-decoration: underline;    
+}
+.menuitem.blocked {
+    color: #c76565;
 }
