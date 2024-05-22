@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Logout from './components/logout/Logout';
 import { createUser, readUser } from "./db/user-collection";
 import { useAuth } from './context/AuthContext';
+import GameStats from './components/interface/GameStats';
 
 
 
@@ -40,10 +41,13 @@ const GameCanvas = () => {
             text: 'Level 5',
             action: () => startLevel('5')
         },
-        
         {
             text: 'Level 6',
             action: () => startLevel('6')
+        },
+        {
+            text: 'Level 7',
+            action: () => { }
         }
     ];
 
@@ -85,15 +89,15 @@ const GameCanvas = () => {
                     }
                 })
                 break;
-            
-        case '6':
-        navigate('/level6', {
-            state: {
-                firstTime: true
-            }
-        })
-        break;
-        
+
+            case '6':
+                navigate('/level6', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+
             default:
                 // resetCameraPosition();
                 break;
@@ -117,37 +121,10 @@ const GameCanvas = () => {
     }, []);
 
 
-    const saveDataUser = async (valuesUser) => {
-        const userDb = await readUser(valuesUser.email);
-        console.log('userDb', userDb)
-        if (!userDb) {
-            console.log('Creando usuario nuevo')
-            await createUser(valuesUser)
-        }
-    }
-
-    const readDataUser = async (email) => {
-        await readUser(email).then((res) => console.log(res))
-            .catch((error) => console.error(error))
-    }
-
-    useEffect(() => {
-        if (auth.userLogged) {
-            const { displayName, email } = auth.userLogged
-
-            saveDataUser({
-                displayName: displayName,
-                email: email,
-            })
-
-            readDataUser(email)
-
-
-        }
-    }, [auth.userLogged])
 
     return (
         <>
+            <GameStats />
             <Logout />
             <Canvas
                 // camera={{ position: cameraPosition }}
@@ -158,10 +135,10 @@ const GameCanvas = () => {
                 {/* <pointLight position={[10, 10, 10]} /> */}
                 <GameMenu options={options} />
                 {/* <Perf position="top-left" /> */}
-                <PerspectiveCamera makeDefault position={[0, 10, 20]} />
+                <PerspectiveCamera makeDefault position={[0, 13, 25]} />
                 {/* <Lights />
                 <EnviromentMap /> */}
-                <OrbitControls makeDefault target={[0, 10, 0]} />
+                <OrbitControls makeDefault target={[0, 13, 0]} />
 
                 <Suspense fallback={null}>
                     <Lights />

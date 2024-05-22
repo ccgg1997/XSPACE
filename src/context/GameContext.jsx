@@ -21,6 +21,7 @@ export function GameProvider({ children }) {
     )
 
     const [stats, setStats] = useState({
+        level: 1,
         lives: 3,
         parts: 0,
         partIcon: "",
@@ -51,7 +52,7 @@ export function GameProvider({ children }) {
 
 
     return (
-        <GameContext.Provider value={{ game, stats, message, setGame, togglePause, addLive, removeLive, addPart, setPartIcon, setMessage }}>
+        <GameContext.Provider value={{ game, stats, message, setGame, togglePause, addLive, removeLive, addPart, setPartIcon, setMessage, setStats }}>
             {children}
         </GameContext.Provider>
     )

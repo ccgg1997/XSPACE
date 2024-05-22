@@ -1,6 +1,7 @@
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export const authContext = createContext();
 
@@ -15,10 +16,17 @@ export const useAuth = () => {
 
 export function AuthProvider({ children }) {
     const [userLogged, setUserLogged] = useState(null)
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const suscribed = onAuthStateChanged(auth, (currentUser) => {
-            !currentUser ? setUserLogged(null) : setUserLogged(currentUser)
+            if (location.pathname !== '/' && !currentUser) {
+                alert('Para jugar debes iniciar sesión')
+                navigate("/");
+            } else {
+                setUserLogged(currentUser)
+            }
         })
 
         return () => suscribed()

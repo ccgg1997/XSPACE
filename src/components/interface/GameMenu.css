@@ -20,20 +20,33 @@
     font-size: 60px;
     color: gray
 }
-@media (max-width: 1320px)  {
 
+@media (max-width: 1320px)  {
+    .gamemenu{
+        padding-bottom: 20px !important;
+    }
     .menuitem {
         font-size: 40px;
     }
 }
 
-@media (min-width: 1321px)  {
-
+@media (min-width: 1321px)  {   
+    .gamemenu{
+        padding-bottom: 50px !important;
+    }
     .menuitem {
-        font-size: 60px;
+        font-size: 50px;
     }
 }
 
 .menuitem.selected-item {
     color: #0099CE;
+}
+    
+    
+.menuitem.current {
+            text-decoration: underline;    
+}
+.menuitem.blocked {
+    color: #c76565;
 }
