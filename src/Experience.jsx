@@ -41,10 +41,13 @@ const GameCanvas = () => {
             text: 'Level 5',
             action: () => startLevel('5')
         },
-        
         {
             text: 'Level 6',
             action: () => startLevel('6')
+        },
+        {
+            text: 'Level 7',
+            action: () => { }
         }
     ];
 
@@ -86,15 +89,15 @@ const GameCanvas = () => {
                     }
                 })
                 break;
-            
-        case '6':
-        navigate('/level6', {
-            state: {
-                firstTime: true
-            }
-        })
-        break;
-        
+
+            case '6':
+                navigate('/level6', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+
             default:
                 // resetCameraPosition();
                 break;
@@ -132,10 +135,10 @@ const GameCanvas = () => {
                 {/* <pointLight position={[10, 10, 10]} /> */}
                 <GameMenu options={options} />
                 {/* <Perf position="top-left" /> */}
-                <PerspectiveCamera makeDefault position={[0, 10, 20]} />
+                <PerspectiveCamera makeDefault position={[0, 13, 25]} />
                 {/* <Lights />
                 <EnviromentMap /> */}
-                <OrbitControls makeDefault target={[0, 10, 0]} />
+                <OrbitControls makeDefault target={[0, 13, 0]} />
 
                 <Suspense fallback={null}>
                     <Lights />

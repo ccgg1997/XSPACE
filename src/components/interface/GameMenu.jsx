@@ -7,7 +7,7 @@ const GameMenu = ({ options }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const { stats } = useGame();
     const menuStyle = {
-        transform: 'translate(-50%, -170%)',
+        transform: 'translate(-50%, -130%)',
     };
 
 
@@ -40,6 +40,12 @@ const GameMenu = ({ options }) => {
     useEffect(() => {
     }, [stats])
 
+    const handleClick = (index, callback) => {
+        if (index <= stats.level - 1) {
+            callback();
+        }
+    }
+
     return (
         <Html className='gamemenu' style={menuStyle}>
             {options.map((option, index) => (
@@ -49,7 +55,7 @@ const GameMenu = ({ options }) => {
                         (index == stats?.level - 1 ? ' current' : '') +
                         (index > stats?.level - 1 ? ' blocked' : '')
                     }
-                    onClick={option.action}>
+                    onClick={() => handleClick(index, option.action)}>
                     {option.text}
                 </div>
             ))}
