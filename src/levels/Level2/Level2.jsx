@@ -2,13 +2,13 @@
 import { OrbitControls, KeyboardControls } from "@react-three/drei";
 import Level2Environment from "./Level2Environment";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
-import { NaveProvider } from "../../context/NaveContext";
+import { NaveProvider, useNave } from "../../context/NaveContext";
 import Controls from "./Controls";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import Combat from "./Combat";
@@ -24,7 +24,7 @@ const Level2 = ({ }) => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
-  const { stats, addLive, removeLive } = useGame();
+  const { addLive, removeLive } = useGame();
 
   const onEarnLife = () => {
     addLive();
@@ -62,7 +62,7 @@ const Level2 = ({ }) => {
                 <Nave
                 />
                 {initCombat && <Combat canvasRef={canvasRef} />}
-                <Live position={[0, 2.3, -50]} scale={1.5} onEarnLife={onEarnLife} />
+                <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
             {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}
