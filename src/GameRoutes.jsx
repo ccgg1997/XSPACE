@@ -9,24 +9,27 @@ import Level5 from "./levels/Level5/Level5";
 import Level6 from "./levels/Level6/Level6";
 import { AuthProvider } from "./context/AuthContext";
 import { GameProvider } from "./context/GameContext";
+import { ProjectilesProvider } from "./context/ProjectilesContext";
 
 export default function GameRoutes() {
     return (
         <BrowserRouter>
             <AuthProvider>
                 <GameProvider>
-                    <Routes>
+                    <ProjectilesProvider>
+                        <Routes>
 
-                        <Route path="/" element={<Home />} />
-                        <Route path="/menu" element={<Experience />} />
-                        <Route path="/level1" element={<Level1 />} />
-                        <Route path="/level2" element={<Level2 />} />
-                        <Route path="/level3" element={<Level3 />} />
-                        <Route path="/level4" element={<Level4 />} />
-                        <Route path="/level5" element={<Level5 />} />
-                        <Route path="/level6" element={<Level6 />} />
+                            <Route path="/" element={<Home />} />
+                            <Route path="/menu" element={<Experience />} />
+                            <Route path="/level1" element={<Level1 />} />
+                            <Route path="/level2" element={<Level2 />} />
+                            <Route path="/level3" element={<Level3 />} />
+                            <Route path="/level4" element={<Level4 />} />
+                            <Route path="/level5" element={<Level5 />} />
+                            <Route path="/level6" element={<Level6 />} />
 
-                    </Routes>
+                        </Routes>
+                    </ProjectilesProvider>
                 </GameProvider>
             </AuthProvider>
         </BrowserRouter>

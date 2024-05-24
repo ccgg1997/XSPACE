@@ -1,6 +1,6 @@
 import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
 import World from "./Level3Environment";
-import { Suspense, useState } from "react";
+import { Suspense, useContext, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { PerspectiveCamera } from "@react-three/drei";
@@ -9,12 +9,13 @@ import Nave from "./Nave";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
 import useMovements from "../../utils/key-movements";
-import { GameProvider } from "../../context/GameContext";
-import { handleCollision } from "./ColisionController";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import { useGame } from "../../context/GameContext";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
+import { projectilesContext } from "../../context/ProjectilesContext";
+import Projectile from "../../components/shipSkills/projectile";
+
 const Level3 = () => {
   const map = useMovements();
   const orbitControlsRef = useRef();
@@ -23,11 +24,11 @@ const Level3 = () => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
   const { stats, addLive, removeLive } = useGame();
+  const {projectiles} = useContext(projectilesContext);
 
   const onEarnLife = () => {
     addLive();
   };
-  
 
   return (
     <div tabIndex={0}>
@@ -57,6 +58,15 @@ const Level3 = () => {
 
                 />
                 <Nave />
+                {projectiles.map((projectile) => (
+                  <Projectile 
+                    key={projectile.id}
+                    position={projectile.position}
+                    id={projectile.id}
+                    limitProjectibles={-1590}
+                  />
+                  
+                ))}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
