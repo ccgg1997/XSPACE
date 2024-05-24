@@ -53,6 +53,7 @@ export function GameProvider({ children }) {
     }
 
     const addLevel = () => {
+        patchUser(userLogged.email, { level: stats.level + 1, checkPoint: [] })
         setStats({ ...stats, level: stats.level + 1 })
     }
 

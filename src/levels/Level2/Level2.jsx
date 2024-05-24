@@ -15,8 +15,6 @@ import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
-import { patchUser } from "../../db/user-collection";
-import { useAuth } from "../../context/AuthContext";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -27,7 +25,6 @@ const Level2 = ({ }) => {
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
-  const { userLogged } = useAuth();
 
   const onEarnLife = () => {
     addLive();
@@ -35,7 +32,6 @@ const Level2 = ({ }) => {
 
   const onWinLevel = () => {
     togglePause();
-    patchUser(userLogged.email, { level: stats.level + 1, checkPoint: [] })
     addLevel();
     setMessage('Ganaste el nivel 2!');
     setTimeout(() => {
