@@ -15,7 +15,6 @@ import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
-import { useNavigate } from "react-router-dom";
 import { patchUser } from "../../db/user-collection";
 import { useAuth } from "../../context/AuthContext";
 
@@ -29,7 +28,6 @@ const Level2 = ({ }) => {
   const [initCombat, setInitCombat] = useState(false)
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
   const { userLogged } = useAuth();
-  const navigate = useNavigate();
 
   const onEarnLife = () => {
     addLive();
@@ -41,7 +39,8 @@ const Level2 = ({ }) => {
     addLevel();
     setMessage('Ganaste el nivel 2!');
     setTimeout(() => {
-      navigate('/level3');
+      // navigate('/level3');
+      window.location.href = 'level3'
     }, 2000)
 
   }
@@ -76,7 +75,7 @@ const Level2 = ({ }) => {
                 color={new Color("#FFFFFF")}
                 intensity={1.4}
               />
-              <Physics debug={true}>
+              <Physics debug={false}>
                 <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Nave
                 />
