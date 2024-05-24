@@ -3,6 +3,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
+import { useProjectiles } from "../../context/ProjectilesContext";
+import { shootProjectile} from "../../utils/shootProjectile.js";
 import { useEffect } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, canvasRef }) {
@@ -13,6 +15,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, can
     const velocity = 8;
     const initialSpeed = 30;
     const { camera } = useThree();
+    const { addProjectile } = useProjectiles();
+
     const startGame = () => {
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -21,6 +25,22 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, can
         camera.position.set(0, 5, -14)
         canvasRef.current.style.background = '#231F1F';
     }
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === ' ' && !game.paused) {
+                if (nave.body) {
+                    shootProjectile(nave, addProjectile);
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [nave, addProjectile]);
+
     useEffect(() => {
         const unsubscribe = sub(
             (state) => {
@@ -65,7 +85,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, can
         let moveX = 0;
         let moveY = 0;
         let speed = initialSpeed;
-        if (currentTranslation.z < -907) {
+        if (currentTranslation.z < -1535) {
+            speed = 0
         }
         let moveZ = speed * delta
         if (up || down || left || right) {
