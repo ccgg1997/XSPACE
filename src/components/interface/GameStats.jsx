@@ -12,7 +12,9 @@ const GameStats = () => {
                 setStats({
                     ...stats,
                     lives: userData.lives,
-                    level: userData.level
+                    level: userData.level,
+                    checkPoint: userData.checkPoint,
+                    parts: userData.parts
                 })
 
             });

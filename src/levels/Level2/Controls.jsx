@@ -7,20 +7,28 @@ import { useEffect } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
-    const { game, setGame } = useGame();
+    const { game, setGame, stats, setPartIcon } = useGame();
     const [sub, get] = useKeyboardControls()
-    // const orbitControlsRef = useRef()
-    let walkDirection = new Vector3()
     const velocity = 8;
     const initialSpeed = 30;
     const { camera } = useThree();
     const startGame = () => {
+        setPartIcon("🔹")
+        nave.body.sleep()
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-        nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
-        orbitControlsRef.current.target.set(0, 1, -28)
-        camera.position.set(0, 5, -14)
-        canvasRef.current.style.background = '#231F1F';
+        if (stats.checkPoint && stats.checkPoint.length > 0) {
+            const [x, y, z] = stats.checkPoint;
+            nave.body.setTranslation({ x: x, y: y, z: z }, true)
+            orbitControlsRef.current.target.set(0, 1, -53998)
+            camera.position.set(0, 5, -921)
+            canvasRef.current.style.background = '#231F1F';
+        } else {
+            nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
+            orbitControlsRef.current.target.set(0, 1, -28)
+            camera.position.set(0, 5, -14)
+            canvasRef.current.style.background = '#231F1F';
+        }
     }
     useEffect(() => {
         const unsubscribe = sub(

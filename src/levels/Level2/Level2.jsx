@@ -2,19 +2,21 @@
 import { OrbitControls, KeyboardControls } from "@react-three/drei";
 import Level2Environment from "./Level2Environment";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
-import { NaveProvider } from "../../context/NaveContext";
+import { NaveProvider, useNave } from "../../context/NaveContext";
 import Controls from "./Controls";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
+import { patchUser } from "../../db/user-collection";
+import { useAuth } from "../../context/AuthContext";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -24,12 +26,28 @@ const Level2 = ({ }) => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
-  const { stats, addLive, removeLive } = useGame();
+  const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
+  const { userLogged } = useAuth();
 
   const onEarnLife = () => {
     addLive();
   }
 
+  const onWinLevel = () => {
+    togglePause();
+    patchUser(userLogged.email, { level: stats.level + 1, checkPoint: [] })
+    addLevel();
+    setMessage('Ganaste el nivel 2!');
+    setTimeout(() => {
+      // navigate('/level3');
+      window.location.href = 'level3'
+    }, 2000)
+
+  }
+
+  useEffect(() => {
+    setGame({ ...game, isCollided: true });
+  }, [])
 
   return (
     <div tabIndex={0}>
@@ -57,12 +75,12 @@ const Level2 = ({ }) => {
                 color={new Color("#FFFFFF")}
                 intensity={1.4}
               />
-              <Physics debug={true}>
+              <Physics debug={false}>
                 <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Nave
                 />
-                {initCombat && <Combat canvasRef={canvasRef} />}
-                <Live position={[0, 2.3, -50]} scale={1.5} onEarnLife={onEarnLife} />
+                {initCombat && <Combat canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} collisionCallback={removeLive} onWinLevel={onWinLevel} />}
+                <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
             {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}
