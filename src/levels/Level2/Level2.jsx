@@ -15,6 +15,9 @@ import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
+import { useNavigate } from "react-router-dom";
+import { patchUser } from "../../db/user-collection";
+import { useAuth } from "../../context/AuthContext";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -24,12 +27,28 @@ const Level2 = ({ }) => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
-  const { addLive, removeLive } = useGame();
+  const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
+  const { userLogged } = useAuth();
+  const navigate = useNavigate();
 
   const onEarnLife = () => {
     addLive();
   }
 
+  const onWinLevel = () => {
+    togglePause();
+    patchUser(userLogged.email, { level: stats.level + 1, checkPoint: [] })
+    addLevel();
+    setMessage('Ganaste el nivel 2!');
+    setTimeout(() => {
+      navigate('/level3');
+    }, 2000)
+
+  }
+
+  useEffect(() => {
+    setGame({ ...game, isCollided: true });
+  }, [])
 
   return (
     <div tabIndex={0}>
@@ -61,7 +80,7 @@ const Level2 = ({ }) => {
                 <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Nave
                 />
-                {initCombat && <Combat canvasRef={canvasRef} />}
+                {initCombat && <Combat canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} collisionCallback={removeLive} onWinLevel={onWinLevel} />}
                 <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>

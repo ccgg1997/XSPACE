@@ -52,14 +52,10 @@ export default function Nave(props) {
                     castShadow
                     receiveShadow
                     object={nodes.nave_espacial}
-                // material={materials.FrontColor}
-                // position={[0, 0, -19.468]}
-                // ref={naveRef}
-                //frustumCulled={false}
                 >
                     <CuboidCollider
                         args={[0.25, 2, 2]}
-                        position={[0, 2.3, -1]}
+                        position={[0, 2.5, -1]}
                     />
                     <CuboidCollider
                         args={[3, 0.4, 2]}

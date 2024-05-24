@@ -10,7 +10,8 @@ const createUser = async (userData) => {
         const newUser = {
             ...userData,
             lives: 3,
-            level: 1
+            level: 1,
+            parts: 0
         }
         await addDoc(usersRef, newUser)
     } catch (error) {
@@ -20,9 +21,9 @@ const createUser = async (userData) => {
 
 const saveDataUser = async (valuesUser) => {
     const userDb = await readUser(valuesUser.email);
-    console.log('userDb', userDb)
+    // console.log('userDb', userDb)
     if (!userDb) {
-        console.log('Creando usuario nuevo')
+        // console.log('Creando usuario nuevo')
         await createUser(valuesUser)
     }
 }
@@ -46,7 +47,6 @@ const readUser = async (userEmail) => {
 
 const editUser = async (userEmail, userData) => {
     try {
-        console.log('userEmail', userEmail, 'userData', userData)
         const userSnapshot = await getDocs(
             query(usersRef, where("email", "==", userEmail)))
 
@@ -63,4 +63,22 @@ const editUser = async (userEmail, userData) => {
     }
 }
 
-export { createUser, readUser, editUser, saveDataUser };
+const patchUser = async (userEmail, propsData) => {
+    try {
+        const userSnapshot = await getDocs(
+            query(usersRef, where("email", "==", userEmail)))
+
+        if (userSnapshot.empty) {
+            return { success: false, message: "User not found" }
+        }
+        const userData = userSnapshot.docs.map((doc) => doc.data())
+        const userDoc = userSnapshot.docs[0]
+        const userDocRef = userDoc.ref;
+        await updateDoc(userDocRef, { ...userData[0], ...propsData });
+        return { success: true, message: "User updated" }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export { createUser, readUser, editUser, saveDataUser, patchUser };
