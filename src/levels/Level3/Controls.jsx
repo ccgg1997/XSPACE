@@ -6,16 +6,19 @@ import { useGame } from "../../context/GameContext";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { shootProjectile} from "../../utils/shootProjectile.js";
 import { useEffect } from "react";
+import { useState } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat,canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
+    const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
     // const orbitControlsRef = useRef()
     const velocity = 9;
     const initialSpeed = 30;
     const { camera } = useThree();
     const { addProjectile } = useProjectiles();
+    const [play, setPlay] = useState(false)
 
     const startGame = () => {
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -27,11 +30,30 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
     }
 
     useEffect(() => {
+        if (play) {
+            shootSound.currentTime = 0;
+            shootSound.volume = 0.5
+            if (shootSound.paused) {
+                shootSound.play()
+            }
+        } else {
+            if (!shootSound.paused) {
+                shootSound.pause()
+            }
+        }
+    }
+    , [play])
+
+
+    useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === ' ' && !game.paused) {
                 if (nave.body) {
+                    setPlay(true)
                     shootProjectile(nave, addProjectile);
                 }
+            } else{
+                setPlay(false)
             }
         };
 
