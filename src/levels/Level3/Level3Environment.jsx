@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useGLTF} from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useGame } from "../../context/GameContext";
 import { useRef } from "react";
@@ -22,7 +22,7 @@ export default function Level3({
 
   const collisionManager = (event) => {
     if (event.other.rigidBodyObject.name == "naveEspacial") {
-      setGame({ ...game, paused: true, isCollided: true })
+      setGame({ ...game, paused: true, isCollided: true });
       collisionCallback();
     }
   };
@@ -1926,6 +1926,7 @@ export default function Level3({
           scale={[-1.555, -0.205, -0.173]}
         />
       </RigidBody>
+      
     </group>
   );
 }
