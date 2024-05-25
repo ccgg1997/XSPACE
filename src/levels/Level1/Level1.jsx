@@ -20,6 +20,9 @@ import { AvatarProvider } from "../../context/AvatarContext";
 import { useAvatar } from "../../context/AvatarContext";
 import { pass } from "three/examples/jsm/nodes/Nodes.js";
 import { useNavigate } from "react-router-dom"
+import { patchUser } from "../../db/user-collection";
+import { useAuth } from "../../context/AuthContext";
+import { useGame } from "../../context/GameContext";
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
@@ -28,7 +31,8 @@ export default function Level1() {
     const [final, setFinal] = useState(false);
     const [quitarPieza, setQuitarPieza] = useState(false);
     const [textoFinal, setTextoFinal] = useState("")
-
+    const { userLogged } = useAuth();
+    const { game, setStats } = useGame();
     const map = useMovements();
     const avatar = useAvatar();
     const navigate = useNavigate()
@@ -81,7 +85,7 @@ export default function Level1() {
     };
     const functionMsjFinal = () => {
         const tiempoEntreMensajes = 3000;
-    
+
         const promesas = mensajes.map((mensaje, index) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
@@ -90,12 +94,14 @@ export default function Level1() {
                 }, index * tiempoEntreMensajes);
             });
         });
-    
+
         Promise.all(promesas).then(() => {
+            patchUser(userLogged.email, { level: 2, lives: countLives })
+            setStats({ ...game, lives: countLives })
             setTimeout(() => {
                 console.log("entro al timeout final");
                 navigate("/level2");
-            }, 10000); 
+            }, 10000);
         });
     };
 
@@ -155,7 +161,7 @@ export default function Level1() {
                                             "Collision at world position ",
                                             manifold.solverContactPoint(0), "mainfold: ", manifold, "target: ", target, "other: ", other
                                         )
-                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza"&& other.rigidBodyObject.name != "final") {
+                                        if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza" && other.rigidBodyObject.name != "final") {
                                             setCountLives(countLives - 1)
                                             setUltimaVidaPerdida(new Date().getTime())
                                             other.rigidBodyObject.name
