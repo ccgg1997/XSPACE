@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './PauseMenu.css';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameContext';
+import BackgroundSound from '../interface/BackgroundSound';
 
 const PauseMenu = ({ onRestart }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [playSound, setPlaySound] = useState(false);
     const { game, togglePause } = useGame();
     const navigate = useNavigate();
     const menuStyle = {
@@ -15,6 +17,7 @@ const PauseMenu = ({ onRestart }) => {
         {
             text: 'Jugar',
             action: () => {
+                setPlaySound(true);
                 if (game.isCollided == true) {
                     onRestart();
                 } else {
@@ -32,14 +35,6 @@ const PauseMenu = ({ onRestart }) => {
         }
 
     ];
-
-    const jugarOption = () => {
-        if (game.isCollided == true) {
-            onRestart();
-        } else {
-            togglePause()
-        }
-    }
 
     const handleKeyDown = (event) => {
         if (event.key == 'Escape') {
@@ -77,6 +72,7 @@ const PauseMenu = ({ onRestart }) => {
 
     return (
         <>
+            <BackgroundSound play={!game.paused && playSound} />
             {game.paused && <div className='gamemenu' style={menuStyle} tabIndex={99}>
                 {options.map((option, index) => (
                     <div key={index} className={index != selectedIndex ? 'menuitem' : 'menuitem selected-item'} onClick={option.action}>

@@ -15,6 +15,7 @@ import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
+import BackgroundSound from "../../components/interface/BackgroundSound";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -47,6 +48,7 @@ const Level2 = ({ }) => {
 
   return (
     <div tabIndex={0}>
+      <BackgroundSound />
       <NaveProvider>
         <PauseMenu onRestart={() => setRestart(true)} />
         <KeyboardControls map={map} >

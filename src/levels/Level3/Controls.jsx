@@ -4,15 +4,17 @@ import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
 import { useProjectiles } from "../../context/ProjectilesContext";
-import { shootProjectile} from "../../utils/shootProjectile.js";
+import { shootProjectile } from "../../utils/shootProjectile.js";
 import { useEffect } from "react";
 import { useState } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat,canvasRef }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
+    const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
+    const [playNaveSound, setPlayNaveSound] = useState(false)
     // const orbitControlsRef = useRef()
     const velocity = 9;
     const initialSpeed = 30;
@@ -34,15 +36,32 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             shootSound.currentTime = 0;
             shootSound.volume = 0.5
             if (shootSound.paused) {
-                shootSound.play()
+                shootSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
             }
         } else {
             if (!shootSound.paused) {
                 shootSound.pause()
             }
         }
-    }
-    , [play])
+    }, [play])
+
+    useEffect(() => {
+        if (playNaveSound) {
+            naveSound.currentTime = 0;
+            naveSound.volume = 0.5
+            if (naveSound.paused) {
+                naveSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!naveSound.paused) {
+                naveSound.pause()
+            }
+        }
+    }, [playNaveSound])
 
 
     useEffect(() => {
@@ -52,7 +71,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                     setPlay(true)
                     shootProjectile(nave, addProjectile);
                 }
-            } else{
+            } else {
                 setPlay(false)
             }
         };
@@ -73,7 +92,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             },
             (pressed) => {
                 if (!game.paused) {
-                    // console.log('pressed', pressed)
+                    !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
                     if (!pressed) {
                         setNave({ ...nave, animation: "Idle" });
                     } else if (pressed.up) {
@@ -85,6 +104,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                     } else if (pressed.right) {
                         setNave({ ...nave, animation: "naveRightRotation" });
                     }
+                } else {
+                    setPlayNaveSound(false)
                 }
             }
         );
