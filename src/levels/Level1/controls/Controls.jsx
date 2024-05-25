@@ -35,7 +35,9 @@ export default function Controls() {
       runSound.currentTime = 0;
       runSound.volume = Math.random()
       if (runSound.paused) {
-        runSound.play()
+        runSound.play().catch((error) => {
+          console.log('Error playing audio:', error);
+        });
       }
     } else {
       if (!runSound.paused) {
@@ -55,7 +57,7 @@ export default function Controls() {
       if (backward) newPosition.z -= speed * delta; // Mover hacia atrás
       if (leftward) newPosition.x += speed * delta; // Mover hacia la izquierda
       if (rightward) newPosition.x -= speed * delta; // Mover hacia la derecha
-      avatar.ref.current.position.copy(newPosition); 
+      avatar.ref.current.position.copy(newPosition);
 
     } else {
       setPlay(false)

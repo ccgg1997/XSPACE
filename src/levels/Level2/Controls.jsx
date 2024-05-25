@@ -3,11 +3,13 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame, stats, setPartIcon } = useGame();
+    const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
+    const [playNaveSound, setPlayNaveSound] = useState(false)
     const [sub, get] = useKeyboardControls()
     const velocity = 8;
     const initialSpeed = 30;
@@ -30,6 +32,24 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             canvasRef.current.style.background = '#231F1F';
         }
     }
+
+    useEffect(() => {
+        if (playNaveSound) {
+            naveSound.currentTime = 0;
+            naveSound.volume = 0.5
+            if (naveSound.paused) {
+                naveSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!naveSound.paused) {
+                naveSound.pause()
+            }
+        }
+    }
+        , [playNaveSound])
+
     useEffect(() => {
         const unsubscribe = sub(
             (state) => {
@@ -41,6 +61,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             (pressed) => {
                 if (!game.paused) {
                     // console.log('pressed', pressed)
+                    !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
                     if (!pressed) {
                         setNave({ ...nave, animation: "Idle" });
                     } else if (pressed.up) {
@@ -52,6 +73,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                     } else if (pressed.right) {
                         setNave({ ...nave, animation: "naveRightRotation" });
                     }
+                } else {
+                    setPlayNaveSound(false)
                 }
             }
         );
