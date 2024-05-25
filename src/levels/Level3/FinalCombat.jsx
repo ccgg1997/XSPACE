@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGame } from "../../context/GameContext";
 import { RigidBody } from "@react-three/rapier";
 import { useGLTF } from "@react-three/drei";
+import * as THREE from "three";
 
 const generateInitialBombPosition = () => {
   return [ 
@@ -112,6 +113,7 @@ export const BombInit = ({ setStart }) => {
 const Bomb = ({ position, id, collisionManager }) => {
   const { nodes, materials } = useGLTF("/assets/models/items/bomb.glb");
   const ref = useRef();
+  const material = new THREE.MeshStandardMaterial({ color: 'green' }); // Cambiamos el color de la bomba a verde
 
   return (
     <RigidBody
@@ -127,7 +129,7 @@ const Bomb = ({ position, id, collisionManager }) => {
       gravityScale={0}
       customId={id}
     >
-      <mesh geometry={nodes.mesh_0.geometry} material={nodes.mesh_0.materials} scale={0.03} />
+      <mesh geometry={nodes.mesh_0.geometry} material={material} scale={0.03} />
     </RigidBody>
   );
 };

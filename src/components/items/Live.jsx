@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { RigidBody, BallCollider } from '@react-three/rapier';
 import React, { useRef } from 'react';
 
-const Live = ({ position , scale , onEarnLife = () => { } }) => {
+const Live = ({ position , scale , onEarnLife }) => {
     const liveRef = useRef(null);
     const { nodes, materials } = useGLTF('/assets/models/items/lives.glb');
     let yPosition = 0;
@@ -14,6 +14,20 @@ const Live = ({ position , scale , onEarnLife = () => { } }) => {
             liveRef.current.rotation.y += 0.05;
         }
     });
+
+    const collisionManager = (event) => {
+        if (event.other.rigidBodyObject.name === 'naveEspacial') {
+            onEarnLife();
+            if (liveRef.current) {
+                liveRef.current.visible = false; // Ocultar la vida
+                setTimeout(() => {
+                    liveRef.current.visible = true; // Mostrar la vida después de 2 segundos
+                    liveRef.current.position.set(...position); // Resetear la posición a la original
+                }, 2000);
+            }
+        }
+    };
+
 
     return (
         <RigidBody
@@ -27,7 +41,7 @@ const Live = ({ position , scale , onEarnLife = () => { } }) => {
             sensors={true}
             sensor={true}
             // onIntersectionExit={() => { console.log('collision exit') }}
-            onIntersectionEnter={onEarnLife}
+            onIntersectionEnter={collisionManager}
         >
             <mesh
                 castShadow
