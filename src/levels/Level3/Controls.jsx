@@ -7,12 +7,12 @@ import { useProjectiles } from "../../context/ProjectilesContext";
 import { shootProjectile} from "../../utils/shootProjectile.js";
 import { useEffect } from "react";
 
-export default function Controls({ orbitControlsRef, restart, onRestartDone, canvasRef }) {
+export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat,canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
     // const orbitControlsRef = useRef()
-    const velocity = 8;
+    const velocity = 9;
     const initialSpeed = 30;
     const { camera } = useThree();
     const { addProjectile } = useProjectiles();
@@ -87,6 +87,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, can
         let speed = initialSpeed;
         if (currentTranslation.z < -1535) {
             speed = 0
+            initCombat();
         }
         let moveZ = speed * delta
         if (up || down || left || right) {

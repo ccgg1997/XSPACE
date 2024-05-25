@@ -15,6 +15,7 @@ import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { projectilesContext } from "../../context/ProjectilesContext";
 import Projectile from "../../components/shipSkills/projectile";
+import { BombInit } from "./FinalCombat";
 
 const Level3 = () => {
   const map = useMovements();
@@ -25,6 +26,7 @@ const Level3 = () => {
   const [restart, setRestart] = useState(false);
   const { stats, addLive, removeLive } = useGame();
   const {projectiles} = useContext(projectilesContext);
+  const [initCombat, setInitCombat] = useState(false);
 
   const onEarnLife = () => {
     addLive();
@@ -67,6 +69,7 @@ const Level3 = () => {
                   />
                   
                 ))}
+                {initCombat && <BombInit setStart={() => setInitCombat(false)} />}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
@@ -76,6 +79,7 @@ const Level3 = () => {
                 restart={restart}
                 onRestartDone={() => setRestart(false)}
                 canvasRef={canvasRef}
+                initCombat={(() => setInitCombat(true))}
               />
             )}
           </Canvas>
