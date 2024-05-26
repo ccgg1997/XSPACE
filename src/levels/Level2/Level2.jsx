@@ -16,6 +16,7 @@ import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
 import BackgroundSound from "../../components/interface/BackgroundSound";
+import CheckPointNotif from "../../components/CheckPointNotif";
 
 const Level2 = ({ }) => {
   const map = useMovements();
@@ -25,6 +26,7 @@ const Level2 = ({ }) => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
+  const [checkpoint, setCheckPoint] = useState(false)
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
 
   const onEarnLife = () => {
@@ -77,7 +79,7 @@ const Level2 = ({ }) => {
                 <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Nave
                 />
-                {initCombat && <Combat canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} collisionCallback={removeLive} onWinLevel={onWinLevel} />}
+                {initCombat && <Combat canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} collisionCallback={removeLive} onWinLevel={onWinLevel} setCheckPointEvent={setCheckPoint} />}
                 <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
@@ -85,6 +87,7 @@ const Level2 = ({ }) => {
           </Canvas>
         </KeyboardControls>
       </NaveProvider>
+      <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPoint} />
     </div>
   );
 };
