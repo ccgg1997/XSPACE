@@ -118,7 +118,7 @@ const Reward = ({ velocity, onRewardObtained }) => {
     );
 };
 
-const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel }) => {
+const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel, setCheckPointEvent }) => {
     const { nave } = useNave();
     const { game, stats, setMessage, addPart, setPartIcon, setCheckPoint } = useGame();
     const [init, setInit] = useState(false)
@@ -149,6 +149,7 @@ const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel }) 
         // console.log('CHECKPOINT TARGET: ', orbitControlsRef.current.target)
         // console.log('CHECKPOINT CAMERA: ', camera.position)
         setCheckPoint([0, 0, -907.2]);
+        setCheckPointEvent(true);
         patchUser(userLogged.email, { checkPoint: [0, 0, -907.2] })
     }, [])
 
