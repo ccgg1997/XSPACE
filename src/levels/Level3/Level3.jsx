@@ -13,7 +13,8 @@ import PauseMenu from "../../components/pause-menu/PauseMenu";
 import { useGame } from "../../context/GameContext";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
-import { projectilesContext } from "../../context/ProjectilesContext";
+import { projectilesContext,useProjectiles } from "../../context/ProjectilesContext";
+import Projectile from "../../components/shipSkills/projectile";
 import { BombInit } from "./FinalCombat";
 
 const Level3 = () => {
@@ -24,7 +25,7 @@ const Level3 = () => {
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
   const { addLive, removeLive } = useGame();
-  const {projectiles, paintProjectiles} = useContext(projectilesContext);
+  const {projectiles} = useProjectiles(projectilesContext);
   const [initCombat, setInitCombat] = useState(false);
 
   const onEarnLife = () => {
@@ -59,7 +60,9 @@ const Level3 = () => {
 
                 />
                 <Nave />
-                {paintProjectiles()}
+                {projectiles.map((projectile) => (
+                  <Projectile position={projectile.position} id={projectile.id} key={projectile.id} />
+                ))}
                 {initCombat && <BombInit setStart={() => setInitCombat(false)} />}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
