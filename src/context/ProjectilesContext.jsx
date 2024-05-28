@@ -1,4 +1,5 @@
 import React, {useState } from "react";
+import Projectile from "../components/shipSkills/projectile";
 
 // Contexto de los proyectiles
 export const projectilesContext = React.createContext();
@@ -27,9 +28,17 @@ export const ProjectilesProvider = ({children}) => {
     setProjectiles((prev) => prev.filter((projectile) => projectile.id !== id)); 
   }
 
+  const paintProjectiles = () => {
+    return projectiles.map((projectile) => {
+      return (
+        <Projectile position={projectile.position} id={projectile.id} />
+      );
+    });
+  }
+
   // Proveedor de los proyectiles
   return (
-    <projectilesContext.Provider value={{projectiles, addProjectile, removeProjectile}}>
+    <projectilesContext.Provider value={{projectiles, addProjectile, removeProjectile, paintProjectiles}}>
       {children}
     </projectilesContext.Provider>
   )
