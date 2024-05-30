@@ -12,7 +12,7 @@ const generateInitialBombPosition = () => {
   ];
 };
 
-export const BombInit = ({ setStart }) => {
+export const BombInit = ({ setStart,onWinLevel }) => {
   const { game, setGame, setMessage, removeLive } = useGame();
   const [bombs, setBombs] = useState([]);
   const [bombCount, setBombCount] = useState(0);
@@ -24,15 +24,6 @@ export const BombInit = ({ setStart }) => {
     const now = Date.now();
     const explodedBombs = bombs.filter((bomb) => bomb.explodeTime <= now);
     const inter = setInterval(() => {
-      if (bombCount < 5 && explodedBombs.length === 0) {
-        setMessage(
-          "Neutraliza las bombas antes de que exploten con la tecla 'espacio'"
-        );
-      }
-      if (bombCount > 4) {
-        allBombsNeutralized();
-        return;
-      }
       if (explodedBombs.length > 0) {
         bombExploded();
         return;
@@ -42,6 +33,24 @@ export const BombInit = ({ setStart }) => {
     }, 2000);
     return () => clearInterval(inter);
   }, [game.paused, bombCount, bombs, init]);
+
+  useEffect(() => {
+    const now = Date.now();
+    const explodedBombs = bombs.filter((bomb) => bomb.explodeTime <= now);
+    const interval = setInterval(() => {
+      if (bombCount < 5 && explodedBombs.length === 0) {
+        setMessage(
+          "Neutraliza las bombas antes de que exploten con la tecla 'espacio'"
+        );
+      }
+      if (bombCount > 4) {
+        allBombsNeutralized();
+        return;
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [bombCount]);
+  
 
   // Función para crear una bomba
   const createBomb = () => {
@@ -56,6 +65,7 @@ export const BombInit = ({ setStart }) => {
   // Función para neutralizar una bomba
   const bombNeutralized = (id) => {
     setMessage("¡Has neutralizado una bomba!");
+    console.log(id)
     setBombs((prev) => prev.filter((bomb) => bomb.id !== id));
     setBombCount((prevCount) => prevCount + 1);
     setTimeout(() => {
@@ -67,12 +77,12 @@ export const BombInit = ({ setStart }) => {
   const allBombsNeutralized = () => {
     setMessage("¡Has neutralizado todas las bombas!");
     setBombs([]);
-    setGame({ ...game, paused: true });
     setStart();
     setInit(false);
     setTimeout(() => {
       setMessage("");
     }, 1500);
+    onWinLevel();
   };
 
   // Función para cuando una bomba explota
@@ -89,8 +99,9 @@ export const BombInit = ({ setStart }) => {
   };
 
   const collisionManager = (event) => {
+    console.log(event);
     if (event.other.rigidBodyObject.name === "projectile" && bombCount < 5) {
-      bombNeutralized(event.other.rigidBodyObject.customId);
+      bombNeutralized(event.target.rigidBodyObject.customId);
     }
   };
 
@@ -101,6 +112,7 @@ export const BombInit = ({ setStart }) => {
           position={bomb.posicion}
           id={bomb.id}
           collisionManager={collisionManager}
+          key={bomb.id}
         />
       ))}
     </>
@@ -111,7 +123,6 @@ const Bomb = ({ position, id, collisionManager }) => {
   const { nodes, materials } = useGLTF("/assets/models/items/bomb.glb");
   const ref = useRef();
   const material = new THREE.MeshStandardMaterial({ color: "green" }); // Cambiamos el color de la bomba a verde
-
   return (
     <RigidBody
       ref={ref}
