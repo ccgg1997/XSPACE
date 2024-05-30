@@ -12,7 +12,7 @@ XSpace es un juego web 3D en desarrollo donde los jugadores controlan una nave e
 4. [Licencia](#licencia)
 5. [Autores y Reconocimientos](#autores-y-reconocimientos)
 6. [Funcionalidad: Sistema de Disparo](#funcionalidad-sistema-de-disparo)
-7. [Ejemplo de uso: Sitema de Disparo](#ejemplo-de-uso-sistema-de-disparo)
+7. [Ejemplo de uso: Sistema de Disparo](#ejemplo-de-uso-sistema-de-disparo)
 
 ## Instalación
 
@@ -143,7 +143,7 @@ const { addProjectile } = useProjectiles();
 shootProjectile(nave,addProjectile);
 ```
 ---
-### Ejemplo de uso: Sitema de Disparo
+### Ejemplo de uso: Sistema de Disparo
 **Controls.jsx**
 En el archivo controls de la nave espacial, se importa el componente `ShootProjectile` y se añade un evento para disparar un proyectil al presionar la tecla de espacio.
 
