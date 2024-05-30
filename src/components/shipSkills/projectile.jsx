@@ -7,18 +7,16 @@ import { Sphere } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import { useGame } from '../../context/GameContext';
 
-const Projectile = ({ position, id }) => {
+const Projectile = ({ position, id,speed }) => {
   const ref = useRef();
   const { removeProjectile } = useProjectiles(projectilesContext);
   const creationProjectileTimeRef = useRef(Date.now());
   const { game } = useGame();
-  const speed = -50;
-  
   // //verificacion de los parametros
-  // if (position === undefined || id === undefined || id === null || position === null) {
-  //   console.error("Projectile component: Missing required props 'position' or 'id'.");
-  //   return null; // Retornar null para no renderizar nada
-  // }
+  if (position === undefined || id === undefined || id === null || position === null || speed === undefined || speed === null) {
+    console.error("Projectile component: Missing required props 'position','id' or 'speed'");
+    return null; // Retornar null para no renderizar nada
+  }
 
   const collisionManager = (event) => {
       removeProjectile(id);
