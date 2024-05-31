@@ -12,7 +12,7 @@ import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
 import useMovements from "../../utils/key-movements";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
-import { projectilesContext } from "../../context/ProjectilesContext";
+import { projectilesContext, useProjectiles } from "../../context/ProjectilesContext";
 import Projectile from "../../components/shipSkills/projectile";
 import { useGame } from "../../context/GameContext";
 import CheckPointNotif from "../../components/CheckPointNotif";
@@ -30,6 +30,7 @@ const Level4 = () => {
   const { projectiles } = useContext(projectilesContext);
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
   const [checkpoint, setCheckPoint] = useState(false)
+  const { paintProjectiles } = useProjectiles();
 
   return (
     <div tabIndex={0}>
@@ -63,17 +64,9 @@ const Level4 = () => {
 
               <Physics debug={true}>
                 <Level4Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
-                <Level4Paredes/>
+                <Level4Paredes />
                 <Nave />
-                {projectiles.map((projectile) => (
-                  <Projectile
-                    key={projectile.id}
-                    position={projectile.position}
-                    id={projectile.id}
-                    limitProjectibles={-1590}
-                  />
-
-                ))}
+                {paintProjectiles(-50)}
               </Physics>
 
             </Suspense>
