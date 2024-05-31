@@ -45,6 +45,7 @@ export default function Nave(props) {
             enabledRotations={[false, false, false]}
             restitution={0}
             name="naveEspacial"
+        // scale={[0.9, 0.9, 0.9]}
         >
             <group ref={naveRef}>
 
