@@ -18,6 +18,7 @@ import { useGame } from "../../context/GameContext";
 import CheckPointNotif from "../../components/CheckPointNotif";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import GameStats from "../../components/interface/GameStats";
+import { Level4Paredes } from "./Level4Paredes";
 
 const Level4 = () => {
   const map = useMovements();
@@ -62,6 +63,7 @@ const Level4 = () => {
 
               <Physics debug={true}>
                 <Level4Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
+                <Level4Paredes/>
                 <Nave />
                 {projectiles.map((projectile) => (
                   <Projectile
