@@ -13,8 +13,7 @@ import PauseMenu from "../../components/pause-menu/PauseMenu";
 import { useGame } from "../../context/GameContext";
 import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
-import { projectilesContext } from "../../context/ProjectilesContext";
-import Projectile from "../../components/shipSkills/projectile";
+import { useProjectiles } from "../../context/ProjectilesContext";
 import { BombInit } from "./FinalCombat";
 
 const Level3 = () => {
@@ -24,13 +23,21 @@ const Level3 = () => {
   const canvasRef = useRef();
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
-  const { stats, addLive, removeLive } = useGame();
-  const {projectiles} = useContext(projectilesContext);
+  const { addLive, removeLive,togglePause, addLevel } = useGame();
+  const { paintProjectiles} = useProjectiles();
   const [initCombat, setInitCombat] = useState(false);
 
   const onEarnLife = () => {
     addLive();
   };
+
+  const onWinLevel = () => {
+    togglePause();
+    addLevel();
+    setTimeout(() => {
+      window.location.href = 'level4';
+    }, 3000);
+  }
 
   return (
     <div tabIndex={0}>
@@ -60,16 +67,8 @@ const Level3 = () => {
 
                 />
                 <Nave />
-                {projectiles.map((projectile) => (
-                  <Projectile 
-                    key={projectile.id}
-                    position={projectile.position}
-                    id={projectile.id}
-                    limitProjectibles={-1590}
-                  />
-                  
-                ))}
-                {initCombat && <BombInit setStart={() => setInitCombat(false)} />}
+                {paintProjectiles(-50)}
+                {initCombat && <BombInit setStart={() => setInitCombat(false)} onWinLevel={onWinLevel} />}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
