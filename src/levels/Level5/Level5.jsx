@@ -1,62 +1,81 @@
-
-import { OrbitControls, KeyboardControls } from "@react-three/drei";
-import Level5Environment from "./Level5Environment";
-import { Perf } from "r3f-perf";
+import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
+import World from "./Level5Environment";
+import { Suspense, useContext, useState } from "react";
+import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef } from "react";
-import { PerspectiveCamera } from '@react-three/drei';
-import { Color } from "three";
-import { Canvas } from '@react-three/fiber';
-import useMovements from "../../utils/key-movements";
+import { PerspectiveCamera } from "@react-three/drei";
+import { useRef } from "react";
 import Nave from "./Nave";
-import { useFrame } from "@react-three/fiber";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
-import World from "../../components/Level1Environment";
-import Galaxy from '../../backgrounds/Galaxy';
-// import Ecctrl, { EcctrlAnimation } from "ecctrl";
+import useMovements from "../../utils/key-movements";
+import PauseMenu from "../../components/pause-menu/PauseMenu";
+import { useGame } from "../../context/GameContext";
+import GameStats from "../../components/interface/GameStats";
+import Live from "../../components/items/Live";
+import { useProjectiles } from "../../context/ProjectilesContext";
+import Environmentlvl5 from "./Environment";
 
 const Level5 = ({ setCameraPosition }) => {
   const map = useMovements();
-  const naveRef = useRef();
-  const orbitControlsRef = useRef()
+  const orbitControlsRef = useRef();
+  const cameraRef = useRef();
+  const canvasRef = useRef();
   const [ready, setReady] = useState(false);
+  const [restart, setRestart] = useState(false);
+  const { addLive, removeLive,togglePause, addLevel } = useGame();
+  const { paintProjectiles} = useProjectiles();
 
-
+  const onEarnLife = () => {
+    addLive();
+  };
 
 
   return (
+    <div tabIndex={0}>
     <NaveProvider>
-      <KeyboardControls map={map} >
-        <Canvas
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        >
-          <Perf position="top-left" />
-          <PerspectiveCamera makeDefault position={[0, 10, 20]} />
-
-          <OrbitControls makeDefault
-            target={[0, 10, 0]}
-            enablePan={true}
-            ref={orbitControlsRef}
-          />
-
-          <Suspense fallback={null}>
-            <ambientLight
-              color={new Color("#FFFFFF")}
-              intensity={1.4}
+        <PauseMenu onRestart={() => setRestart(true)} />
+        <KeyboardControls map={map}>
+          <GameStats />
+          <Canvas
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
+            ref={canvasRef}
+          >
+            <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
+            <OrbitControls makeDefault
+              camera={cameraRef.current}
+              target={[0, 1, -28]}
+              enablePan={false}
+              ref={orbitControlsRef}
+              enableRotate={false}
+              enableZoom={false}
             />
-            <Physics debug={false}>
-              <World />
-              <Galaxy />
-              <Nave
-              />
+            <Suspense fallback={null}>
+              <Environmentlvl5 />
+              <ambientLight />
+              <Physics>
+                <World
+                  onLoad={() => setReady(true)}
+                  collisionCallback={removeLive}
 
-            </Physics>
-          </Suspense>
-          <Controls orbitControlsRef={orbitControlsRef} ready={ready} />
-        </Canvas>
-      </KeyboardControls>
+                />
+                <Nave />
+                {paintProjectiles(-50)}
+                <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
+              </Physics>
+            </Suspense>
+            {ready && (
+              <Controls
+                orbitControlsRef={orbitControlsRef}
+                restart={restart}
+                onRestartDone={() => setRestart(false)}
+                canvasRef={canvasRef}
+              />
+            )}
+          </Canvas>
+        </KeyboardControls>
     </NaveProvider>
+  </div>
   );
 };
 
