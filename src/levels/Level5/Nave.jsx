@@ -1,32 +1,42 @@
-import { useGLTF } from "@react-three/drei"
+import { useAnimations, useGLTF } from "@react-three/drei"
 import { CuboidCollider, RigidBody } from "@react-three/rapier"
 // import { useBox } from '@react-three/cannon';
 import { useNave } from "../../context/NaveContext";
 import { useEffect, useRef } from "react";
+import * as THREE from 'three';
 
 export default function Nave(props) {
     const naveBodyRef = useRef();
     const naveRef = useRef();
-    const { setNave } = useNave();
-    const { nodes, materials } = useGLTF('/assets/models/NaveDefault.glb');
-    // const [ref] = useBox(() => ({
-    //     type: 'Dynamic',
-    //     position,
-    //     gravityScale: 0, // Ignora la gravedad
-    // }));
+    const groupRef = useRef();
+    const { nave, setNave } = useNave();
+    const { nodes, materials, animations } = useGLTF('/assets/models/NaveDefault.glb');
+    const { ref, actions, mixer } = useAnimations(animations, naveRef)
 
     useEffect(() => {
-        console.log('naveBodyRef', naveBodyRef.current)
-        console.log('naveRef', naveRef.current)
-        console.log('position', naveRef.current.position)
         setNave({
+            ...nave,
             ref: naveRef.current,
             body: naveBodyRef.current
         })
     }, [naveBodyRef.current, naveRef.current])
 
-    // Set the initial rotation to 180 degrees around the X-axis
-    //naveRef?.current?.rotation.x = Math.PI;
+    useEffect(() => {
+        if (nave.animation) {
+            actions[nave.animation].setLoop(THREE.LoopOnce);
+            actions[nave.animation].clampWhenFinished = true;
+            actions[nave.animation]?.reset().play();//.fadeIn(0.5)
+        } else {
+            mixer.stopAllAction();
+        }
+
+        return () => {
+            if (actions[nave.animation])
+                actions[nave.animation].fadeOut(0.5);
+        }
+
+    }, [nave.animation]);
+
     return (
         <RigidBody ref={naveBodyRef}
             colliders={false}
@@ -34,26 +44,29 @@ export default function Nave(props) {
             gravityScale={0}
             enabledRotations={[false, false, false]}
             restitution={0}
+            name="naveEspacial"
         >
-            <mesh
-                castShadow
-                receiveShadow
-                geometry={nodes.nave_espacial.geometry}
-                position={[0, 0, -120.468]}
-                rotation={[0, 3, 0]}
-                ref={naveRef}
-                frustumCulled={false}
-            >
-                <meshStandardMaterial color="blue" />
-                <CuboidCollider
-                    args={[0.25, 2, 2]}
-                    position={[0, 2.3, -1]}
-                />
-                <CuboidCollider
-                    args={[3, 0.4, 2]}
-                    position={[0, 3.5, -1]}
-                />
-            </mesh>
+            <group ref={naveRef}>
+
+                <primitive
+                    castShadow
+                    receiveShadow
+                    object={nodes.nave_espacial}
+                // material={materials.FrontColor}
+                // position={[0, 0, -19.468]}
+                // ref={naveRef}
+                //frustumCulled={false}
+                >
+                    <CuboidCollider
+                        args={[0.25, 2, 2]}
+                        position={[0, 2.3, -1]}
+                    />
+                    <CuboidCollider
+                        args={[3, 0.4, 2]}
+                        position={[0, 3.5, -1]}
+                    />
+                </primitive>
+            </group>
 
         </RigidBody >
     )
