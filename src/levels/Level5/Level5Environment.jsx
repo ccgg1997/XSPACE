@@ -161,6 +161,103 @@ export default function Level5Environment({ args, onLoad, collisionCallback }) {
         onCollisionEnter={collisionManager}
       />
       </RigidBody>
+      <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+      <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera001.geometry}
+      material={materials['Material.007']}
+      position={[-12.803, 5.767, -630.071]}
+      scale={16.766}
+    />
+    </RigidBody>
+    <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera002.geometry}
+      material={materials['Material.008']}
+      position={[53.009, 8.403, -807.081]}
+      scale={52.776}
+    />
+    </RigidBody>
+    <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera003.geometry}
+      material={materials['Material.009']}
+      position={[-12.803, 5.767, -630.071]}
+      scale={16.766}
+    />
+    </RigidBody>
+    <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera004.geometry}
+      material={materials['Material.010']}
+      position={[-31.148, 9.235, -1064.73]}
+      scale={28.71}
+    />
+    </RigidBody>
+    <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera005.geometry}
+      material={materials['Material.011']}
+      position={[-4.331, 6.746, -1251.582]}
+      scale={7.274}
+    />
+    </RigidBody>
+    <RigidBody
+        type="fixed"
+        colliders="trimesh"
+        restitution={0}
+        onCollisionEnter={collisionManager}
+        name="obstaculo"
+      >
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={nodes.Esfera006.geometry}
+      material={materials['Material.012']}
+      position={[14.619, 7.707, -1417.354]}
+      scale={16.766}
+    />
+    </RigidBody>
+
     </group>
   );
 }
