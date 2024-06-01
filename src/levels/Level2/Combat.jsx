@@ -150,7 +150,6 @@ const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel, se
         // console.log('CHECKPOINT CAMERA: ', camera.position)
         setCheckPoint([0, 0, -907.2]);
         setCheckPointEvent(true);
-        patchUser(userLogged.email, { checkPoint: [0, 0, -907.2] })
     }, [])
 
     useFrame((state, delta) => {
