@@ -12,12 +12,13 @@ import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
 import useMovements from "../../utils/key-movements";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
-import { projectilesContext } from "../../context/ProjectilesContext";
+import { projectilesContext, useProjectiles } from "../../context/ProjectilesContext";
 import Projectile from "../../components/shipSkills/projectile";
 import { useGame } from "../../context/GameContext";
 import CheckPointNotif from "../../components/CheckPointNotif";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import GameStats from "../../components/interface/GameStats";
+import { Level4Paredes } from "./Level4Paredes";
 
 const Level4 = () => {
   const map = useMovements();
@@ -29,6 +30,7 @@ const Level4 = () => {
   const { projectiles } = useContext(projectilesContext);
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
   const [checkpoint, setCheckPoint] = useState(false)
+  const { paintProjectiles } = useProjectiles();
 
   return (
     <div tabIndex={0}>
@@ -60,18 +62,11 @@ const Level4 = () => {
                 intensity={1.4}
               />
 
-              <Physics debug={true}>
+              <Physics debug={false}>
                 <Level4Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
+                <Level4Paredes collisionCallback={removeLive} restart={restart} />
                 <Nave />
-                {projectiles.map((projectile) => (
-                  <Projectile
-                    key={projectile.id}
-                    position={projectile.position}
-                    id={projectile.id}
-                    limitProjectibles={-1590}
-                  />
-
-                ))}
+                {paintProjectiles(-50)}
               </Physics>
 
             </Suspense>
