@@ -1,7 +1,7 @@
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import Level4Environment from "./Level4Environment";
 import { Perf } from "r3f-perf";
-import { Suspense, useContext, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { PerspectiveCamera } from "@react-three/drei";
@@ -19,6 +19,8 @@ import CheckPointNotif from "../../components/CheckPointNotif";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import GameStats from "../../components/interface/GameStats";
 import { Level4Paredes } from "./Level4Paredes";
+import Live from "../../components/items/Live";
+import { GunsInit } from "./FinalCombat";
 
 const Level4 = () => {
   const map = useMovements();
@@ -27,10 +29,33 @@ const Level4 = () => {
   const cameraRef = useRef();
   const canvasRef = useRef();
   const [restart, setRestart] = useState(false);
-  const { projectiles } = useContext(projectilesContext);
-  const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
-  const [checkpoint, setCheckPoint] = useState(false)
+  const { removeLive, addLive, addLevel, setMessage, setCheckPoint, setPartIcon } = useGame();
+  const [checkpoint, setCheckPointEvent] = useState(false)
   const { paintProjectiles } = useProjectiles();
+  const [initCombat, setInitCombat] = useState(false)
+
+  const onEarnLife = () => {
+    addLive();
+  }
+  const onWinLevel = () => {
+    togglePause();
+    addLevel();
+    setTimeout(() => {
+      window.location.href = 'level5';
+    }, 3000);
+  }
+
+  useEffect(() => {
+    setPartIcon("🔹");
+    setMessage('!Dispara a las 🔹 con el boton "ESPACIO"​!')
+  }, []);
+
+  useEffect(() => {
+    if (initCombat) {
+      setCheckPointEvent(true);
+      setCheckPoint([0, 0, -907.2]);
+    }
+  }, [initCombat])
 
   return (
     <div tabIndex={0}>
@@ -43,7 +68,7 @@ const Level4 = () => {
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#5F6699' }}
             ref={canvasRef}
           >
-            <Perf position="top-left" />
+            {/* <Perf position="top-left" /> */}
             <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
 
             <OrbitControls makeDefault
@@ -66,6 +91,8 @@ const Level4 = () => {
                 <Level4Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
                 <Level4Paredes collisionCallback={removeLive} restart={restart} />
                 <Nave />
+                <Live position={[2, 4.5, -791]} scale={1.5} onEarnLife={onEarnLife} />
+                {initCombat && <GunsInit setStart={() => setInitCombat(false)} onWinLevel={onWinLevel} />}
                 {paintProjectiles(-50)}
               </Physics>
 
@@ -75,7 +102,7 @@ const Level4 = () => {
           </Canvas>
         </KeyboardControls>
       </NaveProvider>
-      <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPoint} />
+      <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPointEvent} />
     </div>
   );
 };

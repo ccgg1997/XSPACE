@@ -62,6 +62,7 @@ export function GameProvider({ children }) {
     }
 
     const setCheckPoint = (checkPoint) => {
+        patchUser(userLogged.email, { checkPoint: checkPoint })
         setStats({ ...stats, checkPoint: checkPoint })
     }
 

@@ -22,12 +22,6 @@ function Pared({ args, collisionManager }) {
 
   useEffect(() => {
     meshRef.current.visible = true;
-
-    return () => {
-      rigidBodyRef.current.sleep();
-      rigidBodyRef.current.active = false;
-      meshRef.current.visible = false;
-    }
   }, [])
 
 
@@ -47,7 +41,7 @@ function Pared({ args, collisionManager }) {
 export function Level4Paredes({ collisionCallback = () => { }, restart }) {
   const { nodes, materials } = useGLTF('/assets/models/Level4Paredes.glb')
   const material = new THREE.MeshStandardMaterial({ color: "blue" });
-  const { game, setGame } = useGame();
+  const { game, setGame, addPart } = useGame();
   const initialparedes = [
     {
       userData: { id: "1", active: true },
@@ -82,6 +76,14 @@ export function Level4Paredes({ collisionCallback = () => { }, restart }) {
       rotation: [1.542, 0, 0],
       scale: [0.963, 1, 0.862]
     },
+    {
+      userData: { id: "5", active: true },
+      geometry: nodes.pared1.geometry,
+      material: materials.Material,
+      position: [0.548, 5.305, -165.819],
+      rotation: [1.542, 0, 0],
+      scale: [0.608, 1, 0.874]
+    },
   ];
   const [paredes, setParedes] = useState(initialparedes);
 
@@ -91,6 +93,7 @@ export function Level4Paredes({ collisionCallback = () => { }, restart }) {
   const collisionManager = (event) => {
     const id = event.target.rigidBodyObject.children[0].userData.id;
     if (event.other.rigidBodyObject.name === "projectile") {
+      addPart();
       const rigidBody = event.target.rigidBody; // Acceder al objeto RigidBody
       rigidBody.active = false;
       // console.log('id', event.target.rigidBodyObject.children[0].userData.id)
