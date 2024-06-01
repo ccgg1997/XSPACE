@@ -17,7 +17,6 @@ export default function Level4Environment({ args, onLoad = () => { }, collisionC
 
     if (event.other.rigidBodyObject.name == "naveEspacial") {
       setGame({ ...game, paused: true, isCollided: true })
-      console.log('aquii')
       collisionCallback();
     }
 

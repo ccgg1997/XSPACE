@@ -62,9 +62,9 @@ const Level4 = () => {
                 intensity={1.4}
               />
 
-              <Physics debug={true}>
+              <Physics debug={false}>
                 <Level4Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
-                <Level4Paredes />
+                <Level4Paredes collisionCallback={removeLive} restart={restart} />
                 <Nave />
                 {paintProjectiles(-50)}
               </Physics>
