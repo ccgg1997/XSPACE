@@ -32,7 +32,7 @@ const Level4 = () => {
   const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame, setPartIcon, setCheckPoint } = useGame();
   const [checkpoint, setCheckPointEvent] = useState(false)
   const { paintProjectiles } = useProjectiles();
-  const [initCombat, setInitCombat] = useState(true)
+  const [initCombat, setInitCombat] = useState(false)
 
   const onEarnLife = () => {
     addLive();

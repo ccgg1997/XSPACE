@@ -136,7 +136,9 @@ const Torreta = ({ args, shotTime = 3, disableTorreta }) => {
 
   const newShot = () => {
     const projectileId = THREE.MathUtils.generateUUID();
-    const positionTorreta = torreta.current.position;
+    const positionTorreta = torreta.current?.position;
+    if (positionTorreta == null)
+      return;
     console.log('positionTorreta', positionTorreta)
     const position = [positionTorreta.x, positionTorreta.y + 0.9, positionTorreta.z + 3];
 
