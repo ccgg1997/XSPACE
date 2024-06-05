@@ -11,15 +11,16 @@
 }
 
 .menuitem {
-    
     /* padding: 10px; */
     border-radius: 5px;
     /* background-color: #f0f0f0; */
     cursor: pointer;
     margin-bottom: 10px;
     font-size: 60px;
-    color: gray
+    color: rgb(165, 114, 38);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
 }
+
 @media (max-width: 1320px)  {
 
     .menuitem {
@@ -35,5 +36,5 @@
 }
 
 .menuitem.selected-item {
-    color: #0099CE;
+    color: #b32810;
 }
