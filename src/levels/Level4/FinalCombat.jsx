@@ -17,73 +17,76 @@ const generateInitialBombPosition = () => {
 export const GunsInit = ({ setStart, onWinLevel }) => {
   const { game, setGame, setMessage, removeLive } = useGame();
   const [init, setInit] = useState(true);
+  const [torretas, setTorretas] = useState({ "1": true, "2": true, "3": true, "4": true });
 
+  const disableTorreta = (key) => {
+    setTorretas((prev) => ({ ...prev, [key]: false }));
+  };
 
-
-
-
-
-  // // Función para neutralizar una bomba
-  // const bombNeutralized = (id) => {
-  //   setMessage("¡Has neutralizado una bomba!");
-  //   console.log(id)
-  //   setBombs((prev) => prev.filter((bomb) => bomb.id !== id));
-  //   setBombCount((prevCount) => prevCount + 1);
-  // };
-
-
-  // const collisionManager = (event) => {
-  //   console.log(event);
-  //   if (event.other.rigidBodyObject.name === "projectile" && bombCount < 5) {
-  //     bombNeutralized(event.target.rigidBodyObject.customId);
-  //   }
-  // };
+  useEffect(() => {
+    if (!(torretas["1"] || torretas["2"] || torretas["3"] || torretas["4"])) {
+      console.log("GANASTE!!");
+      onWinLevel();
+    }
+  }, [, torretas]);
 
   return (
     <>
-      <Torreta
-        shotTime={4000}
-        args={{
-          key: 1,
-          position: [4, 3.025, -990],
-          scale: [0.9, 1.027, 0.8],
-          rotation: [Math.PI / 2, 0, 0]
-        }}
-      />
-      <Torreta
-        shotTime={2000}
-        args={{
-          key: 2,
-          position: [-4, 3.025, -990],
-          scale: [0.9, 1.027, 0.8],
-          rotation: [Math.PI / 2, 0, 0]
-        }}
-      />
-
-      <Torreta
-        shotTime={2000}
-        args={{
-          key: 3,
-          position: [-8, 7.025, -990],
-          scale: [0.9, 1.027, 0.8],
-          rotation: [Math.PI / 2, 4.7, 0]
-        }}
-      />
-      <Torreta
-        shotTime={3000}
-        args={{
-          key: 4,
-          position: [8, 7.025, -990],
-          scale: [0.9, 1.027, 0.8],
-          rotation: [Math.PI / 2, Math.PI / 2, 0]
-        }}
-      />
+      {torretas["1"] &&
+        <Torreta
+          shotTime={4000}
+          args={{
+            key: "1",
+            position: [4, 3.025, -990],
+            scale: [0.9, 1.027, 0.8],
+            rotation: [Math.PI / 2, 0, 0]
+          }}
+          disableTorreta={disableTorreta}
+        />
+      }
+      {torretas["2"] &&
+        <Torreta
+          shotTime={2600}
+          args={{
+            key: "2",
+            position: [-4, 3.025, -990],
+            scale: [0.9, 1.027, 0.8],
+            rotation: [Math.PI / 2, 0, 0]
+          }}
+          disableTorreta={disableTorreta}
+        />
+      }
+      {
+        torretas["3"] &&
+        <Torreta
+          shotTime={2900}
+          args={{
+            key: "3",
+            position: [-8, 7.025, -990],
+            scale: [0.9, 1.027, 0.8],
+            rotation: [Math.PI / 2, 4.7, 0]
+          }}
+          disableTorreta={disableTorreta}
+        />
+      }
+      {torretas["4"] &&
+        <Torreta
+          shotTime={3000}
+          args={{
+            key: "4",
+            position: [8, 7.025, -990],
+            scale: [0.9, 1.027, 0.8],
+            rotation: [Math.PI / 2, Math.PI / 2, 0]
+          }}
+          disableTorreta={disableTorreta}
+        />
+      }
 
     </>
   );
 };
 
-const Torreta = ({ args, shotTime = 3 }) => {
+const Torreta = ({ args, shotTime = 3, disableTorreta }) => {
   const { nodes, materials } = useGLTF('/assets/models/items/canon.glb')
   const { nave } = useNave();
   const { game, setGame, setMessage } = useGame();
@@ -98,21 +101,22 @@ const Torreta = ({ args, shotTime = 3 }) => {
 
 
   const collisionManager = (event) => {
-    if (event.other.rigidBodyObject.name == "naveEspacial") {
-      nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-      nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-      setGame({ ...game, paused: true, isCollided: true })
-      collisionCallback();
+    console.log('Torreta choca con ', event.other.rigidBodyObject.name)
+    if (event.other.rigidBodyObject.name == "projectile") {
+      console.log("deshabilitando torreta ", args.key)
+      disableTorreta(args.key)
+      // nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      // nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      // setGame({ ...game, paused: true, isCollided: true })
+      // collisionCallback();
     }
   }
 
   useEffect(() => {
 
     const timer = setTimeout(() => {
-      // console.log('Acción ejecutada después de 2 segundos');
-      console.log('Torreta ', args.key, ' disparando')
+      // console.log('Torreta ', args.key, ' disparando')
       isShooting(true);
-      // Aquí puedes realizar cualquier acción que necesites
     }, shotTime);
     return () => {
       console.log('fin torreta ', args.key)
@@ -122,11 +126,8 @@ const Torreta = ({ args, shotTime = 3 }) => {
   useEffect(() => {
     if (game.paused)
       return;
-    // Define la acción a ejecutar cada 3 segundos
     const interval = setInterval(() => {
       newShot();
-      // console.log('Acción ejecutada cada 3 segundos');
-      // Aquí puedes realizar cualquier acción que necesites
     }, shotTime);
 
     // Cleanup del interval cuando el componente se desmonte
@@ -134,10 +135,10 @@ const Torreta = ({ args, shotTime = 3 }) => {
   }, [shooting, game, game.paused]);
 
   const newShot = () => {
-    const projectileId = THREE.MathUtils.generateUUID(); // Generar ID único
-    const positionTorreta = torreta.current.position;//torreta.body.translation(); // Posición de la nave
+    const projectileId = THREE.MathUtils.generateUUID();
+    const positionTorreta = torreta.current.position;
     console.log('positionTorreta', positionTorreta)
-    const position = [positionTorreta.x, positionTorreta.y + 0.9, positionTorreta.z + 3]; // Posición del proyectil
+    const position = [positionTorreta.x, positionTorreta.y + 0.9, positionTorreta.z + 3];
 
     const projectile = { id: projectileId, position: position, speed: 25 };
     setShots((prev) => [...prev, projectile]);
@@ -147,17 +148,21 @@ const Torreta = ({ args, shotTime = 3 }) => {
     setShots((prev) => prev.filter((shot) => shot.id !== id));
   }
 
+
+
   return (
     <>
-      <mesh
-        ref={torreta}
-        {...args}
-        name="Canon"
-        castShadow
-        receiveShadow
-        geometry={nodes.Canon.geometry}
-        material={materials['Material.001']}
-      />
+      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} name="cannon" onCollisionEnter={collisionManager}>
+        <mesh
+          ref={torreta}
+          {...args}
+          name="Canon"
+          castShadow
+          receiveShadow
+          geometry={nodes.Canon.geometry}
+          material={materials['Material.001']}
+        />
+      </RigidBody>
       {shots.map((shot) => (
         <Shot position={shot.position} id={shot.id} key={shot.id} speed={shot.speed} removeShot={removeShot} />
       ))}

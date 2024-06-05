@@ -29,7 +29,7 @@ const Level4 = () => {
   const cameraRef = useRef();
   const canvasRef = useRef();
   const [restart, setRestart] = useState(false);
-  const { removeLive, addLive, addLevel, setMessage, setCheckPoint, setPartIcon } = useGame();
+  const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame, setPartIcon, setCheckPoint } = useGame();
   const [checkpoint, setCheckPointEvent] = useState(false)
   const { paintProjectiles } = useProjectiles();
   const [initCombat, setInitCombat] = useState(true)
@@ -38,6 +38,7 @@ const Level4 = () => {
     addLive();
   }
   const onWinLevel = () => {
+    setMessage('!GANASTE!')
     togglePause();
     addLevel();
     setTimeout(() => {
@@ -50,12 +51,13 @@ const Level4 = () => {
     setMessage('!Dispara a las 🔹 con el boton "ESPACIO"​!')
   }, []);
 
-  // useEffect(() => {
-  //   if (initCombat) {
-  //     setCheckPointEvent(true);
-  //     setCheckPoint([0, 0, -907.2]);
-  //   }
-  // }, [initCombat])
+  useEffect(() => {
+    if (initCombat) {
+      setMessage('!Destruye los cañones enemigos!')
+      setCheckPointEvent(true);
+      setCheckPoint([0, 0, -907.2]);
+    }
+  }, [initCombat])
 
   return (
     <div tabIndex={0}>
