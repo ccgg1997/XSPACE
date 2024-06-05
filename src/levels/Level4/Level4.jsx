@@ -32,7 +32,7 @@ const Level4 = () => {
   const { removeLive, addLive, addLevel, setMessage, setCheckPoint, setPartIcon } = useGame();
   const [checkpoint, setCheckPointEvent] = useState(false)
   const { paintProjectiles } = useProjectiles();
-  const [initCombat, setInitCombat] = useState(false)
+  const [initCombat, setInitCombat] = useState(true)
 
   const onEarnLife = () => {
     addLive();
@@ -50,12 +50,12 @@ const Level4 = () => {
     setMessage('!Dispara a las 🔹 con el boton "ESPACIO"​!')
   }, []);
 
-  useEffect(() => {
-    if (initCombat) {
-      setCheckPointEvent(true);
-      setCheckPoint([0, 0, -907.2]);
-    }
-  }, [initCombat])
+  // useEffect(() => {
+  //   if (initCombat) {
+  //     setCheckPointEvent(true);
+  //     setCheckPoint([0, 0, -907.2]);
+  //   }
+  // }, [initCombat])
 
   return (
     <div tabIndex={0}>
@@ -77,7 +77,7 @@ const Level4 = () => {
               enablePan={false}
               ref={orbitControlsRef}
               enableRotate={false}
-              enableZoom={false}
+              enableZoom={true}
             />
 
 
