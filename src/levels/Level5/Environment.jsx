@@ -4,7 +4,7 @@ export default function Environmentlvl5() {
   return (
     <Environment
       background={true}
-      files={"/assets/hdris/sky.hdr"}
+      files={"/assets/hdris/nebulosa.hdr"}
       preset={null}
     />
   );
