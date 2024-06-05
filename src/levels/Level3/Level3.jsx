@@ -1,4 +1,9 @@
-import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
+import {
+  Environment,
+  KeyboardControls,
+  OrbitControls,
+  Stars,
+} from "@react-three/drei";
 import World from "./Level3Environment";
 import { Suspense, useContext, useState } from "react";
 import { Canvas } from "@react-three/fiber";
@@ -15,6 +20,8 @@ import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { BombInit } from "./FinalCombat";
+import { toneMapping } from "three/examples/jsm/nodes/Nodes.js";
+import { ACESFilmicToneMapping, CineonToneMapping } from "three";
 
 const Level3 = () => {
   const map = useMovements();
@@ -23,8 +30,8 @@ const Level3 = () => {
   const canvasRef = useRef();
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
-  const { addLive, removeLive,togglePause, addLevel } = useGame();
-  const { paintProjectiles} = useProjectiles();
+  const { addLive, removeLive, togglePause, addLevel } = useGame();
+  const { paintProjectiles } = useProjectiles();
   const [initCombat, setInitCombat] = useState(false);
 
   const onEarnLife = () => {
@@ -35,22 +42,41 @@ const Level3 = () => {
     togglePause();
     addLevel();
     setTimeout(() => {
-      window.location.href = 'level4';
+      window.location.href = "level4";
     }, 3000);
-  }
+  };
 
   return (
     <div tabIndex={0}>
-    <NaveProvider>
+      <NaveProvider>
         <PauseMenu onRestart={() => setRestart(true)} />
         <KeyboardControls map={map}>
           <GameStats />
           <Canvas
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "#231F1F",
+            }}
             ref={canvasRef}
+            gl={{
+              toneMapping: ACESFilmicToneMapping,
+              toneMappingExposure: 0.5,
+            }}
+            shadows={true}
           >
-            <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
-            <OrbitControls makeDefault
+            <Environment preset="sunset" />
+            <PerspectiveCamera
+              makeDefault
+              position={[0, 5, -14]}
+              fov={100}
+              ref={cameraRef}
+            />
+            <OrbitControls
+              makeDefault
               camera={cameraRef.current}
               target={[0, 1, -28]}
               enablePan={false}
@@ -59,17 +85,25 @@ const Level3 = () => {
               enableZoom={false}
             />
             <Suspense fallback={null}>
-              <ambientLight />
               <Physics>
                 <World
                   onLoad={() => setReady(true)}
                   collisionCallback={removeLive}
-
                 />
+                <ambientLight intensity={1} />
                 <Nave />
                 {paintProjectiles(-50)}
-                {initCombat && <BombInit setStart={() => setInitCombat(false)} onWinLevel={onWinLevel} />}
-                <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
+                {initCombat && (
+                  <BombInit
+                    setStart={() => setInitCombat(false)}
+                    onWinLevel={onWinLevel}
+                  />
+                )}
+                <Live
+                  position={[-6.784, 5.555, -335.465]}
+                  scale={1.5}
+                  onEarnLife={onEarnLife}
+                />
               </Physics>
             </Suspense>
             {ready && (
@@ -78,13 +112,13 @@ const Level3 = () => {
                 restart={restart}
                 onRestartDone={() => setRestart(false)}
                 canvasRef={canvasRef}
-                initCombat={(() => setInitCombat(true))}
+                initCombat={() => setInitCombat(true)}
               />
             )}
           </Canvas>
         </KeyboardControls>
-    </NaveProvider>
-  </div>
+      </NaveProvider>
+    </div>
   );
 };
 
