@@ -99,7 +99,6 @@ export const BombInit = ({ setStart,onWinLevel }) => {
   };
 
   const collisionManager = (event) => {
-    console.log(event);
     if (event.other.rigidBodyObject.name === "projectile" && bombCount < 5) {
       bombNeutralized(event.target.rigidBodyObject.customId);
     }
