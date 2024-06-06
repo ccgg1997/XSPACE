@@ -1,4 +1,4 @@
-import { KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
+import { Environment, KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
 import World from "./Level5Environment";
 import { Suspense, useContext, useState } from "react";
 import { Canvas } from "@react-three/fiber";
@@ -15,6 +15,7 @@ import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import Environmentlvl5 from "./Environment";
+import PlatilloVolador from "./PlatilloVolador";
 
 const Level5 = ({ setCameraPosition }) => {
   const map = useMovements();
@@ -52,6 +53,7 @@ const Level5 = ({ setCameraPosition }) => {
             />
             <Suspense fallback={null}>
               <Environmentlvl5 />
+              <Environment preset="sunset" />
               <ambientLight />
               <Physics>
                 <World
@@ -60,6 +62,7 @@ const Level5 = ({ setCameraPosition }) => {
 
                 />
                 <Nave />
+                <PlatilloVolador />
                 {paintProjectiles(-50)}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
