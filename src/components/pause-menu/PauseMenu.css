@@ -1,0 +1,40 @@
+.gamemenu {
+    width: 16rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* transform: "translate(-50%; -170%)"; */
+    text-align: center;
+    /* padding: 20px; */
+    border-radius: 10px;
+    /* margin-bottom: 60%; */
+}
+
+.menuitem {
+    /* padding: 10px; */
+    border-radius: 5px;
+    /* background-color: #f0f0f0; */
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 60px;
+    color: rgb(165, 114, 38);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), -2px -2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1320px)  {
+
+    .menuitem {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 1321px)  {
+
+    .menuitem {
+        font-size: 60px;
+    }
+}
+
+.menuitem.selected-item {
+    color: #b32810;
+}

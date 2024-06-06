@@ -8,12 +8,17 @@ import Lights from './lights/Lights';
 import Galaxy from './backgrounds/Galaxy';
 import World from "./components/Level1Environment";
 import { useNavigate } from "react-router-dom";
+import Logout from './components/logout/Logout';
+import { createUser, readUser } from "./db/user-collection";
+import { useAuth } from './context/AuthContext';
+import GameStats from './components/interface/GameStats';
 
 
 
 const GameCanvas = () => {
     const resetCameraPosition = () => setCameraPosition([0, 10, 20]);
     const navigate = useNavigate();
+    const auth = useAuth();
 
     const options = [
         {
@@ -36,11 +41,14 @@ const GameCanvas = () => {
             text: 'Level 5',
             action: () => startLevel('5')
         },
-        /*
         {
             text: 'Level 6',
             action: () => startLevel('6')
-        }*/
+        },
+        {
+            text: 'Level 7',
+            action: () => { }
+        }
     ];
 
     const startLevel = (level) => {
@@ -66,6 +74,7 @@ const GameCanvas = () => {
                     }
                 })
                 break;
+
             case '4':
                 navigate('/level4', {
                     state: {
@@ -80,15 +89,15 @@ const GameCanvas = () => {
                     }
                 })
                 break;
-                /** 
-                case '6':
+
+            case '6':
                 navigate('/level6', {
                     state: {
                         firstTime: true
                     }
                 })
                 break;
-                */
+
             default:
                 // resetCameraPosition();
                 break;
@@ -110,27 +119,34 @@ const GameCanvas = () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
-    return (
-        <Canvas
-            // camera={{ position: cameraPosition }}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-        >
-            {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
-            <ambientLight />
-            {/* <pointLight position={[10, 10, 10]} /> */}
-            <GameMenu options={options} />
-            {/* <Perf position="top-left" /> */}
-            <PerspectiveCamera makeDefault position={[0, 10, 20]} />
-            {/* <Lights />
-                <EnviromentMap /> */}
-            <OrbitControls makeDefault target={[0, 10, 0]} />
 
-            <Suspense fallback={null}>
-                <Lights />
-                <World />
-                <Galaxy />
-            </Suspense>
-        </Canvas>
+
+
+    return (
+        <>
+            <GameStats />
+            <Logout />
+            <Canvas
+                // camera={{ position: cameraPosition }}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            >
+                {/* <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 20]} /> */}
+                <ambientLight />
+                {/* <pointLight position={[10, 10, 10]} /> */}
+                <GameMenu options={options} />
+                {/* <Perf position="top-left" /> */}
+                <PerspectiveCamera makeDefault position={[0, 13, 25]} />
+                {/* <Lights />
+                <EnviromentMap /> */}
+                <OrbitControls makeDefault target={[0, 13, 0]} />
+
+                <Suspense fallback={null}>
+                    <Lights />
+                    <World />
+                    <Galaxy />
+                </Suspense>
+            </Canvas>
+        </>
     );
 };
 

@@ -8,7 +8,8 @@ export default function useMovements(){
         rightward: "rightward",
         jump: "jump",
         exit: "exit",
-        run: "run"
+        run: "run",
+        attack: "attack"
     }
 
     const map = useMemo(()=>{
@@ -19,7 +20,8 @@ export default function useMovements(){
             {name: MOVEMENTS.rightward, keys: ["KeyD", "ArrowRight"]},
             {name: MOVEMENTS.jump, keys: ["Space"]},
             {name: MOVEMENTS.exit, keys: ["Escape"]},
-            {name: MOVEMENTS.run, keys: ["Shift"]}
+            {name: MOVEMENTS.run, keys: ["Shift"]},
+            {name: MOVEMENTS.attack, keys: ["KeyP"]},
         ]
     }, [])
 
