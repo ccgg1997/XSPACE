@@ -37,6 +37,26 @@ export default function PlatilloVolador(props) {
     }
   }
 
+  //función para generar una posición aleatoria
+  const generateRandomPosition = () => {
+    return [
+      Math.floor(Math.random() * 21) - 9,
+      Math.floor(Math.random() * 8) + 3,
+      -1578.2,
+    ];
+  };
+
+  //efecto para actualizar la posicion del platillo volador periodicamente
+  useEffect(() => {
+    if(win){
+      return;
+    }
+    const interval = setInterval(() => {
+      setPosition(generateRandomPosition());
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [win]);
+
   return (
     <RigidBody
       ref={platilloBodyRef}
