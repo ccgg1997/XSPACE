@@ -1,4 +1,4 @@
-import { KeyboardControls, OrbitControls } from "@react-three/drei";
+import { KeyboardControls, OrbitControls, Environment } from "@react-three/drei";
 import Level4Environment from "./Level4Environment";
 import { Perf } from "r3f-perf";
 import { Suspense, useContext, useEffect, useState } from "react";
@@ -38,7 +38,7 @@ const Level4 = () => {
     addLive();
   }
   const onWinLevel = () => {
-    setMessage('!GANASTE!')
+    setMessage('¡GANASTE!')
     togglePause();
     addLevel();
     setTimeout(() => {
@@ -48,12 +48,12 @@ const Level4 = () => {
 
   useEffect(() => {
     setPartIcon("🔹");
-    setMessage('!Dispara a las 🔹 con el boton "ESPACIO"​!')
+    setMessage('¡Dispara a las 🔹 con el boton "ESPACIO"​!')
   }, []);
 
   useEffect(() => {
     if (initCombat) {
-      setMessage('!Destruye los cañones enemigos!')
+      setMessage('¡Destruye los cañones enemigos!')
       setCheckPointEvent(true);
       setCheckPoint([0, 0, -907.2]);
     }
@@ -67,10 +67,12 @@ const Level4 = () => {
         <KeyboardControls map={map}>
           <GameStats />
           <Canvas
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#5F6699' }}
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#000000' }}
             ref={canvasRef}
+            shadows={true}
           >
             {/* <Perf position="top-left" /> */}
+            <Environment preset="forest"/>
             <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
 
             <OrbitControls makeDefault
@@ -79,14 +81,13 @@ const Level4 = () => {
               enablePan={false}
               ref={orbitControlsRef}
               enableRotate={false}
-              enableZoom={true}
+              enableZoom={false}
             />
 
 
             <Suspense fallback={null}>
               <ambientLight
-                color={new Color("#FFFFFF")}
-                intensity={1.4}
+                intensity={1}
               />
 
               <Physics debug={false}>
