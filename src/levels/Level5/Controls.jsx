@@ -128,9 +128,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         let moveX = 0;
         let moveY = 0;
         let speed = initialSpeed;
-        if (currentTranslation.z < -1535) {
+        if (currentTranslation.z < -1500) {
             speed = 0
-            //initCombat();
         }
         let moveZ = speed * delta
         if (up || down || left || right) {

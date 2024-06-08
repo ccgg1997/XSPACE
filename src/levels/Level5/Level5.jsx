@@ -1,6 +1,6 @@
 import { Environment, KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
 import World from "./Level5Environment";
-import { Suspense, useContext, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { PerspectiveCamera } from "@react-three/drei";
@@ -31,6 +31,12 @@ const Level5 = ({ setCameraPosition }) => {
     addLive();
   };
 
+  const onWinLevel = () => {
+    addLevel();
+    setTimeout(() => {
+      window.location.href = "level6";
+    }, 3000);
+  };
 
   return (
     <div tabIndex={0}>
@@ -62,7 +68,7 @@ const Level5 = ({ setCameraPosition }) => {
 
                 />
                 <Nave />
-                <PlatilloVolador />
+                < PlatilloVolador onWinLevel={onWinLevel} />
                 {paintProjectiles(-50)}
                 <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>

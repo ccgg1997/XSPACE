@@ -6,15 +6,13 @@ import { useGame } from "../../context/GameContext";
 import { useFrame } from "@react-three/fiber";
 import { useNave } from "../../context/NaveContext";
 
-export default function PlatilloVolador(props) {
+export default function PlatilloVolador({onWinLevel}) {
   const platilloBodyRef = useRef();
-  const { nodes, materials } = useGLTF("/assets/models/PlatilloVolador.glb");
-  const { setMessage, togglePause } = useGame();
+  const { setMessage, togglePause, game } = useGame();
   const [live, setLive] = useState(100);
-  const [position, setPosition] = useState([0, 3.085, -1578.2]);
+  const [position, setPosition] = useState([0,0,0]);
   const [win, setWin] = useState(false);
   const [shots, setShots] = useState([]);
-  const shotIntervalRef = useRef(null);
 
   //evento de colisión
   const onCollision = (event) => {
@@ -25,57 +23,58 @@ export default function PlatilloVolador(props) {
 
   //función para restar vida al ovni
   const subtractLife = () => {
-    if (live > 0){
       setLive((prev) => prev - 10);
       setMessage(`Vida restante del ovni: ${live}%`);
-    } else{
-      setMessage("¡Has derrotado al ovni!");
-      setWin(true);
-      setPosition([0, 0, 10]);
-      setTimeout(() => {
-        setMessage("");
-      }, 1500);
-      togglePause()
-    }
   }
+
+  useEffect(() => {
+    if (live <= 0) {
+      setWin(true);
+      setMessage('Has derrotado al platillo volador');
+      togglePause();
+      setTimeout(() => {
+        setMessage('');
+      } , 1500);
+      onWinLevel();
+    }
+    if (live === 100) {
+      setMessage('cuidado con los planetas y los disparos del platillo volador');
+    }
+  }, [live]);
 
   //función para generar una posición aleatoria
   const generateRandomPosition = () => {
     return [
       Math.floor(Math.random() * 21) - 9,
-      Math.floor(Math.random() * 8) + 3,
+      Math.floor(Math.random() * 8) + 1,
       -1578.2,
     ];
   };
 
   //efecto para actualizar la posicion del platillo volador periodicamente
   useEffect(() => {
-    if(win){
+    if(win || game.paused){
       return;
     }
     const interval = setInterval(() => {
       setPosition(generateRandomPosition());
-    }, 4000);
+    }, 3000);
     return () => clearInterval(interval);
-  }, [win]);
+  }, [win, game.paused]);
 
-  // Efecto para disparar proyectiles periódicamente
   useEffect(() => {
     if (win) {
       return;
     }
-    shotIntervalRef.current = setInterval(() => {
-      newShot();
-    }, 3000);
-    return () => clearInterval(shotIntervalRef.current);
-  }, [win]);
+    newShot(position);
+  }, [position]);
 
   // Función para crear un nuevo disparo
-  const newShot = () => {
+  const newShot = (position) => {
     const projectileId = THREE.MathUtils.generateUUID();
-    console.log('positionTorreta', position)
-    const projectilePosition = [position[0], position[1] + 1, position[2] + 10];
-    const projectileOvni = { id: projectileId, position: projectilePosition, speed: 3 };
+    //console.log('positionTorreta', position)
+    const projectilePosition = [position[0], position[1], position[2] + 5];
+    const projectileOvni = { id: projectileId, position: projectilePosition, speed: 30 };
     setShots((prev) => [...prev, projectileOvni]);
   };
 
@@ -86,31 +85,32 @@ export default function PlatilloVolador(props) {
 
   return (
     <>
-    <RigidBody
-      ref={platilloBodyRef}
-      gravityScale={0}
-      colliders="ball"
-      enabledRotations={[false, false, false]}
-      restitution={0}
-      name="platilloVolador"
-      onIntersectionEnter={onCollision}
-      castShadow
-      receiveShadow
-      sensor={true}
-    >
-        <mesh
-          geometry={nodes.Esfera.geometry}
-          material={materials["Material.001"]}
-          position={position}
-          scale={[4.47, 4.471, 4.987]}
-        />
-    </RigidBody>
+    <Platillo position={position} collisionManager={onCollision} />
     {shots.map((shot) => (
       <Shot position={shot.position} id={shot.id} key={shot.id} speed={shot.speed} removeShot={removeShot} />
     ))}
     </>
   );
 }
+
+const Platillo = ({position, collisionManager}) => {
+  const { nodes, materials } = useGLTF("/assets/models/PlatilloVolador.glb");
+  return (
+    <RigidBody
+      position={position}
+      colliders="ball"
+      castShadow
+      receiveShadow
+      enabledRotations={[false, false, false]}
+      name="platillo"
+      onIntersectionEnter={collisionManager}
+      sensor={true}
+      gravityScale={0}
+    >
+      <mesh geometry={nodes.Esfera.geometry} material={materials["Material.001"]} scale={[4.47, 4.471, 4.987]}/>
+    </RigidBody>
+  );
+};
 
 const Shot = ({ position, id, speed, removeShot }) => {
   const ref = useRef();
@@ -121,10 +121,6 @@ const Shot = ({ position, id, speed, removeShot }) => {
     console.error("Shot component: Missing required props 'position','id' or 'speed'");
     return null;
   }
-
-  const removeProjectile = () => {
-    removeShot(id);
-  };
 
   const collisionManager = (event) => {
     if (event.other.rigidBodyObject.name === "naveEspacial") {
@@ -149,9 +145,6 @@ const Shot = ({ position, id, speed, removeShot }) => {
       ref.current?.setLinvel({ x: 0, y: 0, z: speed }, true);
     }
     const currentTranslation = ref.current?.translation();
-    if (currentTranslation?.z < -1050) {
-      removeProjectile();
-    }
   });
 
   return (
@@ -162,9 +155,11 @@ const Shot = ({ position, id, speed, removeShot }) => {
       gravityScale={0}
       linearVelocity={[0, 0, speed]}
       restitution={0}
-      onCollisionEnter={collisionManager}
+      onIntersectionEnter={collisionManager}
       enabledRotations={[false, false, false]}
       name="projectileOvni"
+      sensor={true}
+
     >
       <Sphere args={[1, 8, 8]}>
         <meshStandardMaterial color="#ADADAD" />
