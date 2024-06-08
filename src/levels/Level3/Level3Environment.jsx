@@ -61,7 +61,7 @@ export default function Level3({
           receiveShadow
           geometry={nodes.Floor.geometry}
           material={materials.Floor}
-          position={[0, 5.015, -786.929]}
+          position={[0, 4.947, -786.929]}
           scale={[0.369, 0.154, 24.606]}
         />
       </RigidBody>

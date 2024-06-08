@@ -37,26 +37,33 @@ export default function Nave(props) {
     return (
         <RigidBody ref={naveBodyRef}
             colliders={false}
+            // type="fixed"
             gravityScale={0}
             enabledRotations={[false, false, false]}
             restitution={0}
             name="naveEspacial"
         >
-            <group ref={naveRef} {...props} dispose={null}>
-                <group name="Scene">
-                    <mesh
-                        name="nave_espacial"
-                        castShadow
-                        receiveShadow
-                        geometry={nodes.nave_espacial.geometry}
-                        material={materials.FrontColor}
-                        position={[0, 0, -19]}
-                    >
-                    </mesh>
-                </group>
+            <group ref={naveRef}>
+
+                <primitive
+                    castShadow
+                    receiveShadow
+                    object={nodes.nave_espacial}
+
+                >
+                    <CuboidCollider
+                        args={[0.25, 2, 2]}
+                        position={[0, 2.3, -1]}
+                    />
+                    <CuboidCollider
+                        args={[3, 0.4, 2]}
+                        position={[0, 3.5, -1]}
+                    />
+                </primitive>
             </group>
-        </RigidBody>
-    );
+
+        </RigidBody >
+    )
 }
 
 useGLTF.preload('/assets/models/NaveDefault.glb');
