@@ -629,7 +629,7 @@ export default function Level3({
           castShadow
           receiveShadow
           geometry={nodes.Cubo004.geometry}
-          material={materials.Material}
+          material={materials["Material.002"]}
           position={[1.335, 6.021, -1059.93]}
           scale={[0.462, 0.77, 0.318]}
         />
