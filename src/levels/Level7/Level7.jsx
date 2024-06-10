@@ -1,13 +1,11 @@
 
 import { OrbitControls, KeyboardControls, Environment } from "@react-three/drei";
-import Level2Environment from "./Level2Environment";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Color } from "three";
 import { Canvas } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
-import Nave from "./Nave";
 import { NaveProvider, useNave } from "../../context/NaveContext";
 import Controls from "./Controls";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
@@ -17,8 +15,11 @@ import Live from "../../components/items/Live";
 import { useGame } from "../../context/GameContext";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import CheckPointNotif from "../../components/CheckPointNotif";
+import Level7Environment from "./Level7Environment";
+import Nave1 from "./Nave1";
+import Nave2 from "./Nave2";
 
-const Level2 = ({ }) => {
+const Level7 = ({ }) => {
   const map = useMovements();
   const orbitControlsRef = useRef()
   const cameraRef = useRef();
@@ -61,26 +62,26 @@ const Level2 = ({ }) => {
           >
             {/* <Perf position="top-left" /> */}
             <Environment preset="forest" />
-            <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
+            <PerspectiveCamera makeDefault position={[0, 6, -14]} fov={100} ref={cameraRef} />
             <OrbitControls makeDefault
               camera={cameraRef.current}
               target={[0, 1, -28]}
               enablePan={false}
               ref={orbitControlsRef}
               enableRotate={false}
-              enableZoom={false}
+              enableZoom={true}
             />
 
             <Suspense fallback={null}>
               <ambientLight
-                color={new Color("#FFFFFF")}
-                intensity={1.4}
+                intensity={1}
               />
-              <Physics debug={false}>
-                <Level2Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
-                <Nave
+              <Physics debug={true}>
+                <Level7Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
+                <Nave1 position={[0, 0, 0]}
                 />
-                {initCombat && <Combat canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} collisionCallback={removeLive} onWinLevel={onWinLevel} setCheckPointEvent={setCheckPoint} />}
+                <Nave2 position={[0, 0, -70]}
+                />
                 <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
               </Physics>
             </Suspense>
@@ -93,4 +94,4 @@ const Level2 = ({ }) => {
   );
 };
 
-export default Level2;
+export default Level7;

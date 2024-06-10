@@ -47,7 +47,7 @@ const GameCanvas = () => {
         },
         {
             text: 'Level 7',
-            action: () => { }
+            action: () => startLevel('7')
         }
     ];
 
@@ -92,6 +92,13 @@ const GameCanvas = () => {
 
             case '6':
                 navigate('/level6', {
+                    state: {
+                        firstTime: true
+                    }
+                })
+                break;
+            case '7':
+                navigate('/level7', {
                     state: {
                         firstTime: true
                     }
