@@ -10,6 +10,7 @@ import Level6 from "./levels/Level6/Level6";
 import { AuthProvider } from "./context/AuthContext";
 import { GameProvider } from "./context/GameContext";
 import { ProjectilesProvider } from "./context/ProjectilesContext";
+import Level7 from "./levels/Level7/Level7";
 
 export default function GameRoutes() {
     return (
@@ -27,6 +28,7 @@ export default function GameRoutes() {
                             <Route path="/level4" element={<Level4 />} />
                             <Route path="/level5" element={<Level5 />} />
                             <Route path="/level6" element={<Level6 />} />
+                            <Route path="/level7" element={<Level7 />} />
 
                         </Routes>
                     </ProjectilesProvider>
