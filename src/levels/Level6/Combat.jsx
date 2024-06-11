@@ -72,11 +72,9 @@ const Reward = ({ velocity, onRewardObtained }) => {
     const { game, setMessage } = useGame();
 
     const collisionManager = (event) => {
-        console.log('colision premio', event)
         if (event.other.rigidBodyObject.name == "naveEspacial") {
             nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
             nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-            console.log('recogiste premio!')
             onRewardObtained();
         }
     }

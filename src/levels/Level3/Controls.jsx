@@ -32,22 +32,6 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
     }
 
     useEffect(() => {
-        if (play) {
-            shootSound.currentTime = 0;
-            shootSound.volume = 0.5
-            if (shootSound.paused) {
-                shootSound.play().catch((error) => {
-                    console.log('Error playing audio:', error);
-                });
-            }
-        } else {
-            if (!shootSound.paused) {
-                shootSound.pause()
-            }
-        }
-    }, [play])
-
-    useEffect(() => {
         if (playNaveSound) {
             naveSound.currentTime = 0;
             naveSound.volume = 0.5
@@ -63,24 +47,45 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         }
     }, [playNaveSound])
 
+    useEffect(() => {
+        if (play) {
+            shootSound.currentTime = 0.003;
+            shootSound.volume = 0.5
+            if (shootSound.paused) {
+                shootSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!shootSound.paused) {
+                shootSound.pause()
+            }
+        }
+    }, [play])
+
+
 
     useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === ' ' && !game.paused) {
-                if (nave.body) {
-                    setPlay(true)
-                    shootProjectile(nave, addProjectile);
+        const unsubscribe = sub(
+            (state) => {
+                if (state.jump) {
+                    return state
                 }
-            } else {
-                setPlay(false)
+                return null;
+            },
+            (pressed) => {
+                if (!game.paused) {
+                    !pressed ? setPlay(false) : setPlay(true);
+                    if (pressed) {
+                        shootProjectile(nave, addProjectile)
+                    } else {
+                        setPlay(false)
+                    }
+                }
             }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [nave, addProjectile]);
+        );
+        return () => unsubscribe();
+    }, [nave, addProjectile,sub, get]);
 
     useEffect(() => {
         const unsubscribe = sub(
