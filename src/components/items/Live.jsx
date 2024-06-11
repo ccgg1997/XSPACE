@@ -40,7 +40,6 @@ const Live = ({ position , scale , onEarnLife }) => {
             colliders={'ball'}
             sensors={true}
             sensor={true}
-            // onIntersectionExit={() => { console.log('collision exit') }}
             onIntersectionEnter={collisionManager}
         >
             <mesh

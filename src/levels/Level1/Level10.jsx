@@ -8,9 +8,6 @@ import { Suspense } from "react";
 import { Canvas } from '@react-three/fiber';
 
 const Level1 = () => {
-  const logOrbitControlsProps = (controls) => {
-    console.log('OrbitControls Properties:', controls);
-  };
   return (
     <Canvas
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
