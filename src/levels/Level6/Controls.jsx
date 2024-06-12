@@ -3,17 +3,26 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
+import { useProjectiles } from "../../context/ProjectilesContext";
+import { shootProjectile } from "../../utils/shootProjectile.js";
+import { useState } from "react";
 import { useEffect } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame } = useGame();
     const [sub, get] = useKeyboardControls()
+    const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
+    const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
+    const [playNaveSound, setPlayNaveSound] = useState(false)
     // const orbitControlsRef = useRef()
     let walkDirection = new Vector3()
-    const velocity = 8;
+    const velocity = 9;
     const initialSpeed = 30;
     const { camera } = useThree();
+    const { addProjectile } = useProjectiles();
+    const [play, setPlay] = useState(false)
+
     const startGame = () => {
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -22,6 +31,58 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         camera.position.set(0, 5, -14)
         canvasRef.current.style.background = '#231F1F';
     }
+
+    useEffect(() => {
+        if (play) {
+            shootSound.currentTime = 0;
+            shootSound.volume = 0.5
+            if (shootSound.paused) {
+                shootSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!shootSound.paused) {
+                shootSound.pause()
+            }
+        }
+    }, [play])
+
+    useEffect(() => {
+        if (playNaveSound) {
+            naveSound.currentTime = 0;
+            naveSound.volume = 0.5
+            if (naveSound.paused) {
+                naveSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!naveSound.paused) {
+                naveSound.pause()
+            }
+        }
+    }, [playNaveSound])
+
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === ' ' && !game.paused) {
+                if (nave.body) {
+                    setPlay(true)
+                    shootProjectile(nave, addProjectile);
+                }
+            } else {
+                setPlay(false)
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [nave, addProjectile]);
+
     useEffect(() => {
         const unsubscribe = sub(
             (state) => {
@@ -32,7 +93,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             },
             (pressed) => {
                 if (!game.paused) {
-                    // console.log('pressed', pressed)
+                    !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
                     if (!pressed) {
                         setNave({ ...nave, animation: "Idle" });
                     } else if (pressed.up) {
@@ -44,6 +105,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                     } else if (pressed.right) {
                         setNave({ ...nave, animation: "naveRightRotation" });
                     }
+                } else {
+                    setPlayNaveSound(false)
                 }
             }
         );
@@ -66,7 +129,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         let moveX = 0;
         let moveY = 0;
         let speed = initialSpeed;
-        if (currentTranslation.z < -907) {
+        if (currentTranslation.z < -1535) {
             speed = 0
             initCombat();
         }

@@ -1,21 +1,24 @@
-
-import { OrbitControls, KeyboardControls } from "@react-three/drei";
-import Level6Environment from "./Level6Environment";
+import { Environment, OrbitControls, KeyboardControls } from "@react-three/drei";
+import World from "./Level6Environment";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef, useEffect } from "react";
+import { Suspense, useState, useRef, useEffect, useContext } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
-import { Color } from "three";
 import { Canvas, useThree } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
-import { handleCollision } from "./ColisionController";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
-import { GameProvider } from "../../context/GameContext";
-import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
 import * as THREE from 'three';
+import { useGame } from "../../context/GameContext";
+import { useProjectiles } from "../../context/ProjectilesContext";
+import { ACESFilmicToneMapping, CineonToneMapping } from "three";
+import Live from "../../components/items/Live";
+import Environmentlvl6 from "./Environment";
+import Combat from "./Combat";
+import CheckPointNotif from "../../components/CheckPointNotif";
+
 
 function CustomCamera() {
   const { camera } = useThree();
@@ -31,7 +34,6 @@ function CustomCamera() {
 
     // Define the target point the camera should look at
     const target = { x: 1, y: 1, z: -20 };
-
     // Update the camera to look at the new target
     // camera.lookAt(target.x, target.y, target.z);
 
@@ -44,66 +46,103 @@ function CustomCamera() {
 }
 
 
-const Level6 = ({ }) => {
+const Level6 = () => {
   const map = useMovements();
-  const orbitControlsRef = useRef()
+  const orbitControlsRef = useRef();
   const cameraRef = useRef();
-  const canvasRef = useRef()
+  const canvasRef = useRef();
   const [ready, setReady] = useState(false);
-  const [restart, setRestart] = useState(false)
-  const [mensaje, setMensaje] = useState("");
-  const [initCombat, setInitCombat] = useState(false)
-  const [cohete, setCohete] = useState("🔹");
+  const [restart, setRestart] = useState(false);
+  const { addLive, removeLive, togglePause, addLevel, setMessage, game, setGame } = useGame();
+  const { paintProjectiles } = useProjectiles();
+  const [initCombat, setInitCombat] = useState(false);
+  const [checkpoint, setCheckPoint] = useState(false)
 
-  const lives = "♥".repeat(3);
+  const onEarnLife = () => {
+    addLive();
+  };
+
+  useEffect(() => {
+    setGame({ ...game, isCollided: true });
+    setMessage('Cuidado con las estrellas en movimiento')
+  }, []);
+
   return (
     <div tabIndex={0}>
       <NaveProvider>
-        <GameProvider>
-          <PauseMenu onRestart={() => setRestart(true)} />
-          <KeyboardControls map={map} >
-            {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '24px', padding: "3px" }}>
-              <div style={{ color: 'red', fontSize: '39px', zIndex: "1", marginLeft: "1rem" }}>{cohete}</div>
-              {mensaje && <div style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: '30px', color: 'white', zIndex: "1" }}>{mensaje}</div>}
-              <div style={{ color: 'red', fontSize: '49px', zIndex: "1" }}>{lives}</div>
-            </div> */}
-            <GameStats />
-            <Canvas
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
-              ref={canvasRef}
-            >
-              {/* <Perf position="top-left" /> */}
-              <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
-              {/* <CustomCamera /> */}
-              <OrbitControls makeDefault
-                camera={cameraRef.current}
-                target={[0, 1, -28]}
-                enablePan={false}
-                ref={orbitControlsRef}
-                enableRotate={false}
-                enableZoom={false}
-              />
-
-              <Suspense fallback={null}>
-                <ambientLight
-                  color={new Color("#FFFFFF")}
-                  intensity={1.4}
+        <PauseMenu onRestart={() => setRestart(true)} />
+        <KeyboardControls map={map}>
+          <GameStats />
+          <Canvas
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "#231F1F",
+            }}
+            ref={canvasRef}
+            gl={{
+              toneMapping: ACESFilmicToneMapping,
+              toneMappingExposure: 0.5,
+            }}
+            shadows={true}
+          >
+            <PerspectiveCamera
+              makeDefault
+              position={[0, 5, -14]}
+              fov={100}
+              ref={cameraRef}
+            />
+            <OrbitControls
+              makeDefault
+              camera={cameraRef.current}
+              target={[0, 1, -28]}
+              enablePan={false}
+              ref={orbitControlsRef}
+              enableRotate={false}
+              enableZoom={false}
+            />
+            <Suspense fallback={null}>
+              <Environmentlvl6 />
+              <Environment preset="sunset" />
+              <Physics>
+                <World
+                  onLoad={() => setReady(true)}
+                  collisionCallback={removeLive}
                 />
-                <Physics debug={false}>
-                  <Level6Environment onLoad={() => setReady(true)} collisionController={handleCollision} collisionCallback={() => setRestart(true)} />
-                  <Nave
-                  />
-                  {initCombat && <Combat setMensaje={setMensaje} canvasRef={canvasRef} />}
-
-                </Physics>
-              </Suspense>
-              {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}
-            </Canvas>
-          </KeyboardControls>
-        </GameProvider>
+                <ambientLight intensity={1} />
+                <Nave />
+                {paintProjectiles(-50)}
+                {initCombat && <Combat canvasRef={canvasRef}
+                  orbitControlsRef={orbitControlsRef}
+                  collisionCallback={removeLive}
+                  onWinLevel={onWinLevel}
+                  setCheckPointEvent={setCheckPoint} />}
+                <Live
+                  position={[-6.784, 5.555, -335.465]}
+                  scale={1.5}
+                  onEarnLife={onEarnLife}
+                />
+              </Physics>
+            </Suspense>
+            {ready && (
+              <Controls
+                orbitControlsRef={orbitControlsRef}
+                restart={restart}
+                onRestartDone={() => setRestart(false)}
+                canvasRef={canvasRef}
+                initCombat={() => setInitCombat(true)}
+              />
+            )}
+          </Canvas>
+        </KeyboardControls>
       </NaveProvider>
+      <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPoint} />
     </div>
   );
 };
+
 
 export default Level6;
