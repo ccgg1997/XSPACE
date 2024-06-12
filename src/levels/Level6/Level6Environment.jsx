@@ -259,7 +259,7 @@ import { useFrame } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
-export default function Level6Environment({ args, onLoad = () => { }, collisionController = () => { }, collisionCallback }) {
+export default function Level6Environment({ args, onLoad, collisionCallback }) {
   const { nodes, materials, scene } = useGLTF('/assets/models/Level6.glb');
   const { nave } = useNave();
   const { game, setGame } = useGame();
@@ -272,17 +272,20 @@ export default function Level6Environment({ args, onLoad = () => { }, collisionC
 
   useEffect(() => {
     onLoad();
+    setGame({ ...game });
   }, [scene]);
 
   const collisionManager = (event) => {
     if (event.other.rigidBodyObject.name === "naveEspacial") {
       setGame({ ...game, paused: true, isCollided: true });
+      collisionCallback();
     }
   };
+  
 
-  useEffect(() => {
-    setGame({ ...game });
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   useFrame((state) => {
     asteroidsRefs.current.forEach((ref, index) => {

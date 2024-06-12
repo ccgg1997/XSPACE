@@ -58,6 +58,13 @@ const Level6 = () => {
   const [initCombat, setInitCombat] = useState(false);
   const [checkpoint, setCheckPoint] = useState(false)
 
+  const onWinLevel = () => {
+    addLevel();
+    setTimeout(() => {
+      window.location.href = "level6";
+    }, 3000);
+  };
+
   const onEarnLife = () => {
     addLive();
   };
@@ -109,7 +116,7 @@ const Level6 = () => {
               <Environment preset="sunset" />
               <Physics>
                 <World
-                  onLoad={() => setReady(true)}
+                onLoad={() => setReady(true)}
                   collisionCallback={removeLive}
                 />
                 <ambientLight intensity={1} />
