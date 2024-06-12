@@ -19,7 +19,6 @@ import Environmentlvl6 from "./Environment";
 import Combat from "./Combat";
 import CheckPointNotif from "../../components/CheckPointNotif";
 
-
 function CustomCamera() {
   const { camera } = useThree();
 
@@ -59,9 +58,10 @@ const Level6 = () => {
   const [checkpoint, setCheckPoint] = useState(false)
 
   const onWinLevel = () => {
+    togglePause();
     addLevel();
     setTimeout(() => {
-      window.location.href = "level6";
+      window.location.href = "level7";
     }, 3000);
   };
 
@@ -122,11 +122,12 @@ const Level6 = () => {
                 <ambientLight intensity={1} />
                 <Nave />
                 {paintProjectiles(-50)}
-                {initCombat && <Combat canvasRef={canvasRef}
-                  orbitControlsRef={orbitControlsRef}
-                  collisionCallback={removeLive}
-                  onWinLevel={onWinLevel}
-                  setCheckPointEvent={setCheckPoint} />}
+                {initCombat && <Combat 
+                canvasRef={canvasRef} 
+                orbitControlsRef={orbitControlsRef} 
+                collisionCallback={removeLive} 
+                onWinLevel={onWinLevel} 
+                setCheckPointEvent={setCheckPoint} />}
                 <Live
                   position={[-6.784, 5.555, -335.465]}
                   scale={1.5}

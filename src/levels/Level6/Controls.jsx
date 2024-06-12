@@ -3,50 +3,35 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
-import { useProjectiles } from "../../context/ProjectilesContext";
-import { shootProjectile } from "../../utils/shootProjectile.js";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
-    const { game, setGame } = useGame();
-    const [sub, get] = useKeyboardControls()
-    const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
+    const { game, setGame, stats, setPartIcon } = useGame();
     const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
     const [playNaveSound, setPlayNaveSound] = useState(false)
-    // const orbitControlsRef = useRef()
-    let walkDirection = new Vector3()
-    const velocity = 9;
+    const [sub, get] = useKeyboardControls()
+    const velocity = 8;
     const initialSpeed = 30;
     const { camera } = useThree();
-    const { addProjectile } = useProjectiles();
-    const [play, setPlay] = useState(false)
-
     const startGame = () => {
+        setPartIcon("🔹")
+        nave.body.sleep()
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
         nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-        nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
-        orbitControlsRef.current.target.set(0, 1, -28)
-        camera.position.set(0, 5, -14)
-        canvasRef.current.style.background = '#231F1F';
-    }
-
-    useEffect(() => {
-        if (play) {
-            shootSound.currentTime = 0;
-            shootSound.volume = 0.5
-            if (shootSound.paused) {
-                shootSound.play().catch((error) => {
-                    console.log('Error playing audio:', error);
-                });
-            }
+        if (stats.checkPoint && stats.checkPoint.length > 0) {
+            const [x, y, z] = stats.checkPoint;
+            nave.body.setTranslation({ x: x, y: y, z: z }, true)
+            orbitControlsRef.current.target.set(0, 1, -53998)
+            camera.position.set(0, 5, -921)
+            canvasRef.current.style.background = '#231F1F';
         } else {
-            if (!shootSound.paused) {
-                shootSound.pause()
-            }
+            nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
+            orbitControlsRef.current.target.set(0, 1, -28)
+            camera.position.set(0, 5, -14)
+            canvasRef.current.style.background = '#231F1F';
         }
-    }, [play])
+    }
 
     useEffect(() => {
         if (playNaveSound) {
@@ -62,26 +47,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                 naveSound.pause()
             }
         }
-    }, [playNaveSound])
-
-
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === ' ' && !game.paused) {
-                if (nave.body) {
-                    setPlay(true)
-                    shootProjectile(nave, addProjectile);
-                }
-            } else {
-                setPlay(false)
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [nave, addProjectile]);
+    }
+        , [playNaveSound])
 
     useEffect(() => {
         const unsubscribe = sub(
@@ -93,6 +60,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             },
             (pressed) => {
                 if (!game.paused) {
+                    // console.log('pressed', pressed)
                     !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
                     if (!pressed) {
                         setNave({ ...nave, animation: "Idle" });
@@ -129,7 +97,7 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         let moveX = 0;
         let moveY = 0;
         let speed = initialSpeed;
-        if (currentTranslation.z < -1535) {
+        if (currentTranslation.z < -907) {
             speed = 0
             initCombat();
         }
