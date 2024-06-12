@@ -65,7 +65,6 @@ export const BombInit = ({ setStart,onWinLevel }) => {
   // Función para neutralizar una bomba
   const bombNeutralized = (id) => {
     setMessage("¡Has neutralizado una bomba!");
-    console.log(id)
     setBombs((prev) => prev.filter((bomb) => bomb.id !== id));
     setBombCount((prevCount) => prevCount + 1);
     setTimeout(() => {

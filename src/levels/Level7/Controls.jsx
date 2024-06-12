@@ -3,23 +3,17 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useNave } from "../../context/NaveContext";
 import { useGame } from "../../context/GameContext";
-import { shootProjectile } from "../../utils/shootProjectile.js";
-import { useProjectiles } from "../../context/ProjectilesContext";
 import { useEffect, useState } from "react";
 
 export default function Controls({ orbitControlsRef, restart, onRestartDone, initCombat, canvasRef }) {
     const { nave, setNave } = useNave();
     const { game, setGame, stats, setPartIcon } = useGame();
     const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
-    const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
     const [playNaveSound, setPlayNaveSound] = useState(false)
     const [sub, get] = useKeyboardControls()
     const velocity = 8;
-    const initialSpeed = 25;
+    const initialSpeed = 30;
     const { camera } = useThree();
-    const { addProjectile } = useProjectiles();
-    const [play, setPlay] = useState(false)
-
     const startGame = () => {
         setPartIcon("🔹")
         nave.body.sleep()
@@ -30,12 +24,12 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
             nave.body.setTranslation({ x: x, y: y, z: z }, true)
             orbitControlsRef.current.target.set(0, 1, -53998)
             camera.position.set(0, 5, -921)
-            // canvasRef.current.style.background = '#231F1F';
+            canvasRef.current.style.background = '#231F1F';
         } else {
             nave.body.setTranslation({ x: 0, y: 0, z: 0 }, true)
             orbitControlsRef.current.target.set(0, 1, -28)
-            camera.position.set(0, 5, -14)
-            // canvasRef.current.style.background = '#231F1F';
+            camera.position.set(0, 6, -14)
+            canvasRef.current.style.background = '#231F1F';
         }
     }
 
@@ -53,47 +47,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
                 naveSound.pause()
             }
         }
-    }, [playNaveSound])
-
-    useEffect(() => {
-        if (play) {
-            shootSound.currentTime = 0.003;
-            shootSound.volume = 0.5
-            if (shootSound.paused) {
-                shootSound.play().catch((error) => {
-                    console.log('Error playing audio:', error);
-                });
-            }
-        } else {
-            if (!shootSound.paused) {
-                shootSound.pause()
-            }
-        }
-    }, [play])
-
-
-
-    useEffect(() => {
-        const unsubscribe = sub(
-            (state) => {
-                if (state.jump) {
-                    return state
-                }
-                return null;
-            },
-            (pressed) => {
-                if (!game.paused) {
-                    !pressed ? setPlay(false) : setPlay(true);
-                    if (pressed) {
-                        shootProjectile(nave, addProjectile)
-                    } else {
-                        setPlay(false)
-                    }
-                }
-            }
-        );
-        return () => unsubscribe();
-    }, [nave, addProjectile,sub, get]);
+    }
+        , [playNaveSound])
 
     useEffect(() => {
         const unsubscribe = sub(
