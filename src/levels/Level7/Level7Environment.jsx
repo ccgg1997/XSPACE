@@ -6,12 +6,13 @@ import { Color, RepeatWrapping, MeshBasicMaterial } from 'three';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
-export default function Level7Environment({ args, onLoad = () => { }, collisionCallback = () => { } }) {
+export default function Level7Environment({ args, onLoad = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF('/assets/models/world/SquidGamesMaik.glb');
   const { nave } = useNave();
   const { game, setGame } = useGame();
   const wallsRef = useRef();
+
   const PATH = "/assets/textures/moon_floor/";
 
   const propsTexture = useTexture({
@@ -32,6 +33,14 @@ export default function Level7Environment({ args, onLoad = () => { }, collisionC
 
   propsTexture.displacementMap.repeat.set(4, 64);
   propsTexture.displacementMap.wrapS = propsTexture.displacementMap.wrapT = RepeatWrapping;
+
+  useEffect(() => {
+    onLoad();
+  }, [scene]);
+
+  useEffect(() => {
+    setGame({ ...game })
+  }, [])
 
 
   return (

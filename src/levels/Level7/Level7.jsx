@@ -1,5 +1,5 @@
 
-import { OrbitControls, KeyboardControls, Environment } from "@react-three/drei";
+import { OrbitControls, KeyboardControls, Environment, Stars } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
@@ -28,7 +28,7 @@ const Level7 = ({ }) => {
   const [restart, setRestart] = useState(false)
   const [initCombat, setInitCombat] = useState(false)
   const [checkpoint, setCheckPoint] = useState(false)
-  const { addLive, removeLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
+  const { addLive, togglePause, stats, addLevel, setMessage, game, setGame } = useGame();
 
   const onEarnLife = () => {
     addLive();
@@ -36,24 +36,24 @@ const Level7 = ({ }) => {
 
   const onWinLevel = () => {
     togglePause();
-    addLevel();
-    setMessage('Ganaste el nivel 2!');
+    // addLevel();
+    setMessage('Ganaste el nivel 7!');
     setTimeout(() => {
       // navigate('/level3');
-      window.location.href = 'level3'
+      window.location.href = 'menu'
     }, 2000)
 
   }
 
-  useEffect(() => {
-    setGame({ ...game, isCollided: true });
-  }, [])
+  // useEffect(() => {
+  //   setGame({ ...game, isCollided: true });
+  // }, [])
 
   return (
     <div tabIndex={0}>
       <BackgroundSound />
       <NaveProvider>
-        <PauseMenu onRestart={() => setRestart(true)} />
+        <PauseMenu onRestart={() => console.log('en restart')} />
         <KeyboardControls map={map} >
           <GameStats />
           <Canvas
@@ -76,20 +76,22 @@ const Level7 = ({ }) => {
               <ambientLight
                 intensity={1}
               />
+              {/* <directionalLight position={[-10, 20, 10]} intensity={1.5} /> */}
+              <Stars radius={100} depth={0} count={3000} factor={4} saturation={0} fade speed={1} />
               <Physics debug={true}>
-                <Level7Environment onLoad={() => setReady(true)} collisionCallback={removeLive} />
-                <Nave1 position={[0, 0, 0]}
+                <Level7Environment onLoad={() => setReady(true)} />
+                <Nave1 orbitControlsRef={orbitControlsRef}
                 />
                 <Nave2 position={[0, 0, -70]}
                 />
-                <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />
+                {/* <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} /> */}
               </Physics>
             </Suspense>
-            {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />}
+            {/* {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />} */}
           </Canvas>
         </KeyboardControls>
       </NaveProvider>
-      <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPoint} />
+      {/* <CheckPointNotif checkpoint={checkpoint} setCheckpoint={setCheckPoint} /> */}
     </div>
   );
 };

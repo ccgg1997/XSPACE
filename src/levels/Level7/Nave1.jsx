@@ -1,17 +1,49 @@
-import { useAnimations, useGLTF } from "@react-three/drei"
+import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei"
 import { CuboidCollider, RigidBody } from "@react-three/rapier"
 // import { useBox } from '@react-three/cannon';
 import { useNave } from "../../context/NaveContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from 'three';
+import { useGame } from "../../context/GameContext";
+import { useFrame } from "@react-three/fiber";
+import { Vector3 } from "three";
+import { useProjectiles } from "../../context/ProjectilesContext";
+import { shootProjectile } from "../../utils/shootProjectile.js";
 
-export default function Nave1(props) {
+export default function Nave1({ orbitControlsRef }) {
     const naveBodyRef = useRef();
+    const [animation, setAnimation] = useState('Idle')
     const naveRef = useRef();
-    const groupRef = useRef();
     const { nave, setNave } = useNave();
-    const { nodes, materials, animations } = useGLTF('/assets/models/NaveDefault.glb');
+    const { nodes, animations } = useGLTF('/assets/models/NaveDefault.glb');
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
+    const { addProjectile } = useProjectiles();
+    const [play, setPlay] = useState(false)
+
+    const { game, setGame, stats, setPartIcon } = useGame();
+    const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
+    const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
+    const [playNaveSound, setPlayNaveSound] = useState(false)
+    const [sub, get] = useKeyboardControls()
+    const velocity = 8;
+    const initialSpeed = 30;
+    const { paintProjectiles } = useProjectiles();
+
+    useEffect(() => {
+        if (play) {
+            shootSound.currentTime = 0;
+            shootSound.volume = 0.5
+            if (shootSound.paused) {
+                shootSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!shootSound.paused) {
+                shootSound.pause()
+            }
+        }
+    }, [play])
 
     useEffect(() => {
         setNave({
@@ -19,25 +51,143 @@ export default function Nave1(props) {
             ref: naveRef.current,
             body: naveBodyRef.current
         })
-    }, [naveBodyRef.current, naveRef.current])
+    }, [naveBodyRef, naveBodyRef.current, naveRef.current])
 
     useEffect(() => {
-        if (nave.animation) {
-            actions[nave.animation].setLoop(THREE.LoopOnce);
-            actions[nave.animation].clampWhenFinished = true;
-            actions[nave.animation]?.reset().play();//.fadeIn(0.5)
+        if (animation) {
+            actions[animation].setLoop(THREE.LoopOnce);
+            actions[animation].clampWhenFinished = true;
+            actions[animation]?.reset().play();//.fadeIn(0.5)
         } else {
             mixer.stopAllAction();
         }
 
         return () => {
-            if (actions[nave.animation])
-                actions[nave.animation].fadeOut(0.5);
+            if (actions[animation])
+                actions[animation].fadeOut(0.25);
         }
 
-    }, [nave.animation]);
+    }, [animation]);
 
-    return (
+    useEffect(() => {
+        const unsubscribe = sub(
+            (state) => {
+                if (state.up || state.down || state.left || state.right) {
+                    return state
+                }
+                return null;
+            },
+            (pressed) => {
+                if (!game.paused) {
+                    // console.log('pressed', pressed)
+                    !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
+                    if (!pressed) {
+                        setAnimation("Idle");
+                    } else if (pressed.up) {
+                        setAnimation("naveUpRotation");
+                    } else if (pressed.down) {
+                        setAnimation("naveDownRotation");
+                    } else if (pressed.left) {
+                        setAnimation("naveLeftRotation");
+                    } else if (pressed.right) {
+                        setAnimation("naveRightRotation");
+                    }
+                } else {
+                    setPlayNaveSound(false)
+                }
+            }
+        );
+        return () => unsubscribe();
+    }, [game, nave, setNave, sub, get]);
+
+
+    useFrame((state, delta) => {
+        if (game.paused) return;
+        const { up, down, left, right } = get()
+        const currentTranslation = nave.body?.translation()
+        let moveX = 0;
+        let moveY = 0;
+        let speed = initialSpeed;
+        let moveZ = 0; //speed * delta
+        if (up || down || left || right) {
+
+
+            if (up) {
+                if (currentTranslation.y < 7) {
+                    moveY += velocity * delta;
+
+                }
+            }
+            if (down) {
+                if (currentTranslation.y > -0.30) {
+                    moveY -= velocity * delta;
+                }
+            }
+            if (left) {
+                if (currentTranslation.x > -14) {
+                    moveX -= velocity * delta;
+                }
+            }
+            if (right) {
+                if (currentTranslation.x < 14) {
+                    moveX += velocity * delta;
+                }
+            }
+
+        }
+
+        const newPosition = new Vector3(
+            currentTranslation.x + moveX,
+            currentTranslation.y + moveY,
+            currentTranslation.z - moveZ
+        )
+        nave.body?.setTranslation({
+            x: newPosition.x,
+            y: newPosition.y,
+            z: newPosition.z
+        }, true)
+
+        state.camera.position.add(new Vector3(moveX, moveY, 0));
+        orbitControlsRef.current.target.add(new Vector3(moveX, moveY, 0));
+        // orbitControlsRef.current.target.set(new Vector3(newPosition.x, newPosition.y, -28));
+        get().back
+    })
+
+    useEffect(() => {
+        if (playNaveSound) {
+            naveSound.currentTime = 0;
+            naveSound.volume = 0.5
+            if (naveSound.paused) {
+                naveSound.play().catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+            }
+        } else {
+            if (!naveSound.paused) {
+                naveSound.pause()
+            }
+        }
+    }, [playNaveSound])
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === ' ') {
+                if (nave.body) {
+                    setPlay(true)
+                    shootProjectile(nave, addProjectile);
+                }
+            } else {
+                setPlay(false)
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    return (<>
         <RigidBody ref={naveBodyRef}
             colliders={false}
             // type="fixed"
@@ -65,6 +215,8 @@ export default function Nave1(props) {
             </group>
 
         </RigidBody >
+        {paintProjectiles(-20)}
+    </>
     )
 
 }
