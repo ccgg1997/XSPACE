@@ -1,7 +1,7 @@
 import { Environment, OrbitControls, KeyboardControls } from "@react-three/drei";
 import World from "./Level6Environment";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState, useRef, useEffect, useContext } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { PerspectiveCamera } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
 import useMovements from "../../utils/key-movements";
@@ -13,11 +13,12 @@ import GameStats from "../../components/interface/GameStats";
 import * as THREE from 'three';
 import { useGame } from "../../context/GameContext";
 import { useProjectiles } from "../../context/ProjectilesContext";
-import { ACESFilmicToneMapping, CineonToneMapping } from "three";
+import { ACESFilmicToneMapping } from "three";
 import Live from "../../components/items/Live";
 import Environmentlvl6 from "./Environment";
 import Combat from "./Combat";
 import CheckPointNotif from "../../components/CheckPointNotif";
+import PlatilloVolador from "./PlatilloVolador";
 
 function CustomCamera() {
   const { camera } = useThree();
@@ -40,10 +41,8 @@ function CustomCamera() {
     // camera.updateProjectionMatrix();
   }, [camera]);
 
-  // return (<PerspectiveCamera makeDefault position={[0, 5, 1]} fov={100} />);
   return null;
 }
-
 
 const Level6 = () => {
   const map = useMovements();
@@ -55,7 +54,7 @@ const Level6 = () => {
   const { addLive, removeLive, togglePause, addLevel, setMessage, game, setGame } = useGame();
   const { paintProjectiles } = useProjectiles();
   const [initCombat, setInitCombat] = useState(false);
-  const [checkpoint, setCheckPoint] = useState(false)
+  const [checkpoint, setCheckPoint] = useState(false);
 
   const onWinLevel = () => {
     togglePause();
@@ -71,7 +70,6 @@ const Level6 = () => {
 
   useEffect(() => {
     setGame({ ...game, isCollided: true });
-    setMessage('Cuidado con las estrellas en movimiento')
   }, []);
 
   return (
@@ -116,18 +114,22 @@ const Level6 = () => {
               <Environment preset="sunset" />
               <Physics>
                 <World
-                onLoad={() => setReady(true)}
+                  onLoad={() => setReady(true)}
                   collisionCallback={removeLive}
                 />
                 <ambientLight intensity={1} />
                 <Nave />
+                <PlatilloVolador onWinLevel={onWinLevel} />
                 {paintProjectiles(-50)}
-                {initCombat && <Combat 
-                canvasRef={canvasRef} 
-                orbitControlsRef={orbitControlsRef} 
-                collisionCallback={removeLive} 
-                onWinLevel={onWinLevel} 
-                setCheckPointEvent={setCheckPoint} />}
+                {initCombat && (
+                  <Combat
+                    canvasRef={canvasRef}
+                    orbitControlsRef={orbitControlsRef}
+                    collisionCallback={removeLive}
+                    onWinLevel={onWinLevel}
+                    setCheckPointEvent={setCheckPoint}
+                  />
+                )}
                 <Live
                   position={[-6.784, 5.555, -335.465]}
                   scale={1.5}
@@ -152,5 +154,5 @@ const Level6 = () => {
   );
 };
 
-
 export default Level6;
+

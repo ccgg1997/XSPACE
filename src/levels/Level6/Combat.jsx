@@ -127,26 +127,23 @@ const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel, se
     const { camera } = useThree();
     const starsRef = useRef(null);
 
-    const numStars = 21;
+    const numStars = 0;
 
-    const generateNewStars = () => {
-        const newStars = Array.from({ length: numStars }, () => {
-            const position = generateInitialStarPosition();
-            return {
-                id: Date.now(),
-                position: new Vector3(position.x, position.y, position.z),
-                velocity:
-                    Math.floor(Math.random() * (35 - 24 + 1)) + 24
-            };
-        });
-        setstars(newStars);
-    }
+    // const generateNewStars = () => {
+    //     const newStars = Array.from({ length: numStars }, () => {
+    //         const position = generateInitialStarPosition();
+    //         return {
+    //             id: Date.now(),
+    //             position: new Vector3(position.x, position.y, position.z),
+    //             velocity:
+    //                 Math.floor(Math.random() * (35 - 24 + 1)) + 24
+    //         };
+    //     });
+    //     setstars(newStars);
+    // }
 
     useEffect(() => {
-        setPartIcon("🔹")
-        // console.log('CHECKPOINT POSITION: ', nave.body?.translation())
-        // console.log('CHECKPOINT TARGET: ', orbitControlsRef.current.target)
-        // console.log('CHECKPOINT CAMERA: ', camera.position)
+        //setPartIcon("🔹")
         setCheckPoint([0, 0, -907.2]);
         setCheckPointEvent(true);
     }, [])
@@ -165,46 +162,11 @@ const Combat = ({ canvasRef, collisionCallback, orbitControlsRef, onWinLevel, se
 
     useEffect(() => {
         if (init) {
-            setMessage("!Esquiva los meteoritos!")
+            setMessage("¡Dispara al ovni con la tecla espacio!")
             canvasRef.current.style.background = 'black';
-            //premios
-            const showReward = () => {
-                setMessage("!Recupera las partes 🔹​!")
-                setReward(true);
-                const interval = setTimeout(() => {
-                    setMessage("!Esquiva los meteoritos!")
-                    setReward(false);
-                }, 9500); // Ocultar después de 4 segundos
-                return () => clearInterval(interval);
-            };
-
-            // Esperar 10 segundos antes de mostrar el componente por primera vez
-            const initialTimeout = setTimeout(() => {
-                showReward();
-                // Luego, configurar el intervalo para mostrar el componente cada 10 segundos
-                const interval = setInterval(showReward, 10000);
-                // Limpiar el intervalo cuando el componente se desmonte
-                return () => clearInterval(interval);
-            }, 8000);
-            // clearInterval(initialTimeout);
-            // Limpiar el intervalo cuando el componente se desmonte
             return () => { clearInterval(initialTimeout); setMessage("") };
         }
     }, [init])
-
-    useEffect(() => {
-        if (stats.parts >= 3) {
-            setInit(false);
-            onWinLevel();
-        }
-    }, [stats.parts])
-
-    useEffect(() => {
-        //meteoritos
-        generateNewStars();
-
-
-    }, [])
 
     const onRewardObtained = () => {
         setReward(false);

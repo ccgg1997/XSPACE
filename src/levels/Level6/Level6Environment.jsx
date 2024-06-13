@@ -11,10 +11,7 @@ export default function Level6Environment({ args, onLoad, collisionCallback }) {
   const { game, setGame } = useGame();
   
   const asteroidsRefs = useRef([]);
-  const wallRef = useRef();
   const amplitude = 3.5;
-  const wallAmplitude = 5; // Ajusta esta amplitud para el movimiento del muro
-  const wallSpeed = 2; // Ajusta esta velocidad para el movimiento del muro
 
   useEffect(() => {
     onLoad();
@@ -27,11 +24,7 @@ export default function Level6Environment({ args, onLoad, collisionCallback }) {
       collisionCallback();
     }
   };
-  
 
-  // useEffect(() => {
-
-  // }, []);
 
   useFrame((state) => {
     asteroidsRefs.current.forEach((ref, index) => {
@@ -46,10 +39,6 @@ export default function Level6Environment({ args, onLoad, collisionCallback }) {
         }
       }
     });
-
-    if (wallRef.current) {
-      wallRef.current.position.y = Math.sin(state.clock.getElapsedTime() * wallSpeed) * wallAmplitude;
-    }
   });
 
   return (
@@ -227,24 +216,6 @@ export default function Level6Environment({ args, onLoad, collisionCallback }) {
           material={materials['Material.012']}
           position={[3.568, 8.647, -821.618]}
           rotation={[0, 0, 2.062]}
-        />
-        </RigidBody>
-
-        <RigidBody
-          type="fixed"
-          colliders="trimesh"
-          restitution={0}
-          // onCollisionEnter={collisionManager}
-          name="FinalPlatform"
-        >
-        <mesh
-          ref={wallRef}
-          castShadow
-          receiveShadow
-          geometry={nodes.FinalPlatform.geometry}
-          material={materials['Material.002']}
-          position={[0, 5.069, -980.748]}
-          scale={[11.703, 2.951, 1]}
         />
         </RigidBody>
 
