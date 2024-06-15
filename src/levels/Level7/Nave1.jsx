@@ -155,6 +155,12 @@ export default function Nave1({ orbitControlsRef }) {
         state.camera.position.add(new Vector3(moveX, moveY, 0));
         orbitControlsRef.current.target.add(new Vector3(moveX, moveY, 0));
         // orbitControlsRef.current.target.set(new Vector3(newPosition.x, newPosition.y, -28));
+
+        window.setTimeout(() => {
+            socket.emit("player-moving", {
+                translation: naveBodyRef.current?.translation()
+            });
+        }, 100);
         get().back
     })
 

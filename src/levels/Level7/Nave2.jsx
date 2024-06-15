@@ -2,13 +2,15 @@ import { useAnimations, useGLTF } from "@react-three/drei"
 import { CuboidCollider, RigidBody } from "@react-three/rapier"
 // import { useBox } from '@react-three/cannon';
 import { useNave } from "../../context/NaveContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from 'three';
 import { socket } from "./socket-manager";
-import { shootProjectile } from "../../utils/shootProjectile";
 import { useProjectiles } from "../../context/ProjectilesContext";
+import EnemyProjectile from "./EnemyProjectile";
 
 const url = "https://josem-18.github.io/sourcesPI/models/NaveEnemy.glb"
+
+
 export default function Nave2({ position }) {
     const naveBodyRef = useRef();
     const naveRef = useRef();
@@ -16,32 +18,44 @@ export default function Nave2({ position }) {
     const { nave, setNave } = useNave();
     const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
-    const material = new THREE.MeshStandardMaterial({ color: "blue" }); // Cambiamos el color de la bomba a verde
-    const { addProjectile, paintProjectiles } = useProjectiles();
+    const material = new THREE.MeshStandardMaterial({ color: "blue" });
+    const [projectiles, setprojectiles] = useState([])
 
-    // useEffect(() => {
-    //     setNave({
-    //         ...nave,
-    //         ref: naveRef.current,
-    //         body: naveBodyRef.current
-    //     })
-    // }, [naveBodyRef.current, naveRef.current])
+    const addProjectile = (projectile) => {
+        setprojectiles((prev) => [...prev, projectile]);
+    }
+
+    const removeProjectile = (id) => {
+        console.log('en remove projectile', id)
+        console.log('projectiles', projectiles)
+        setprojectiles((prev) => prev.filter((projectile) => projectile.id !== id));
+    }
+
+
+    const shootProjectile = (nave, addProjectile) => {
+        const projectileId = THREE.MathUtils.generateUUID(); // Generar ID único
+        const positionNave = nave.translation(); // Posición de la nave
+        const position = [positionNave.x, positionNave.y + 4, positionNave.z - 60]; // Posición del proyectil
+
+        addProjectile({ id: projectileId, position });
+    };
 
     useEffect(() => {
         // Set up the WebSocket event listener for "player-moving"
+        console.log("player-shot INITT")
         socket.on("player-shot", (transforms) => {
-            console.log('disparo recibido', transforms);
-            console.log('naveBodyRef', naveBodyRef.current)
-            shootProjectile({ body: naveBodyRef.current }, addProjectile);
-            console.log('disparo pintado', transforms);
+            shootProjectile(naveBodyRef.current, addProjectile);
         });
-        //movePlayer(transforms));
+        socket.on("player-moving", (t) => {
+            naveBodyRef.current.setTranslation({ x: -t.translation.x, y: t.translation.y, z: naveBodyRef.current.translation().z }, true)
+        });
+
 
         // Clean up the event listener on component unmount
         return () => {
             socket.off("player-shot", (transforms) => console.log('disparo recibido', transforms));
         };
-    }, [naveBodyRef, naveBodyRef.current, addProjectile]);
+    }, [naveBodyRef]);
 
     useEffect(() => {
         if (nave.animation) {
@@ -91,7 +105,9 @@ export default function Nave2({ position }) {
                 </group>
 
             </RigidBody >
-            {paintProjectiles(20)}
+            {projectiles.map((projectile) => (
+                <EnemyProjectile position={projectile.position} id={projectile.id} key={projectile.id} speed={20} removeProjectile={removeProjectile} />
+            ))}
         </>
     )
 

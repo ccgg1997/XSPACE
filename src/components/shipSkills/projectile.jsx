@@ -1,13 +1,13 @@
-import React, { useRef} from 'react';
+import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { projectilesContext,useProjectiles } from '../../context/ProjectilesContext';
+import { projectilesContext, useProjectiles } from '../../context/ProjectilesContext';
 import * as THREE from 'three';
 import { RigidBody } from "@react-three/rapier"
 import { Sphere } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import { useGame } from '../../context/GameContext';
 
-const Projectile = ({ position, id,speed }) => {
+const Projectile = ({ position, id, speed, color = "red" }) => {
   const ref = useRef();
   const { removeProjectile } = useProjectiles(projectilesContext);
   const creationProjectileTimeRef = useRef(Date.now());
@@ -19,19 +19,19 @@ const Projectile = ({ position, id,speed }) => {
   }
 
   const collisionManager = (event) => {
-      removeProjectile(id);
+    removeProjectile(id);
   }
 
   useFrame(() => {
-    if (!game.paused){
+    if (!game.paused) {
       ref.current?.setLinvel(new THREE.Vector3(0, 0, speed), true);
       //si pasan 5 segundos eliminamos el proyectil
       const currentTime = Date.now();
-      const elapsed =( currentTime - creationProjectileTimeRef.current) / 1000;
+      const elapsed = (currentTime - creationProjectileTimeRef.current) / 1000;
       if (elapsed > 5000) {
         removeProjectile(id);
       }
-    } else{
+    } else {
       ref.current?.setLinvel(new THREE.Vector3(0, 0, 0), true);
     }
 
@@ -49,7 +49,7 @@ const Projectile = ({ position, id,speed }) => {
       name='projectile'
     >
       <Sphere args={[1, 8, 8]} scale={[0.5, 0.5, 0.5]}>
-        <meshStandardMaterial color="red" />
+        <meshStandardMaterial color={color} />
       </Sphere>
     </RigidBody>
   );
