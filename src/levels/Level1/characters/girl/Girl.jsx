@@ -2,8 +2,9 @@ import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 
+const url = "https://josem-18.github.io/sourcesPI/models/girl/Girl.glb"
 export function Girl() {
-  const { nodes, materials } = useGLTF('/assets/models/girl/Girl.glb')
+  const { nodes, materials } = useGLTF(url)
 
   return (
     <RigidBody colliders={false} type='fixed'>
@@ -30,4 +31,4 @@ export function Girl() {
   )
 }
 
-useGLTF.preload('/assets/models/girl/Girl.glb')
+useGLTF.preload(url)

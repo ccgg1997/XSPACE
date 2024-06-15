@@ -5,8 +5,9 @@ import { useFrame } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
+const url = "https://josem-18.github.io/sourcesPI/models/Level6.glb"
 export default function Level6Environment({ args, onLoad, collisionCallback }) {
-  const { nodes, materials, scene } = useGLTF('/assets/models/Level6.glb');
+  const { nodes, materials, scene } = useGLTF(url);
   const { nave } = useNave();
   const { game, setGame } = useGame();
   
@@ -224,5 +225,5 @@ export default function Level6Environment({ args, onLoad, collisionCallback }) {
   );
 }
 
-useGLTF.preload('/assets/models/Level6.glb');
+useGLTF.preload(url);
 

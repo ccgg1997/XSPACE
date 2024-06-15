@@ -37,9 +37,9 @@ function Pared({ args, collisionManager }) {
   );
 
 }
-
+const url = "https://josem-18.github.io/sourcesPI/models/Level4Paredes.glb"
 export function Level4Paredes({ collisionCallback = () => { }, restart }) {
-  const { nodes, materials } = useGLTF('/assets/models/Level4Paredes.glb')
+  const { nodes, materials } = useGLTF(url)
   const material = new THREE.MeshStandardMaterial({ color: "blue" });
   const { game, setGame, addPart } = useGame();
   const initialparedes = [
@@ -178,4 +178,4 @@ export function Level4Paredes({ collisionCallback = () => { }, restart }) {
   // )
 }
 
-useGLTF.preload('/Level4Paredes.glb')
+useGLTF.preload(url)

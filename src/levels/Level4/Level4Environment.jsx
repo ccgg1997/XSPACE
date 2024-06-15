@@ -4,9 +4,9 @@ import { RigidBody } from '@react-three/rapier';
 import { useGame } from '../../context/GameContext';
 
 
-
+const url = "https://josem-18.github.io/sourcesPI/models/Level4.glb"
 export default function Level4Environment({ args, onLoad = () => { }, collisionCallback = () => { } }) {
-  const { nodes, materials, scene } = useGLTF('/assets/models/Level4.glb')
+  const { nodes, materials, scene } = useGLTF(url)
   const { game, setGame } = useGame();
 
   useEffect(() => {
@@ -293,4 +293,4 @@ export default function Level4Environment({ args, onLoad = () => { }, collisionC
   )
 }
 
-useGLTF.preload('/assets/models/Level4.glb')
+useGLTF.preload(url)

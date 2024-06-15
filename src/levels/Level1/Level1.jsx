@@ -1,12 +1,9 @@
-import { Perf } from "r3f-perf";
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { Suspense } from "react";
 import WelcomeText from "./abstractions/WelcomeText";
 import RedMen from "./characters/redMen/RedMen";
 import Lights from "./lights/Lights";
-import Environments from "./staging/Environments";
-import { Girl } from "./characters/girl/Girl";
 import { Canvas } from "@react-three/fiber";
 import World from "./world/World";
 import Controls from "./controls/Controls";

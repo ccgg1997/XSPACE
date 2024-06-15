@@ -6,13 +6,15 @@ import { Color, RepeatWrapping, MeshBasicMaterial } from 'three';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
+const url = "https://josem-18.github.io/sourcesPI/models/world/SquidGamesMaik.glb"
+const url2 = "https://josem-18.github.io/sourcesPI/textures/moon_floor/"
 export default function Level7Environment({ args, onLoad = () => { }, collisionCallback = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
-  const { nodes, materials, scene } = useGLTF('/assets/models/world/SquidGamesMaik.glb');
+  const { nodes, materials, scene } = useGLTF(url);
   const { nave } = useNave();
   const { game, setGame } = useGame();
   const wallsRef = useRef();
-  const PATH = "/assets/textures/moon_floor/";
+  const PATH = url2;
 
   const propsTexture = useTexture({
     map: PATH + "rock_boulder_dry_diff_1k.jpg",
@@ -49,4 +51,4 @@ export default function Level7Environment({ args, onLoad = () => { }, collisionC
   )
 
 }
-useGLTF.preload('/assets/models/Level7.glb')
+useGLTF.preload(url)

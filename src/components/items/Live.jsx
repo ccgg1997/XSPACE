@@ -3,9 +3,10 @@ import { useFrame } from '@react-three/fiber';
 import { RigidBody, BallCollider } from '@react-three/rapier';
 import React, { useRef } from 'react';
 
+const url = "https://josem-18.github.io/sourcesPI/models/items/lives.glb"
 const Live = ({ position , scale , onEarnLife }) => {
     const liveRef = useRef(null);
-    const { nodes, materials } = useGLTF('/assets/models/items/lives.glb');
+    const { nodes, materials } = useGLTF(url);
     let yPosition = 0;
 
     useFrame((state, delta) => {

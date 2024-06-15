@@ -4,13 +4,13 @@ import { RigidBody } from "@react-three/rapier";
 import { useGame } from "../../context/GameContext";
 import { useRef } from "react";
 import { useNave } from "../../context/NaveContext";
-
+const url = "https://josem-18.github.io/sourcesPI/models/level3.glb"
 export default function Level3({
   args,
   onLoad = () => {},
   collisionCallback = () => {},
 }) {
-  const { nodes, materials, scene } = useGLTF("/assets/models/Level3.glb");
+  const { nodes, materials, scene } = useGLTF(url);
   const { game, setGame } = useGame();
   const { nave } = useNave();
   const wallsRef = useRef();

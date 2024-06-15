@@ -3,13 +3,14 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { RigidBody, BallCollider } from '@react-three/rapier';
 
+const url = "https://josem-18.github.io/sourcesPI/models/black-mens/RedManCircle.glb"
 export default function BlackManCircle(props) {
   const redManCircleRef = useRef(null);
-  const { nodes, materials } = useGLTF('/assets/models/black-mens/RedManCircle.glb');
+  const { nodes, materials } = useGLTF(url);
+
 
   const radius = 3.5;
   const speed = 1.5;
-  const blackMaterial = { color: "black" };
 
   useFrame((state, delta) => {
     if (redManCircleRef.current) { 
@@ -56,4 +57,4 @@ export default function BlackManCircle(props) {
   );
 }
 
-useGLTF.preload('/assets/models/red-mens/RedManCircle.glb');
+useGLTF.preload(url);

@@ -79,7 +79,6 @@ const Reward = ({ velocity, onRewardObtained }) => {
         if (event.other.rigidBodyObject.name == "naveEspacial") {
             nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
             nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
-            console.log('recogiste premio!')
             onRewardObtained();
         }
     }

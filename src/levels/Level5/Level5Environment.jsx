@@ -4,8 +4,9 @@ import { RigidBody } from "@react-three/rapier";
 import { useGame } from "../../context/GameContext";
 import { Color, RepeatWrapping, MeshBasicMaterial } from 'three';
 
+const url = "https://josem-18.github.io/sourcesPI/models/Level5.glb"
 export default function Level5Environment({ args, onLoad, collisionCallback }) {
-  const { nodes, materials, scene } = useGLTF("/assets/models/Level5.glb");
+  const { nodes, materials, scene } = useGLTF(url);
   const { game, setGame,togglePause } = useGame();
   useEffect(() => {
     onLoad();
@@ -262,4 +263,4 @@ export default function Level5Environment({ args, onLoad, collisionCallback }) {
   );
 }
 
-useGLTF.preload("/assets/models/Level5.glb");
+useGLTF.preload(url);
