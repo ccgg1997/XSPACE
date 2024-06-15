@@ -4,13 +4,13 @@ import { CuboidCollider, RigidBody } from "@react-three/rapier"
 import { useNave } from "../../context/NaveContext";
 import { useEffect, useRef } from "react";
 import * as THREE from 'three';
-
+const url = "https://josem-18.github.io/sourcesPI/models/NaveDefault.glb"
 export default function Nave(props) {
     const naveBodyRef = useRef();
     const naveRef = useRef();
     const groupRef = useRef();
     const { nave, setNave } = useNave();
-    const { nodes, materials, animations } = useGLTF('/assets/models/NaveDefault.glb');
+    const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
 
     useEffect(() => {
@@ -69,4 +69,4 @@ export default function Nave(props) {
     )
 
 }
-useGLTF.preload('/assets/models/NaveDefault.glb')
+useGLTF.preload(url)

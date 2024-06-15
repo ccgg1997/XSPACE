@@ -5,9 +5,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
+const url = "https://josem-18.github.io/sourcesPI/models/Level2.glb"
 export default function Level2Environment({ args, onLoad = () => { }, collisionCallback = () => { } }) {
-  // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
-  const { nodes, materials, scene } = useGLTF('/assets/models/Level2.glb');
+  const { nodes, materials, scene } = useGLTF(url);
   const { nave } = useNave();
   const { game, setGame } = useGame();
   const wallsRef = useRef();
@@ -212,4 +212,4 @@ export default function Level2Environment({ args, onLoad = () => { }, collisionC
   )
 
 }
-useGLTF.preload('/assets/models/Level2.glb')
+useGLTF.preload(url)

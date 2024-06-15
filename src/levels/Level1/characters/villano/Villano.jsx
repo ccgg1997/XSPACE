@@ -4,10 +4,11 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 import { CuboidCollider, RigidBody } from '@react-three/rapier' ; 
 
 export default function Villano() {
+    const url = "https://josem-18.github.io/sourcesPI/models/villano/villano.glb"
     const avatarRef = useRef();
     const avatarBodyRef = useRef();
     const { avatar, setAvatar } = useAvatar();
-    const { nodes, materials, animations } = useGLTF('/assets/models/villano/villano.glb')
+    const { nodes, materials, animations } = useGLTF(url)
     const { actions } = useAnimations(animations, avatarRef)
     useEffect(() => {
         actions[avatar.animation]?.reset().fadeIn(0.5).play();

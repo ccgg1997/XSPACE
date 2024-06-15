@@ -5,12 +5,13 @@ import { useNave } from "../../context/NaveContext";
 import { useEffect, useRef } from "react";
 import * as THREE from 'three';
 
+const url = "https://josem-18.github.io/sourcesPI/models/NaveEnemy.glb"
 export default function Nave2({ position }) {
     const naveBodyRef = useRef();
     const naveRef = useRef();
     const groupRef = useRef();
     const { nave, setNave } = useNave();
-    const { nodes, materials, animations } = useGLTF('/assets/models/NaveEnemy.glb');
+    const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
     const material = new THREE.MeshStandardMaterial({ color: "blue" }); // Cambiamos el color de la bomba a verde
 

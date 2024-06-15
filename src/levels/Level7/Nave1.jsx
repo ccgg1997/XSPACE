@@ -10,12 +10,16 @@ import { Vector3 } from "three";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { shootProjectile } from "../../utils/shootProjectile.js";
 
+
+const url = "https://josem-18.github.io/sourcesPI/models/NaveDefault.glb"
 export default function Nave1({ orbitControlsRef }) {
+
     const naveBodyRef = useRef();
     const [animation, setAnimation] = useState('Idle')
     const naveRef = useRef();
     const { nave, setNave } = useNave();
-    const { nodes, animations } = useGLTF('/assets/models/NaveDefault.glb');
+
+    const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
     const { addProjectile } = useProjectiles();
     const [play, setPlay] = useState(false)

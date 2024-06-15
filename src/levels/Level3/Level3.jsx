@@ -20,7 +20,6 @@ import GameStats from "../../components/interface/GameStats";
 import Live from "../../components/items/Live";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { BombInit } from "./FinalCombat";
-import { toneMapping } from "three/examples/jsm/nodes/Nodes.js";
 import { ACESFilmicToneMapping, CineonToneMapping } from "three";
 
 const Level3 = () => {
