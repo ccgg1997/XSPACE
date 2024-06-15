@@ -10,7 +10,7 @@ export default function Nave(props) {
     const naveRef = useRef();
     const groupRef = useRef();
     const { nave, setNave } = useNave();
-    const { nodes, materials, animations } = useGLTF('/assets/models/NaveDefault.glb');
+    const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
 
     useEffect(() => {
@@ -69,4 +69,4 @@ export default function Nave(props) {
     )
 
 }
-useGLTF.preload('/assets/models/NaveDefault.glb')
+useGLTF.preload(url)
