@@ -1,16 +1,20 @@
-import { Environment, OrbitControls, KeyboardControls } from "@react-three/drei";
+import {
+  Environment,
+  OrbitControls,
+  KeyboardControls,
+} from "@react-three/drei";
 import World from "./Level6Environment";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useState, useRef, useEffect } from "react";
-import { PerspectiveCamera } from '@react-three/drei';
-import { Canvas, useThree } from '@react-three/fiber';
+import { PerspectiveCamera } from "@react-three/drei";
+import { Canvas, useThree } from "@react-three/fiber";
 import useMovements from "../../utils/key-movements";
 import Nave from "./Nave";
 import { NaveProvider } from "../../context/NaveContext";
 import Controls from "./Controls";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import GameStats from "../../components/interface/GameStats";
-import * as THREE from 'three';
+import * as THREE from "three";
 import { useGame } from "../../context/GameContext";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { ACESFilmicToneMapping } from "three";
@@ -19,12 +23,13 @@ import Environmentlvl6 from "./Environment";
 import Combat from "./Combat";
 import CheckPointNotif from "../../components/CheckPointNotif";
 import PlatilloVolador from "./PlatilloVolador";
+import Loading from "../../components/interface/loading/Loading";
 
 function CustomCamera() {
   const { camera } = useThree();
 
   useThree(({ camera }) => {
-    console.log('aquiii')
+    console.log("aquiii");
     camera.rotation.set(THREE.MathUtils.degToRad(30), 1, 1);
   });
 
@@ -51,7 +56,15 @@ const Level6 = () => {
   const canvasRef = useRef();
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
-  const { addLive, removeLive, togglePause, addLevel, setMessage, game, setGame } = useGame();
+  const {
+    addLive,
+    removeLive,
+    togglePause,
+    addLevel,
+    setMessage,
+    game,
+    setGame,
+  } = useGame();
   const { paintProjectiles } = useProjectiles();
   const [initCombat, setInitCombat] = useState(false);
   const [checkpoint, setCheckPoint] = useState(false);
@@ -75,9 +88,10 @@ const Level6 = () => {
   return (
     <div tabIndex={0}>
       <NaveProvider>
-        <PauseMenu onRestart={() => setRestart(true)} />
+        {!ready && <Loading />}
+        {ready && <PauseMenu onRestart={() => setRestart(true)} />}
         <KeyboardControls map={map}>
-          <GameStats />
+          {ready && <GameStats />}
           <Canvas
             style={{
               position: "absolute",
@@ -155,4 +169,3 @@ const Level6 = () => {
 };
 
 export default Level6;
-
