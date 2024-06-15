@@ -49,7 +49,7 @@ export default function Nave2({ position }) {
             shootProjectile(naveBodyRef.current, addProjectile);
         });
         socket.on("player-moving", (t) => {
-            naveBodyRef.current.setTranslation({ x: -t.translation.x, y: t.translation.y, z: naveBodyRef.current.translation().z }, true)
+            naveBodyRef?.current?.setTranslation({ x: -t.translation.x, y: t.translation.y, z: position[2] + 58 }, true)
         });
         socket.on("player-dead", () => {
             setMessage('GANASTE!')

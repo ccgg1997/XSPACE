@@ -11,7 +11,7 @@ import Controls from "./Controls";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import Combat from "./Combat";
 import GameStats from "../../components/interface/GameStats";
-import Live from "../../components/items/Live";
+import LivesGeneration from "./LivesGeneration";
 import { useGame } from "../../context/GameContext";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import CheckPointNotif from "../../components/CheckPointNotif";
@@ -84,7 +84,7 @@ const Level7 = ({ }) => {
                 />
                 <Nave2 position={[0, 0, -70]}
                 />
-                {/* <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} /> */}
+                {/* {ready && <LivesGeneration position={[2, 4.5, -786]} scale={1} onEarnLife={onEarnLife} />} */}
               </Physics>
             </Suspense>
             {/* {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />} */}

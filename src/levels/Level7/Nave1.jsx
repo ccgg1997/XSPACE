@@ -229,6 +229,10 @@ export default function Nave1({ orbitControlsRef }) {
             removeLive();
         }
     }
+    const collisionExit = (event) => {
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    }
 
     useEffect(() => {
         if (stats.lives < 0) {
@@ -249,6 +253,7 @@ export default function Nave1({ orbitControlsRef }) {
             restitution={0}
             name="naveEspacial"
             onCollisionEnter={collisionManager}
+            onCollisionExit={collisionExit}
         >
             <group ref={naveRef}>
 
