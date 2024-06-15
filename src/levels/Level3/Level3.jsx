@@ -5,7 +5,7 @@ import {
   Stars,
 } from "@react-three/drei";
 import World from "./Level3Environment";
-import { Suspense, useContext, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { PerspectiveCamera } from "@react-three/drei";
@@ -21,6 +21,7 @@ import Live from "../../components/items/Live";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { BombInit } from "./FinalCombat";
 import { ACESFilmicToneMapping, CineonToneMapping } from "three";
+import Loading from "../../components/interface/loading/Loading";
 
 const Level3 = () => {
   const map = useMovements();
@@ -48,9 +49,8 @@ const Level3 = () => {
   return (
     <div tabIndex={0}>
       <NaveProvider>
-        <PauseMenu onRestart={() => setRestart(true)} />
+        {!ready && <Loading />}
         <KeyboardControls map={map}>
-          <GameStats />
           <Canvas
             style={{
               position: "absolute",
@@ -67,23 +67,23 @@ const Level3 = () => {
             }}
             shadows={true}
           >
-            <Environment preset="sunset" />
-            <PerspectiveCamera
-              makeDefault
-              position={[0, 5, -14]}
-              fov={100}
-              ref={cameraRef}
-            />
-            <OrbitControls
-              makeDefault
-              camera={cameraRef.current}
-              target={[0, 1, -28]}
-              enablePan={false}
-              ref={orbitControlsRef}
-              enableRotate={false}
-              enableZoom={false}
-            />
             <Suspense fallback={null}>
+              <Environment preset="sunset" />
+              <PerspectiveCamera
+                makeDefault
+                position={[0, 5, -14]}
+                fov={100}
+                ref={cameraRef}
+              />
+              <OrbitControls
+                makeDefault
+                camera={cameraRef.current}
+                target={[0, 1, -28]}
+                enablePan={false}
+                ref={orbitControlsRef}
+                enableRotate={false}
+                enableZoom={false}
+              />
               <Physics>
                 <World
                   onLoad={() => setReady(true)}
@@ -115,6 +115,8 @@ const Level3 = () => {
               />
             )}
           </Canvas>
+          {ready && <PauseMenu onRestart={() => setRestart(true)} />}
+          {ready && <GameStats />}
         </KeyboardControls>
       </NaveProvider>
     </div>
