@@ -1,4 +1,9 @@
-import { Environment, KeyboardControls, OrbitControls, Stars } from "@react-three/drei";
+import {
+  Environment,
+  KeyboardControls,
+  OrbitControls,
+  Stars,
+} from "@react-three/drei";
 import World from "./Level5Environment";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
@@ -16,6 +21,7 @@ import Live from "../../components/items/Live";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import Environmentlvl5 from "./Environment";
 import PlatilloVolador from "./PlatilloVolador";
+import Loading from "../../components/interface/loading/Loading";
 
 const Level5 = ({ setCameraPosition }) => {
   const map = useMovements();
@@ -24,8 +30,8 @@ const Level5 = ({ setCameraPosition }) => {
   const canvasRef = useRef();
   const [ready, setReady] = useState(false);
   const [restart, setRestart] = useState(false);
-  const { addLive, removeLive,togglePause, addLevel } = useGame();
-  const { paintProjectiles} = useProjectiles();
+  const { addLive, removeLive, togglePause, addLevel } = useGame();
+  const { paintProjectiles } = useProjectiles();
 
   const onEarnLife = () => {
     addLive();
@@ -40,16 +46,30 @@ const Level5 = ({ setCameraPosition }) => {
 
   return (
     <div tabIndex={0}>
-    <NaveProvider>
-        <PauseMenu onRestart={() => setRestart(true)} />
+      <NaveProvider>
+        {!ready && <Loading />}
+        {ready && <PauseMenu onRestart={() => setRestart(true)} />}
         <KeyboardControls map={map}>
-          <GameStats />
+          {ready && <GameStats />}
           <Canvas
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: '#231F1F' }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "#231F1F",
+            }}
             ref={canvasRef}
           >
-            <PerspectiveCamera makeDefault position={[0, 5, -14]} fov={100} ref={cameraRef} />
-            <OrbitControls makeDefault
+            <PerspectiveCamera
+              makeDefault
+              position={[0, 5, -14]}
+              fov={100}
+              ref={cameraRef}
+            />
+            <OrbitControls
+              makeDefault
               camera={cameraRef.current}
               target={[0, 1, -28]}
               enablePan={false}
@@ -65,12 +85,15 @@ const Level5 = ({ setCameraPosition }) => {
                 <World
                   onLoad={() => setReady(true)}
                   collisionCallback={removeLive}
-
                 />
                 <Nave />
-                < PlatilloVolador onWinLevel={onWinLevel} />
+                <PlatilloVolador onWinLevel={onWinLevel} />
                 {paintProjectiles(-50)}
-                <Live position={[-6.784, 5.555, -335.465]} scale={1.5} onEarnLife={onEarnLife} />
+                <Live
+                  position={[-6.784, 5.555, -335.465]}
+                  scale={1.5}
+                  onEarnLife={onEarnLife}
+                />
               </Physics>
             </Suspense>
             {ready && (
@@ -83,25 +106,9 @@ const Level5 = ({ setCameraPosition }) => {
             )}
           </Canvas>
         </KeyboardControls>
-    </NaveProvider>
-  </div>
+      </NaveProvider>
+    </div>
   );
 };
 
 export default Level5;
-/*
-<Ecctrl
-              camInitDis={1}
-              camMaxDis={10}
-              maxVelLimit={5}
-              jumpVel={4}
-              position={[0, 10, -30]}
-              debug={true}
-              disableFollowCam={true}
-              disableFollowCamPos={{ x: 0, y: 0, z: 0 }}
-            >
-              <Nave
-              // position={[0, 10, 0]}
-              />
-            </Ecctrl>
-            */
