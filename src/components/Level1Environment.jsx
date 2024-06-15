@@ -1,11 +1,14 @@
 import { useGLTF, useTexture } from "@react-three/drei"
 import { Color, RepeatWrapping, MeshBasicMaterial } from 'three';
 
+const url = "https://josem-18.github.io/sourcesPI/models/world/nave_espacial.glb"
+const url2 = "https://josem-18.github.io/sourcesPI/models/world/SquidGamesMaik.glb"
+const url3 = "https://josem-18.github.io/sourcesPI/textures/moon_floor/"
 export default function Level1(props) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
-  const { nodes, materials } = useGLTF('/assets/models/world/nave_espacial.glb');
-  const { nodes: nodesSG, materials: materialsSG } = useGLTF("/assets/models/world/SquidGamesMaik.glb");
-  const PATH = "/assets/textures/moon_floor/";
+  const { nodes, materials } = useGLTF(url);
+  const { nodes: nodesSG, materials: materialsSG } = useGLTF(url2);
+  const PATH = url3;
   const propsTexture = useTexture({
     map: PATH + "rock_boulder_dry_diff_1k.jpg",
     normalMap: PATH + "rock_boulder_dry_nor_gl_1k.jpg",
@@ -46,5 +49,5 @@ export default function Level1(props) {
   )
 }
 
-useGLTF.preload('/assets/models/world/squisgame.glb')
-useGLTF.preload("/assets/models/world/SquidGamesMaik.glb");
+useGLTF.preload(url)
+useGLTF.preload(url2);

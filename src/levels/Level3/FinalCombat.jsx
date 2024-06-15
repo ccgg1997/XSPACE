@@ -116,9 +116,9 @@ export const BombInit = ({ setStart,onWinLevel }) => {
     </>
   );
 };
-
+const url = "https://josem-18.github.io/sourcesPI/models/items/bomb.glb"
 const Bomb = ({ position, id, collisionManager }) => {
-  const { nodes, materials } = useGLTF("/assets/models/items/bomb.glb");
+  const { nodes, materials } = useGLTF(url);
   const ref = useRef();
   const material = new THREE.MeshStandardMaterial({ color: "green" }); // Cambiamos el color de la bomba a verde
   return (

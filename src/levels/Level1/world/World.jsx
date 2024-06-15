@@ -3,9 +3,9 @@ import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 
-
+const url = "https://josem-18.github.io/sourcesPI/models/world/level1.glb"
 export default function World(props) {
-  const { nodes, materials } = useGLTF("/assets/models/world/level1.glb")
+  const { nodes, materials } = useGLTF(url)
   const liveRef = useRef(null);
   let mostraVida = props.mostrarVidaExtra
   let quitarPieza = props.quitarPieza
@@ -1162,5 +1162,5 @@ export default function World(props) {
   );
 }
 
-useGLTF.preload("/assets/models/world/WorldSquidGames.glb");
+useGLTF.preload(url);
 

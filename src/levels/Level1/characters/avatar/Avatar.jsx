@@ -3,11 +3,12 @@ import { useAvatar } from "../../../../context/AvatarContext";
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 
+const url = "https://josem-18.github.io/sourcesPI/models/avatar/Avatar.glb"
 export default function Avatar({ setpositionfunction }) {
     const avatarBodyRef = useRef();
     const avatarRef = useRef();
     const { avatar, setAvatar } = useAvatar();
-    const { nodes, materials, animations } = useGLTF('/assets/models/avatar/Avatar.glb')
+    const { nodes, materials, animations } = useGLTF(url)
     const { actions } = useAnimations(animations, avatarRef)
     const [showMessage, setShowMessage] = useState(false);
 

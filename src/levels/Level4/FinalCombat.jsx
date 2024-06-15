@@ -84,9 +84,9 @@ export const GunsInit = ({ setStart, onWinLevel }) => {
     </>
   );
 };
-
+const url = "https://josem-18.github.io/sourcesPI/models/items/canon.glb"
 const Torreta = ({ args, shotTime = 3, disableTorreta }) => {
-  const { nodes, materials } = useGLTF('/assets/models/items/canon.glb')
+  const { nodes, materials } = useGLTF(url)
   const { nave } = useNave();
   const { game, setGame, setMessage } = useGame();
   const [shots, setShots] = useState([]);
@@ -242,6 +242,6 @@ const Shot = ({ position, id, speed, removeShot }) => {
   );
 };
 
-useGLTF.preload('/assets/models/items/canon.glb')
+useGLTF.preload(url)
 
 

@@ -93,8 +93,9 @@ export default function PlatilloVolador({onWinLevel}) {
   );
 }
 
+const url = "https://josem-18.github.io/sourcesPI/models/PlatilloVolador.glb"
 const Platillo = ({position, collisionManager}) => {
-  const { nodes, materials } = useGLTF("/assets/models/PlatilloVolador.glb");
+  const { nodes, materials } = useGLTF(url);
   return (
     <RigidBody
       position={position}
@@ -168,4 +169,4 @@ const Shot = ({ position, id, speed, removeShot }) => {
   );
 };
 
-useGLTF.preload("/assets/models/PlatilloVolador.glb");
+useGLTF.preload(url);
