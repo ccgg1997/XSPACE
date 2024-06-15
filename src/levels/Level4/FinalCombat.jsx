@@ -25,7 +25,6 @@ export const GunsInit = ({ setStart, onWinLevel }) => {
 
   useEffect(() => {
     if (!(torretas["1"] || torretas["2"] || torretas["3"] || torretas["4"])) {
-      console.log("GANASTE!!");
       onWinLevel();
     }
   }, [, torretas]);
@@ -101,9 +100,7 @@ const Torreta = ({ args, shotTime = 3, disableTorreta }) => {
 
 
   const collisionManager = (event) => {
-    console.log('Torreta choca con ', event.other.rigidBodyObject.name)
     if (event.other.rigidBodyObject.name == "projectile") {
-      console.log("deshabilitando torreta ", args.key)
       disableTorreta(args.key)
       // nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);
       // nave.body.setLinvel({ x: 0, y: 0, z: 0 }, true);

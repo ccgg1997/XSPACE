@@ -3,11 +3,10 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    /* transform: "translate(-50%; -170%)"; */
     text-align: center;
-    /* padding: 20px; */
     border-radius: 10px;
-    /* margin-bottom: 60%; */
+    background-color: rgba(65, 60, 60, 0.5);
+    
 }
 
 .menuitem {
@@ -36,5 +35,5 @@
 }
 
 .menuitem.selected-item {
-    color: #b32810;
+    color: #cc3636;
 }

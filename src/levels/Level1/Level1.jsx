@@ -99,7 +99,6 @@ export default function Level1() {
             patchUser(userLogged.email, { level: 2, lives: countLives })
             setStats({ ...game, lives: countLives })
             setTimeout(() => {
-                console.log("entro al timeout final");
                 navigate("/level2");
             }, 10000);
         });
@@ -156,11 +155,6 @@ export default function Level1() {
                                     camInitDir={{ x: 0, y: 10 }}
                                     onCollisionEnter={({ manifold, target, other }) => {
                                         const diferencia = (new Date().getTime() - ultimaVidaPerdida) / 1000 > 2
-                                        console.log("HOLA_", other.rigidBodyObject.name)
-                                        console.log(
-                                            "Collision at world position ",
-                                            manifold.solverContactPoint(0), "mainfold: ", manifold, "target: ", target, "other: ", other
-                                        )
                                         if (countLives > 0 && diferencia && other.rigidBodyObject.name && other.rigidBodyObject.name != "live" && other.rigidBodyObject.name != "pieza" && other.rigidBodyObject.name != "final") {
                                             setCountLives(countLives - 1)
                                             setUltimaVidaPerdida(new Date().getTime())
@@ -171,14 +165,12 @@ export default function Level1() {
                                             setCountLives(countLives + 1)
                                             setUltimaVidaPerdida(new Date().getTime())
                                             setMostrarVidaExtra(false)
-                                            console.log("desaparece la vida")
 
                                         }
 
                                         if (other.rigidBodyObject.name && other.rigidBodyObject.name == "pieza") {
                                             setCohete("🚀")
                                             setQuitarPieza(true)
-                                            console.log("desaparece la pieza")
 
                                         }
 

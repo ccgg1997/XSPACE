@@ -1,44 +1,45 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useGLTF } from "@react-three/drei"
-import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
-import { useFrame, useThree } from '@react-three/fiber';
+import { RigidBody } from "@react-three/rapier"
+import { useFrame } from '@react-three/fiber';
 import { useGame } from '../../context/GameContext';
 import { useNave } from '../../context/NaveContext';
 
-export default function Level6Environment({ args, onLoad = () => { }, collisionController = () => { }, collisionCallback }) {
-  // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
+export default function Level6Environment({ args, onLoad, collisionCallback }) {
   const { nodes, materials, scene } = useGLTF('/assets/models/Level6.glb');
   const { nave } = useNave();
   const { game, setGame } = useGame();
-  const wallsRef = useRef();
+  
+  const asteroidsRefs = useRef([]);
+  const amplitude = 3.5;
 
   useEffect(() => {
     onLoad();
+    setGame({ ...game });
   }, [scene]);
 
   const collisionManager = (event) => {
-
-    if (event.other.rigidBodyObject.name == "naveEspacial") {
-      setGame({ ...game, paused: true, isCollided: true })
+    if (event.other.rigidBodyObject.name === "naveEspacial") {
+      setGame({ ...game, paused: true, isCollided: true });
+      collisionCallback();
     }
-
   };
 
-  useEffect(() => {
-    setGame({ ...game })
-  }, [])
 
-  useFrame(() => {
-    const currentTranslation = nave.body?.translation()
-    if (currentTranslation?.z < -907) {
-      wallsRef.current.visible = false;
-    } else {
-      wallsRef.current.visible = true;
-    }
+  useFrame((state) => {
+    asteroidsRefs.current.forEach((ref, index) => {
+      if (ref) {
+        if (index % 2 === 0) {
+          // Movimiento de lado a lado para índices pares
+          ref.position.x = Math.cos(state.clock.getElapsedTime() + index) * amplitude;
+        } else {
+          // Movimiento circular para índices impares
+          ref.position.x = Math.cos(state.clock.getElapsedTime() + index) * amplitude;
+          ref.position.y = Math.sin(state.clock.getElapsedTime() + index) * amplitude;
+        }
+      }
+    });
   });
-
-  // const { camera } = useThree();
-  // camera.near = 20;
 
   return (
     <group {...args} dispose={null}>
@@ -47,170 +48,181 @@ export default function Level6Environment({ args, onLoad = () => { }, collisionC
           castShadow
           receiveShadow
           geometry={nodes.Walls.geometry}
-          material={materials.ConcreteWall}
-          position={[0, 5, -500]}
-          scale={[0.369, 0.154, 15.385]}
-          frustumCulled={true}
-          ref={wallsRef}
+          material={materials['Material.002']}
         />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} frustumCulled={false} name="PISO">
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Floor.geometry}
-          material={materials.Floor}
-          position={[0, 5, -500]}
-          scale={[0.369, 0.154, 15.385]}
-          frustumCulled={false}
+          material={materials['Material.004']}
         />
-      </RigidBody>
-      <RigidBody type="fixed" restitution={0} onCollisionEnter={collisionManager} name="obstaculo">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst.geometry}
-          material={materials['Concrete Obstacle']}
-          position={[4, 5, -111.053]}
-          scale={[1, 0.625, 0.25]}
-          frustumCulled={true}
-        />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" restitution={0} onCollisionEnter={collisionManager} name="obstaculo">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst001.geometry}
-          material={materials['Concrete Obstacle']}
-          position={[4, 2.5, -74.167]}
-          scale={[1, 0.313, 0.25]}
-          frustumCulled={true}
-        />
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
+          <mesh
+            ref={(el) => (asteroidsRefs.current[0] = el)}
+            castShadow
+            receiveShadow
+            geometry={nodes.Asteroide002.geometry}
+            material={materials['Material.003']}
+            position={[-4.014, 2.088, -131.599]}
+          />
+        </RigidBody>
 
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst002.geometry}
-          material={materials['Metal Obstacle']}
-          position={[-4, 7.5, -163.657]}
-          scale={[1, 0.313, 0.25]}
-          frustumCulled={true}
-        />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
+          <mesh
+            ref={(el) => (asteroidsRefs.current[1] = el)}
+            castShadow
+            receiveShadow
+            geometry={nodes.Asteroide003.geometry}
+            material={materials['Material.003']}
+            position={[1.335, 4.059, -190.794]}
+            rotation={[0.034, -0.027, -0.682]}
+          />
+        </RigidBody>
 
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst003.geometry}
-          material={materials['Concrete Obstacle']}
-          position={[-4, 2.5, -199.376]}
-          scale={[1, 0.313, 0.25]}
-        />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst004.geometry}
-          material={materials['Metal Obstacle']}
-          position={[0, 5, -231.898]}
-          scale={[0.5, 0.625, 0.25]}
-        />
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
+          <group ref={(el) => (asteroidsRefs.current[2] = el)} position={[3.568, 5.537, -256.91]}>
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Asteroide007_1.geometry}
+              material={materials['Material.003']}
+            />
 
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+            <mesh
+              castShadow
+              receiveShadow
+              geometry={nodes.Asteroide007_2.geometry}
+              material={materials['Material.001']}
+            />
+          </group>
+        </RigidBody>
 
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[3] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst006.geometry}
-          material={materials['Metal Obstacle']}
-          position={[8, 5, -279.922]}
-          scale={[0.5, 0.625, 0.25]}
+          geometry={nodes.Asteroide005.geometry}
+          material={materials['Material.001']}
+          position={[-0.942, 3.293, -330.711]}
         />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        </RigidBody>
+
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[4] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst005.geometry}
-          material={materials['Concrete Obstacle']}
-          position={[0, 2.5, -327.066]}
-          scale={[1.5, 0.313, 0.25]}
+          geometry={nodes.Asteroide006.geometry}
+          material={materials['Material.003']}
+          position={[-0.345, 5.709, -409.259]}
         />
+        </RigidBody>
 
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[5] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst007.geometry}
-          material={materials['Metal Obstacle']}
-          position={[0, 7.5, -410.938]}
-          scale={[1.5, 0.313, 0.25]}
+          geometry={nodes.Asteroide007.geometry}
+          material={materials['Material.003']}
+          position={[3.568, 8.647, -653.768]}
         />
+        </RigidBody>
 
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[6] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst009.geometry}
-          material={materials['Concrete Obstacle']}
-          position={[0, 5, -500.841]}
-          scale={[1.5, 0.625, 0.25]}
+          geometry={nodes.Asteroide008.geometry}
+          material={materials['Material.007']}
+          position={[1.361, 5.709, -443.885]}
+          rotation={[-3.021, 0.26, -2.729]}
         />
+        </RigidBody>
 
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
-
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[7] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst010.geometry}
-          material={materials['Metal Obstacle']}
-          position={[0, 5, -697.953]}
-          scale={[1.5, 0.625, 0.25]}
+          geometry={nodes.Asteroide009.geometry}
+          material={materials['Material.011']}
+          position={[-0.345, 5.709, -554.364]}
         />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        </RigidBody>
 
+        <RigidBody
+          type="fixed"
+          colliders="trimesh"
+          restitution={0}
+          onCollisionEnter={collisionManager}
+          name="Asteroide"
+        >
         <mesh
+          ref={(el) => (asteroidsRefs.current[8] = el)}
           castShadow
           receiveShadow
-          geometry={nodes.wall_obst011.geometry}
-          material={materials['Metal Obstacle']}
-          position={[0, 5, -595.461]}
-          scale={[1.5, 0.625, 0.25]}
+          geometry={nodes.Asteroide010.geometry}
+          material={materials['Material.012']}
+          position={[3.568, 8.647, -821.618]}
+          rotation={[0, 0, 2.062]}
         />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
+        </RigidBody>
 
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst013.geometry}
-          material={materials['Metal Obstacle']}
-          position={[4, 2.5, -803.294]}
-          scale={[1, 0.313, 0.25]}
-        />
-      </RigidBody>
-      <RigidBody type="fixed" colliders="trimesh" onCollisionEnter={collisionManager} name="obstaculo">
-
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.wall_obst012.geometry}
-          material={materials['Metal Obstacle']}
-          position={[0, 5, -908]}
-          scale={[1.5, 0.625, 0.25]}
-        />
       </RigidBody>
     </group>
-  )
-
+  );
 }
-// useGLTF.preload('/assets/models/Level6.glb')
+
+useGLTF.preload('/assets/models/Level6.glb');
+
