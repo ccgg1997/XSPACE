@@ -12,6 +12,7 @@ import useMovements from "../../utils/key-movements";
 import { NaveProvider, useNave } from "../../context/NaveContext";
 import PauseMenu from "../../components/pause-menu/PauseMenu";
 import GameStats from "../../components/interface/GameStats";
+import LivesGeneration from "./LivesGeneration";
 import { useGame } from "../../context/GameContext";
 import BackgroundSound from "../../components/interface/BackgroundSound";
 import Level7Environment from "./Level7Environment";
@@ -19,7 +20,7 @@ import Nave1 from "./Nave1";
 import Nave2 from "./Nave2";
 import Loading from "../../components/interface/loading/Loading";
 
-const Level7 = ({}) => {
+const Level7 = ({ }) => {
   const map = useMovements();
   const orbitControlsRef = useRef();
   const cameraRef = useRef();

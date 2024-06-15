@@ -8,7 +8,7 @@ import { useNave } from '../../context/NaveContext';
 
 const url = "https://josem-18.github.io/sourcesPI/models/world/SquidGamesMaik.glb"
 const url2 = "https://josem-18.github.io/sourcesPI/textures/moon_floor/"
-export default function Level7Environment({ args, onLoad = () => { }}) {
+export default function Level7Environment({ args, onLoad = () => { } }) {
   // const {nodes, materials} =useGLTF('/assets/models/world/squisgame.glb');
   const { nodes, materials, scene } = useGLTF(url);
   const { nave } = useNave();
@@ -37,7 +37,9 @@ export default function Level7Environment({ args, onLoad = () => { }}) {
   propsTexture.displacementMap.wrapS = propsTexture.displacementMap.wrapT = RepeatWrapping;
 
   useEffect(() => {
-    onLoad();
+    setTimeout(() => {
+      onLoad();
+    }, 2000);
   }, [scene]);
 
   useEffect(() => {
