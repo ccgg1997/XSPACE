@@ -9,6 +9,7 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import { shootProjectile } from "../../utils/shootProjectile.js";
+import { socket } from "./socket-manager";
 
 
 const url = "https://josem-18.github.io/sourcesPI/models/NaveDefault.glb"
@@ -175,11 +176,21 @@ export default function Nave1({ orbitControlsRef }) {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
-            console.log('aqui')
+            // console.log('aqui')
             if (event.key === ' ') {
                 if (nave.body && !game.paused) {
                     setPlay(true)
                     shootProjectile(nave, addProjectile);
+                    const positionNave = nave.body.translation(); // Posición de la nave
+                    const position = [positionNave.x, positionNave.y + 3, positionNave.z - 30];
+                    console.log('emitiendo disparo')
+                    socket.emit("player-shot", {
+                        player: 1,
+                        position: position
+                        // translation: rbPlayer1Ref.current?.translation(),
+                        // rotation: rbPlayer1Ref.current?.rotation(),
+                    });
+                    console.log('fin disparo')
                 }
             } else {
                 setPlay(false)
@@ -191,6 +202,19 @@ export default function Nave1({ orbitControlsRef }) {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [nave, setNave, game, setGame]);
+
+    useEffect(() => {
+        console.log('creando socketTTTT')
+        socket.emit("connected", {
+            player: 1,
+            // translation: rbPlayer1Ref.current?.translation(),
+            // rotation: rbPlayer1Ref.current?.rotation(),
+        });
+        console.log('creando socket2')
+
+
+    }, [])
+
 
     return (<>
         <RigidBody ref={naveBodyRef}
