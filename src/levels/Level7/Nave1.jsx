@@ -175,8 +175,9 @@ export default function Nave1({ orbitControlsRef }) {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
+            console.log('aqui')
             if (event.key === ' ') {
-                if (nave.body) {
+                if (nave.body && !game.paused) {
                     setPlay(true)
                     shootProjectile(nave, addProjectile);
                 }
@@ -189,7 +190,7 @@ export default function Nave1({ orbitControlsRef }) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [nave, setNave, game, setGame]);
 
     return (<>
         <RigidBody ref={naveBodyRef}
