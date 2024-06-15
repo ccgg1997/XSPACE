@@ -78,7 +78,7 @@ const Level7 = ({ }) => {
               />
               {/* <directionalLight position={[-10, 20, 10]} intensity={1.5} /> */}
               <Stars radius={100} depth={0} count={3000} factor={4} saturation={0} fade speed={1} />
-              <Physics debug={true}>
+              <Physics debug={false}>
                 <Level7Environment onLoad={() => setReady(true)} />
                 <Nave1 orbitControlsRef={orbitControlsRef}
                 />

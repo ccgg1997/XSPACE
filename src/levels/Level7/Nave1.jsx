@@ -25,7 +25,7 @@ export default function Nave1({ orbitControlsRef }) {
     const { addProjectile } = useProjectiles();
     const [play, setPlay] = useState(false)
 
-    const { game, setGame, stats, setPartIcon } = useGame();
+    const { game, setGame, stats, setPartIcon, removeLive, setMessage } = useGame();
     const [naveSound] = useState(new Audio("/assets/sounds/motor.mp3"));
     const [shootSound] = useState(new Audio("/assets/sounds/shootGunLaser.mp3"))
     const [playNaveSound, setPlayNaveSound] = useState(false)
@@ -155,6 +155,12 @@ export default function Nave1({ orbitControlsRef }) {
         state.camera.position.add(new Vector3(moveX, moveY, 0));
         orbitControlsRef.current.target.add(new Vector3(moveX, moveY, 0));
         // orbitControlsRef.current.target.set(new Vector3(newPosition.x, newPosition.y, -28));
+
+        window.setTimeout(() => {
+            socket.emit("player-moving", {
+                translation: naveBodyRef.current?.translation()
+            });
+        }, 100);
         get().back
     })
 
@@ -215,6 +221,24 @@ export default function Nave1({ orbitControlsRef }) {
 
     }, [])
 
+    const collisionManager = (event) => {
+        console.log('nave1 collisiona con ', event.other.rigidBodyObject.name)
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        if (event.other.rigidBodyObject.name === "enemyProjectile") {
+            removeLive();
+        }
+    }
+
+    useEffect(() => {
+        if (stats.lives < 0) {
+            socket.emit("player-dead", {
+                translation: naveBodyRef.current?.translation()
+            });
+            setMessage('HAS SIDO ELIMINADO')
+        }
+    }, [stats.lives])
+
 
     return (<>
         <RigidBody ref={naveBodyRef}
@@ -224,6 +248,7 @@ export default function Nave1({ orbitControlsRef }) {
             enabledRotations={[false, false, false]}
             restitution={0}
             name="naveEspacial"
+            onCollisionEnter={collisionManager}
         >
             <group ref={naveRef}>
 
