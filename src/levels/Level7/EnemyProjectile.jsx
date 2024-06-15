@@ -31,7 +31,7 @@ const EnemyProjectile = ({ position, id, speed, removeProjectile = () => { }, co
     useEffect(() => {
         const timer = setTimeout(() => {
             removeProjectile(id);
-        }, 3300);
+        }, 4000);
 
         return () => clearTimeout(timer);
     }, []);
@@ -45,7 +45,7 @@ const EnemyProjectile = ({ position, id, speed, removeProjectile = () => { }, co
             restitution={0}
             onCollisionEnter={collisionManager}
             enabledRotations={[false, false, false]}
-            name='projectile'
+            name='enemyProjectile'
         >
             <Sphere args={[1, 8, 8]} scale={[0.5, 0.5, 0.5]}>
                 <meshStandardMaterial color={color} />

@@ -7,6 +7,7 @@ import * as THREE from 'three';
 import { socket } from "./socket-manager";
 import { useProjectiles } from "../../context/ProjectilesContext";
 import EnemyProjectile from "./EnemyProjectile";
+import { useGame } from "../../context/GameContext";
 
 const url = "https://josem-18.github.io/sourcesPI/models/NaveEnemy.glb"
 
@@ -20,6 +21,7 @@ export default function Nave2({ position }) {
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
     const material = new THREE.MeshStandardMaterial({ color: "blue" });
     const [projectiles, setprojectiles] = useState([])
+    const { setMessage } = useGame();
 
     const addProjectile = (projectile) => {
         setprojectiles((prev) => [...prev, projectile]);
@@ -49,6 +51,13 @@ export default function Nave2({ position }) {
         socket.on("player-moving", (t) => {
             naveBodyRef.current.setTranslation({ x: -t.translation.x, y: t.translation.y, z: naveBodyRef.current.translation().z }, true)
         });
+        socket.on("player-dead", () => {
+            setMessage('GANASTE!')
+
+            setTimeout(() => {
+                window.location.href = 'menu'
+            }, 3000);
+        });
 
 
         // Clean up the event listener on component unmount
@@ -73,6 +82,15 @@ export default function Nave2({ position }) {
 
     }, [nave.animation]);
 
+    const collisionManager = (event) => {
+        console.log('nave2 collisiona con ', event.other.rigidBodyObject.name)
+        // if (event.other.rigidBodyObject.name === "projectile" ) {
+        //     bombNeutralized(event.target.rigidBodyObject.customId);
+        //   }
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    }
+
     return (
         <>
             <RigidBody ref={naveBodyRef}
@@ -81,7 +99,8 @@ export default function Nave2({ position }) {
                 gravityScale={0}
                 enabledRotations={[false, false, false]}
                 restitution={0}
-            // name="naveEspacial"
+                name="naveEnemiga"
+                onCollisionEnter={collisionManager}
             // position={position}
             >
                 <group ref={naveRef}>
