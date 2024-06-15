@@ -141,7 +141,8 @@ export default function Controls({ orbitControlsRef, restart, onRestartDone, ini
         }, true)
 
         state.camera.position.add(new Vector3(moveX, moveY, -1 * (speed * delta)))
-        orbitControlsRef.current.target.add(new Vector3(0, 0, -(speed)));
+        orbitControlsRef.current.target.add(new Vector3(moveX, moveY, 0));
+        // orbitControlsRef.current.target.set(newPosition.x, newPosition.y, -28)
         get().back
     })
 

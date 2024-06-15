@@ -4,6 +4,9 @@ import { CuboidCollider, RigidBody } from "@react-three/rapier"
 import { useNave } from "../../context/NaveContext";
 import { useEffect, useRef } from "react";
 import * as THREE from 'three';
+import { socket } from "./socket-manager";
+import { shootProjectile } from "../../utils/shootProjectile";
+import { useProjectiles } from "../../context/ProjectilesContext";
 
 const url = "https://josem-18.github.io/sourcesPI/models/NaveEnemy.glb"
 export default function Nave2({ position }) {
@@ -14,6 +17,7 @@ export default function Nave2({ position }) {
     const { nodes, materials, animations } = useGLTF(url);
     const { ref, actions, mixer } = useAnimations(animations, naveRef)
     const material = new THREE.MeshStandardMaterial({ color: "blue" }); // Cambiamos el color de la bomba a verde
+    const { addProjectile, paintProjectiles } = useProjectiles();
 
     // useEffect(() => {
     //     setNave({
@@ -22,6 +26,22 @@ export default function Nave2({ position }) {
     //         body: naveBodyRef.current
     //     })
     // }, [naveBodyRef.current, naveRef.current])
+
+    useEffect(() => {
+        // Set up the WebSocket event listener for "player-moving"
+        socket.on("player-shot", (transforms) => {
+            console.log('disparo recibido', transforms);
+            console.log('naveBodyRef', naveBodyRef.current)
+            shootProjectile({ body: naveBodyRef.current }, addProjectile);
+            console.log('disparo pintado', transforms);
+        });
+        //movePlayer(transforms));
+
+        // Clean up the event listener on component unmount
+        return () => {
+            socket.off("player-shot", (transforms) => console.log('disparo recibido', transforms));
+        };
+    }, [naveBodyRef, naveBodyRef.current, addProjectile]);
 
     useEffect(() => {
         if (nave.animation) {
@@ -40,36 +60,39 @@ export default function Nave2({ position }) {
     }, [nave.animation]);
 
     return (
-        <RigidBody ref={naveBodyRef}
-            colliders={false}
-            // type="fixed"
-            gravityScale={0}
-            enabledRotations={[false, false, false]}
-            restitution={0}
-        // name="naveEspacial"
-        // position={position}
-        >
-            <group ref={naveRef}>
+        <>
+            <RigidBody ref={naveBodyRef}
+                colliders={false}
+                // type="fixed"
+                gravityScale={0}
+                enabledRotations={[false, false, false]}
+                restitution={0}
+            // name="naveEspacial"
+            // position={position}
+            >
+                <group ref={naveRef}>
 
-                <primitive
-                    castShadow
-                    receiveShadow
-                    object={nodes.nave_espacial}
-                    position={position}
-                    material={material}
-                >
-                    <CuboidCollider
-                        args={[0.25, 2, 2]}
-                        position={[0, 2.5, -1]}
-                    />
-                    <CuboidCollider
-                        args={[3, 0.4, 2]}
-                        position={[0, 3.5, -1]}
-                    />
-                </primitive>
-            </group>
+                    <primitive
+                        castShadow
+                        receiveShadow
+                        object={nodes.nave_espacial}
+                        position={position}
+                        material={material}
+                    >
+                        <CuboidCollider
+                            args={[0.25, 2, 2]}
+                            position={[0, 2.5, -1]}
+                        />
+                        <CuboidCollider
+                            args={[3, 0.4, 2]}
+                            position={[0, 3.5, -1]}
+                        />
+                    </primitive>
+                </group>
 
-        </RigidBody >
+            </RigidBody >
+            {paintProjectiles(20)}
+        </>
     )
 
 }
