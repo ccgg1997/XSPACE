@@ -19,6 +19,7 @@ import Level7Environment from "./Level7Environment";
 import Nave1 from "./Nave1";
 import Nave2 from "./Nave2";
 import Loading from "../../components/interface/loading/Loading";
+import EnemyLivesStats from "./EnemyLivesStats";
 
 const Level7 = ({ }) => {
   const map = useMovements();
@@ -58,6 +59,7 @@ const Level7 = ({ }) => {
         {ready && <PauseMenu onRestart={() => console.log("en restart")} />}
         <KeyboardControls map={map}>
           {ready && <GameStats />}
+          {ready && <EnemyLivesStats />}
           <Canvas
             style={{
               position: "absolute",
@@ -103,7 +105,7 @@ const Level7 = ({ }) => {
                 <Level7Environment onLoad={() => setReady(true)} />
                 <Nave1 orbitControlsRef={orbitControlsRef} />
                 <Nave2 position={[0, 0, -70]} />
-                {/* <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} /> */}
+                {ready && <LivesGeneration position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />}
               </Physics>
             </Suspense>
             {/* {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />} */}

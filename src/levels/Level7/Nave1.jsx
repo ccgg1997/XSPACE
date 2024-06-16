@@ -157,9 +157,16 @@ export default function Nave1({ orbitControlsRef }) {
         // orbitControlsRef.current.target.set(new Vector3(newPosition.x, newPosition.y, -28));
 
         window.setTimeout(() => {
-            socket.emit("player-moving", {
-                translation: naveBodyRef.current?.translation()
-            });
+            const navePosition = naveBodyRef.current;
+            if (navePosition) {
+                try {
+                    socket.emit("player-moving", {
+                        translation: navePosition.translation()
+                    })
+                } catch (error) {
+                    console.error('error emit player-moving', error)
+                }
+            }
         }, 100);
         get().back
     })
@@ -247,7 +254,7 @@ export default function Nave1({ orbitControlsRef }) {
     return (<>
         <RigidBody ref={naveBodyRef}
             colliders={false}
-            // type="fixed"
+            type="fixed"
             gravityScale={0}
             enabledRotations={[false, false, false]}
             restitution={0}
