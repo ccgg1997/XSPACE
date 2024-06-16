@@ -28,8 +28,6 @@ export default function Nave2({ position }) {
     }
 
     const removeProjectile = (id) => {
-        console.log('en remove projectile', id)
-        console.log('projectiles', projectiles)
         setprojectiles((prev) => prev.filter((projectile) => projectile.id !== id));
     }
 
@@ -38,13 +36,11 @@ export default function Nave2({ position }) {
         const projectileId = THREE.MathUtils.generateUUID(); // Generar ID único
         const positionNave = nave.translation(); // Posición de la nave
         const position = [positionNave.x, positionNave.y + 4, positionNave.z - 60]; // Posición del proyectil
-
         addProjectile({ id: projectileId, position });
     };
 
     useEffect(() => {
         // Set up the WebSocket event listener for "player-moving"
-        console.log("player-shot INITT")
         socket.on("player-shot", (transforms) => {
             shootProjectile(naveBodyRef.current, addProjectile);
         });
@@ -62,7 +58,7 @@ export default function Nave2({ position }) {
 
         // Clean up the event listener on component unmount
         return () => {
-            socket.off("player-shot", (transforms) => console.log('disparo recibido', transforms));
+            socket.off("player-shot");
         };
     }, [naveBodyRef]);
 
@@ -83,7 +79,7 @@ export default function Nave2({ position }) {
     }, [nave.animation]);
 
     const collisionManager = (event) => {
-        console.log('nave2 collisiona con ', event.other.rigidBodyObject.name)
+        // console.log('nave2 collisiona con ', event.other.rigidBodyObject.name)
         // if (event.other.rigidBodyObject.name === "projectile" ) {
         //     bombNeutralized(event.target.rigidBodyObject.customId);
         //   }
