@@ -1,0 +1,8 @@
+.enemy-lives{
+    display: flex;
+    top: 92%;
+    width: 99%;
+    justify-content: flex-start;
+    position: absolute;
+    z-index: 9;
+}

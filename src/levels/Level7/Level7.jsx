@@ -19,6 +19,7 @@ import Level7Environment from "./Level7Environment";
 import Nave1 from "./Nave1";
 import Nave2 from "./Nave2";
 import Loading from "../../components/interface/loading/Loading";
+import EnemyLivesStats from "./EnemyLivesStats";
 
 const Level7 = ({ }) => {
   const map = useMovements();
@@ -58,6 +59,7 @@ const Level7 = ({ }) => {
         {ready && <PauseMenu onRestart={() => console.log("en restart")} />}
         <KeyboardControls map={map}>
           {ready && <GameStats />}
+          {ready && <EnemyLivesStats />}
           <Canvas
             style={{
               position: "absolute",
