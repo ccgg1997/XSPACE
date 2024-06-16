@@ -14,7 +14,6 @@ import { socket } from "./socket-manager";
 
 const url = "https://josem-18.github.io/sourcesPI/models/NaveDefault.glb"
 export default function Nave1({ orbitControlsRef }) {
-
     const naveBodyRef = useRef();
     const [animation, setAnimation] = useState('Idle')
     const naveRef = useRef();
@@ -84,7 +83,6 @@ export default function Nave1({ orbitControlsRef }) {
             },
             (pressed) => {
                 if (!game.paused) {
-                    // console.log('pressed', pressed)
                     !pressed ? setPlayNaveSound(false) : setPlayNaveSound(true);
                     if (!pressed) {
                         setAnimation("Idle");
@@ -161,13 +159,13 @@ export default function Nave1({ orbitControlsRef }) {
             if (navePosition) {
                 try {
                     socket.emit("player-moving", {
-                        translation: navePosition.translation()
-                    })
+                        translation: navePosition?.translation()
+                    });
                 } catch (error) {
-                    console.error('error emit player-moving', error)
+                    console.error('error emit player-moving', error);
                 }
             }
-        }, 100);
+        }, 100);        
         get().back
     })
 
@@ -235,15 +233,21 @@ export default function Nave1({ orbitControlsRef }) {
         naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
         naveBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
-
     useEffect(() => {
         if (stats.lives < 0) {
-            socket.emit("player-dead", {
-                translation: naveBodyRef.current?.translation()
-            });
-            setMessage('HAS SIDO ELIMINADO')
+            const navePosition = naveBodyRef.current?.translation();
+            if (navePosition) {
+                socket.emit("player-dead", {
+                    translation: navePosition
+                });
+            }
+            setMessage('HAS SIDO ELIMINADO');
+    
+            // Cerrar la conexión del socket
+            socket.disconnect();
         }
-    }, [stats.lives])
+    }, [stats.lives]);
+    
 
 
     return (<>
