@@ -20,6 +20,7 @@ import Nave1 from "./Nave1";
 import Nave2 from "./Nave2";
 import Loading from "../../components/interface/loading/Loading";
 import EnemyLivesStats from "./EnemyLivesStats";
+import AsteroidsGeneration from "./AsteroidsGeneration";
 
 const Level7 = ({ }) => {
   const map = useMovements();
@@ -56,7 +57,7 @@ const Level7 = ({ }) => {
       <BackgroundSound />
       <NaveProvider>
         {!ready && <Loading />}
-        {ready && <PauseMenu onRestart={() => console.log("en restart")} />}
+        {ready && <PauseMenu onRestart={() => { }} />}
         <KeyboardControls map={map}>
           {ready && <GameStats />}
           {ready && <EnemyLivesStats />}
@@ -106,6 +107,7 @@ const Level7 = ({ }) => {
                 <Nave1 orbitControlsRef={orbitControlsRef} />
                 <Nave2 position={[0, 0, -70]} />
                 {ready && <LivesGeneration position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />}
+                {ready && <AsteroidsGeneration canvasRef={canvasRef} orbitControlsRef={orbitControlsRef} />}
               </Physics>
             </Suspense>
             {/* {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />} */}
