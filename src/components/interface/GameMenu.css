@@ -1,52 +1,208 @@
-.gamemenu {
-    width: 16rem;
+.menu-container {
+    width: 100%;
+    height: 100vh;
+    margin-top: 0;
+  }
+
+  .menu-title {
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 50%;
-    /* transform: "translate(-50%; -170%)"; */
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    /* margin-bottom: 60%; */
-}
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    z-index: 100;
+  }
+  
+  .centered-grid {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .planet-group {
+    position: relative;
+  }
+  
+  .planet-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: opacity 0.3s ease-in-out;
+    filter: blur(12px);
+  }
+  
+  .planet-bg-1 {
+    background: linear-gradient(to bottom right, #042ff0, #026bbbc7);
+  }
+  
+  .planet-bg-2 {
+    background: linear-gradient(to bottom right, #cbcbd8, #0a0a09);
+  }
+  
+  .planet-bg-3 {
+    background: linear-gradient(to bottom right, #4ebb6f, #3acf46);
+  }
+  
+  .planet-bg-4 {
+    background: linear-gradient(to bottom right, #e74c3c, #f39c12);
+  }
+  
+  .planet-bg-5 {
+    background: linear-gradient(to bottom right, #9b59b6, #00b894);
+  }
+  
+  .planet-bg-6 {
+    background: linear-gradient(to bottom right, #584716, #573c18);
+  }
+  
+  .planet-bg-7 {
+    background: linear-gradient(to bottom right, #969a9b, #59585a);
+  }
+  
+  .planet-link {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 1.125rem;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  
+  .planet-link-1 {
+    background-color: rgba(17, 175, 146, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-1:hover {
+    background-color: #11af92;
+    color: #ffffff;
+  }
+  
+  .planet-link-2 {
+    background-color: rgba(5, 94, 211, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-2:hover {
+    background-color: #055ed3;
+    color: #ffffff;
+  }
+  
+  .planet-link-3 {
+    background-color: rgba(79, 211, 90, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-3:hover {
+    background-color: #4fd35a;
+    color: #ffffff;
+  }
+  
+  .planet-link-4 {
+    background-color: rgba(231, 76, 60, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-4:hover {
+    background-color: #e74c3c;
+    color: #ffffff;
+  }
+  
+  .planet-link-5 {
+    background-color: rgba(155, 89, 182, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-5:hover {
+    background-color: #9b59b6;
+    color: #ffffff;
+  }
+  
+  .planet-link-6 {
+    background-color: rgba(82, 69, 44, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-6:hover {
+    background-color: #52452c;
+    color: #ffffff;
+  }
+  
+  .planet-link-7 {
+    background-color: rgba(118, 124, 126, 0.8);
+    color: #ffffff;
+  }
+  
+  .planet-link-7:hover {
+    background-color: #767c7e;
+    color: #ffffff;
+  }
+  
+  
+  .planet-description {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: normal;
+  }
+  
+  .background-overlay {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .bg-gradient {
+    background: linear-gradient(to bottom right, #0f0f0f, #1e272e);
+    opacity: 0.8;
+  }
 
-.menuitem {
-    
-    /* padding: 10px; */
-    border-radius: 5px;
-    /* background-color: #f0f0f0; */
-    cursor: pointer;
-    margin-bottom: 10px;
-    font-size: 60px;
-    color: gray
-}
+  .selected {
+    border: 2px solid #fafaf7; /* Borde blanco */
+    box-shadow: 0 0 20px rgba(241, 241, 240, 0.75); /* Sombra brillante */
+    animation: glow 1.5s infinite alternate; /* Animación de brillo */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transform: scale(1.1); /* Escala para hacer que se vea más grande */
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px rgba(248, 248, 248, 0.5);
+    }
+    to {
+      box-shadow: 0 0 20px rgb(255, 255, 255);
+    }
+  }
 
-@media (max-width: 1320px)  {
-    .gamemenu{
-        padding-bottom: 20px !important;
-    }
-    .menuitem {
-        font-size: 40px;
-    }
-}
-
-@media (min-width: 1321px)  {   
-    .gamemenu{
-        padding-bottom: 50px !important;
-    }
-    .menuitem {
-        font-size: 50px;
-    }
-}
-
-.menuitem.selected-item {
-    color: #0099CE;
-}
-    
-    
-.menuitem.current {
-            text-decoration: underline;    
-}
-.menuitem.blocked {
-    color: #c76565;
-}
+  .blocked {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    background: linear-gradient(to bottom right, #0f0f0f, #1e272e);
+    pointer-events: none; /* Desactiva los eventos de clic en los elementos bloqueados */
+  }
+  
+  .bg-galaxy {
+    background-image: url('../../../public/assets/images/galaxy.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5;
+    z-index: 1;
+  }
+  
+  
