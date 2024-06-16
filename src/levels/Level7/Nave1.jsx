@@ -165,7 +165,7 @@ export default function Nave1({ orbitControlsRef }) {
                     console.error('error emit player-moving', error);
                 }
             }
-        }, 100);        
+        }, 100);
         get().back
     })
 
@@ -219,7 +219,9 @@ export default function Nave1({ orbitControlsRef }) {
             // rotation: rbPlayer1Ref.current?.rotation(),
         });
 
-
+        return () => {
+            socket.disconnect();
+        }
     }, [])
 
     const collisionManager = (event) => {
@@ -235,19 +237,11 @@ export default function Nave1({ orbitControlsRef }) {
     }
     useEffect(() => {
         if (stats.lives < 0) {
-            const navePosition = naveBodyRef.current?.translation();
-            if (navePosition) {
-                socket.emit("player-dead", {
-                    translation: navePosition
-                });
-            }
+            socket.emit("player-dead", { mensaje: "Jugador Eliminado" });
             setMessage('HAS SIDO ELIMINADO');
-    
-            // Cerrar la conexión del socket
-            socket.disconnect();
         }
     }, [stats.lives]);
-    
+
 
 
     return (<>
