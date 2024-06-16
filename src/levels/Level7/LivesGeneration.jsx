@@ -111,14 +111,9 @@ const FriendlyLive = ({ id, speed, removeFriendlyLive, position }) => {
 
     const collisionManager = (event) => {
         removeFriendlyLive(id);
-        addLive();
-        console.log('vida OK colisiona con ', event.other.rigidBodyObject.name);
-        // if (event.other.rigidBodyObject.name === 'naveEspacial') {
-        //     onEarnLife();
-        //     if (liveRef.current) {
-        //         liveRef.current.visible = false; // Ocultar la vida
-        //     }
-        // }
+        if (event.other.rigidBodyObject.name == "naveEspacial") {
+            addLive();
+        }
     };
 
     useFrame((state, delta) => {
