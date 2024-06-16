@@ -103,7 +103,7 @@ const Level7 = ({ }) => {
                 <Level7Environment onLoad={() => setReady(true)} />
                 <Nave1 orbitControlsRef={orbitControlsRef} />
                 <Nave2 position={[0, 0, -70]} />
-                {/* <Live position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} /> */}
+                {ready && <LivesGeneration position={[2, 4.5, -786]} scale={1.5} onEarnLife={onEarnLife} />}
               </Physics>
             </Suspense>
             {/* {ready && <Controls orbitControlsRef={orbitControlsRef} restart={restart} onRestartDone={() => setRestart(false)} initCombat={(() => setInitCombat(true))} canvasRef={canvasRef} />} */}
