@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom"
 import { patchUser } from "../../db/user-collection";
 import { useAuth } from "../../context/AuthContext";
 import { useGame } from "../../context/GameContext";
+import Loading from "../../components/interface/loading/Loading";
 
 export default function Level1() {
     const [countLives, setCountLives] = useState(3);
@@ -27,6 +28,7 @@ export default function Level1() {
     const [cohete, setCohete] = useState("");
     const [final, setFinal] = useState(false);
     const [quitarPieza, setQuitarPieza] = useState(false);
+    const [ready, setReady] = useState(false);
     const [textoFinal, setTextoFinal] = useState("")
     const { userLogged } = useAuth();
     const { game, setStats } = useGame();
@@ -129,6 +131,7 @@ export default function Level1() {
                         <div style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: '39px', color: 'white' }}>{mensaje}</div>
                         <div style={{ color: 'red', fontSize: '49px' }}>{lives}</div>
                     </div>
+                    {!ready && <Loading />}
                     <Canvas
                         shadows={false}
                     >
@@ -137,7 +140,7 @@ export default function Level1() {
                             <Lights ></Lights>
                             {/* <Environments /> */}
                             <Physics debug={false}>
-                                <World mostrarVidaExtra={mostrarVidaExtra} quitarPieza={quitarPieza} />
+                                <World mostrarVidaExtra={mostrarVidaExtra} quitarPieza={quitarPieza} onLoad={() => setReady(true)} />
                                 {/* <Girl /> */}
                                 <Villano />
                                 <Villano2 />
