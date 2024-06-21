@@ -38,7 +38,7 @@ export default function PlatilloVolador({onWinLevel}) {
       onWinLevel();
     }
     if (live === 100) {
-      setMessage('cuidado con las estrellas en movimiento y los disparos del ovni');
+      setMessage('Cuidado con las estrellas en movimiento y los disparos del ovni');
     }
   }, [live]);
 
