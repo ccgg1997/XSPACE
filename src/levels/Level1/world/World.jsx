@@ -1,11 +1,13 @@
 import { useGLTF } from "@react-three/drei"
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier"
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useGame } from "../../../context/GameContext";
 
 const url = "https://josem-18.github.io/sourcesPI/models/world/level1.glb"
 export default function World(props) {
-  const { nodes, materials } = useGLTF(url)
+  const { nodes, materials,scene } = useGLTF(url)
+  const { game, setGame } = useGame();
   const liveRef = useRef(null);
   let mostraVida = props.mostrarVidaExtra
   let quitarPieza = props.quitarPieza
@@ -18,6 +20,11 @@ export default function World(props) {
       liveRef.current.rotation.y += 0.01;
     }
   });
+
+  useEffect(() => {
+    props.onLoad();
+    setGame({ ...game });
+  }, [scene]);
   
 
   return (
